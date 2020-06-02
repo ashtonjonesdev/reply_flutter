@@ -12,8 +12,6 @@ I wanted to translate a native Android app I built to Flutter to practice buildi
 
 ## 🕹 Features
 - Solves the problem of repeatedly typing commonly sent messages and not being able to send them through multiple platforms
-- Uses Android Architecture components, including LiveData, ViewModel, Navigation, and View Binding to make the app robust, stable, and maintainable
-- Follows Google's recommended single activity architecture and MVVM design pattern
 - Uses Material Design components for a beautiful, consistent design
 
 ## 🖥 Technologies used
