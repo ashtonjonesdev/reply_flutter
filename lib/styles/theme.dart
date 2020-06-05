@@ -25,8 +25,8 @@ class AppTheme {
     dialogTheme: DialogTheme(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-      )
-    )
+      ),
+    ),
   );
 
 }

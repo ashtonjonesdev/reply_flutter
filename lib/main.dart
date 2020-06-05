@@ -3,9 +3,11 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:reply_flutter/styles/colors.dart';
 import 'package:reply_flutter/styles/theme.dart';
 import 'package:reply_flutter/views/about_developer.dart';
+import 'package:reply_flutter/views/add_new_message.dart';
+import 'package:reply_flutter/views/edit_message.dart';
 import 'package:reply_flutter/views/home.dart';
 import 'package:reply_flutter/views/introduction.dart';
-import 'package:reply_flutter/views/sign_out.dart';
+import 'package:reply_flutter/views/sign_in.dart';
 import 'package:share/share.dart';
 
 void main() {
@@ -24,7 +26,9 @@ class MyApp extends StatelessWidget {
         '/': (context) => Home(),
         '/introduction': (context) => Introduction(),
         '/aboutdeveloper': (context) => AboutDeveloper(),
-        '/signout': (context) => SignOut(),
+        '/signin': (context) => SignIn(),
+        '/addnewmessage' : (context) => AddNewMessage(),
+        '/editmessage' : (context) => EditMessage(),
       },
     );
   }

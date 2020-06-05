@@ -7,24 +7,13 @@ import '../styles/colors.dart';
 import 'introduction.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key key}) : super(key:key);
+  const Home({Key key}) : super(key: key);
+
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
-
-  List<String> appBarTitles = [
-    'Personal Messages',
-    'Social Messages',
-    'Business Messages',
-    '+1 Messages',
-    '+2 Messages',
-  ];
-
-  int _currentTabIndex;
-
-
   @override
   void initState() {
     super.initState();
@@ -36,11 +25,17 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     _tabController.addListener(_onTabChanged);
 
     _currentTabIndex = 0;
-
-//    _tabController.animateTo(_currentTabIndex);
-
   }
 
+  List<String> appBarTitles = [
+    'Personal Messages',
+    'Social Messages',
+    'Business Messages',
+    '+1 Messages',
+    '+2 Messages',
+  ];
+
+  int _currentTabIndex;
 
   String appBarTitle = 'Personal Messages';
 
@@ -64,21 +59,24 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     ),
   ];
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text(appBarTitle),centerTitle: true,
+          title: Text(appBarTitle),
+          centerTitle: true,
           actions: <Widget>[
             PopupMenuButton<String>(
               onSelected: handleClick,
               itemBuilder: (BuildContext context) {
-                return {'Introduction', 'Tips', 'About Developer', 'Sign Out'}.map((String choice) {
+                return {'Introduction', 'Tips', 'About Developer', 'Sign Out'}
+                    .map((String choice) {
                   return PopupMenuItem<String>(
                     value: choice,
-                    child: Text(choice, style: TextStyle(color: Colors.black),),
+                    child: Text(
+                      choice,
+                      style: TextStyle(color: Colors.black),
+                    ),
                   );
                 }).toList();
               },
@@ -92,42 +90,33 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
-          GridView(
-            children: <Widget>[
-              Container(
-                child: Card(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text('Title 1'),
-                      Text('Text 1'),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                child: Card(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text('Title 1'),
-                      Text('Text 1'),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+          GridView.count(
+            crossAxisCount: 2,
             scrollDirection: Axis.vertical,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 30,
-              crossAxisSpacing: 30
-            ),
+            children: List.generate(100, (index) {
+              return GestureDetector(
+                onTap: () {print('Clicked item $index');},
+                child: Center(
+                  child: Text(
+                    'Item $index',
+                    style: Theme.of(context).textTheme.headline5,
+                  ),
+                ),
+              );
+            }),
           ),
-          Center(child: Text('Tab 2'),),
-          Center(child: Text('Tab 3'),),
-          Center(child: Text('Tab 4'),),
-          Center(child: Text('Tab 5'),),
+          Center(
+            child: Text('Tab 2'),
+          ),
+          Center(
+            child: Text('Tab 3'),
+          ),
+          Center(
+            child: Text('Tab 4'),
+          ),
+          Center(
+            child: Text('Tab 5'),
+          ),
         ],
       ),
       floatingActionButton: SpeedDial(
@@ -140,9 +129,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               Share.share("My test message");
               print('Tapped Send');
             },
-            child: Icon(
-                Icons.email
-            ),
+            child: Icon(Icons.email),
           ),
           SpeedDialChild(
             backgroundColor: kPrimaryColorLight,
@@ -150,45 +137,38 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               print('Tapped Preview');
               _previewMessageDialog();
             },
-            child: Icon(
-                Icons.visibility
-            ),
+            child: Icon(Icons.visibility),
           ),
           SpeedDialChild(
             backgroundColor: kPrimaryColorLight,
             onTap: () {
               print('Tapped Add');
+              Navigator.pushNamed(context, '/addnewmessage');
             },
-            child: Icon(
-                Icons.add
-            ),
+            child: Icon(Icons.add),
           ),
           SpeedDialChild(
             backgroundColor: kPrimaryColorLight,
             onTap: () {
               print('Tapped Edit');
+              Navigator.pushNamed(context, '/editmessage');
+
             },
-            child: Icon(
-                Icons.edit
-            ),
+            child: Icon(Icons.edit),
           ),
           SpeedDialChild(
             backgroundColor: kPrimaryColorLight,
             onTap: () {
               print('Tapped Delete');
             },
-            child: Icon(
-                Icons.delete
-            ),
+            child: Icon(Icons.delete),
           ),
           SpeedDialChild(
             backgroundColor: kPrimaryColorLight,
             onTap: () {
               print('Tapped Timer');
             },
-            child: Icon(
-                Icons.timer
-            ),
+            child: Icon(Icons.timer),
           ),
         ],
       ),
@@ -196,11 +176,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   void handleClick(String value) {
-
-    switch(value) {
+    switch (value) {
       case 'Introduction':
         print('Tapped Introduction');
-        Navigator.pushNamed(context, '/introduction', arguments: TestArguments('Introduction Destination'));
+        Navigator.pushNamed(context, '/introduction');
         break;
       case 'Tips':
         print('Tapped Tips');
@@ -212,21 +191,19 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         break;
       case 'Sign Out':
         print('Tapped Sign Out');
-        Navigator.pushNamed(context, '/signout');
+        Navigator.pushNamed(context, '/signin');
         break;
-
     }
-
   }
 
   void _onTabChanged() {
     /// Only manually set the index if it is changing from a swipe, not a tab selection (indexIsChanging is only true when selecting a tab, and tab index is automatically changed) to avoid setting the index twice when a tab is selected
-    if(!_tabController.indexIsChanging)
-    setState(() {
-      print('Changing to Tab: ${_tabController.index}');
-      _currentTabIndex = _tabController.index;
-      appBarTitle = appBarTitles[_tabController.index];
-    });
+    if (!_tabController.indexIsChanging)
+      setState(() {
+        print('Changing to Tab: ${_tabController.index}');
+        _currentTabIndex = _tabController.index;
+        appBarTitle = appBarTitles[_tabController.index];
+      });
   }
 
   _openMediumArticle() async {
@@ -245,17 +222,25 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       builder: (BuildContext context) {
         return AlertDialog(
           shape: Theme.of(context).dialogTheme.shape,
-          title: Text('Your Message:', textAlign: TextAlign.center,),
+          title: Text(
+            'Your Message:',
+            textAlign: TextAlign.center,
+          ),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('This is a preview of your message. hehe It is very long indeed lol', style: Theme.of(context).textTheme.bodyText1,),
+                Text(
+                  'This is a preview of your message. hehe It is very long indeed lol',
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
               ],
             ),
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('Got it',),
+              child: Text(
+                'Got it',
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -265,8 +250,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       },
     );
   }
-
-
 
   @override
   void dispose() {
