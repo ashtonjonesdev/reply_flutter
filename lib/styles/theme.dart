@@ -5,6 +5,7 @@ import 'colors.dart';
 class AppTheme {
 
   static ThemeData appThemeData = ThemeData.light().copyWith(
+    visualDensity: VisualDensity.adaptivePlatformDensity,
     primaryColor: kPrimaryColor,
     primaryColorLight: kPrimaryColorLight,
     accentColor: kAccentColor,
