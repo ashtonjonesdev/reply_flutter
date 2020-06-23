@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
@@ -31,6 +32,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
     _currentTabIndex = 0;
   }
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
 
   PersonalMessagesViewModel personalMessagesViewModel = PersonalMessagesViewModel();
   SocialMessagesViewModel socialMessagesViewModel = SocialMessagesViewModel();
@@ -309,7 +313,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         break;
       case 'Sign Out':
         print('Tapped Sign Out');
-        Navigator.pushNamed(context, '/signin');
+        _signOut();
+        Navigator.popAndPushNamed(context, '/signin');
         break;
     }
   }
@@ -368,6 +373,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       },
     );
   }
+
+  void _signOut() async {
+    await _auth.signOut();
+    print('Signed out user');
+  }
+
+
 
   @override
   void dispose() {
