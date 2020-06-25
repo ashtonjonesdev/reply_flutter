@@ -6,18 +6,25 @@ import 'package:reply_flutter/core/data/viewmodel/FirstAdditionalMessagesViewMod
 import 'package:reply_flutter/core/data/viewmodel/PersonalMessagesViewModel.dart';
 import 'package:reply_flutter/core/data/viewmodel/SecondAdditionalMessagesViewModel.dart';
 import 'package:reply_flutter/core/data/viewmodel/SocialMessagesViewModel.dart';
+import 'package:reply_flutter/core/services/AuthService.dart';
+import 'package:reply_flutter/styles/colors.dart';
 import 'package:reply_flutter/styles/theme.dart';
 import 'package:reply_flutter/ui/screens/about_developer.dart';
 import 'package:reply_flutter/ui/screens/add_new_message.dart';
 import 'package:reply_flutter/ui/screens/edit_message.dart';
 import 'package:reply_flutter/ui/screens/home.dart';
 import 'package:reply_flutter/ui/screens/introduction.dart';
+import 'package:reply_flutter/ui/screens/register.dart';
 import 'package:reply_flutter/ui/screens/reply_later.dart';
-import 'package:reply_flutter/ui/screens/sign_in.dart';
+import 'package:reply_flutter/ui/screens/signin.dart';
+import 'package:reply_flutter/ui/screens/welcome.dart';
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(
+      ChangeNotifierProvider<AuthService>(
+        create: (context) => AuthService(),
+        child: MyApp(),
+      ),
+    );
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -44,19 +51,45 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Reply',
         theme: AppTheme.appThemeData,
-        initialRoute: '/',
+        home: FutureBuilder(
+            future: Provider.of<AuthService>(context).getUser(),
+            builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.error != null) {
+                  print("error");
+                  return Text(snapshot.error.toString());
+                }
+                return snapshot.hasData ? Home(firebaseUser: snapshot.data,) : Welcome();
+              } else {
+                return LoadingCircle();
+              }
+            }),
         routes: {
-          '/': (context) => Home(),
-          '/introduction': (context) => Introduction(),
-          '/aboutdeveloper': (context) => AboutDeveloper(),
-          '/signin': (context) => SignIn(),
-          '/addnewmessage': (context) => AddNewMessage(),
-          '/editmessage': (context) => EditMessage(),
-          '/replylater': (context) => ReplyLater(),
+          Home.routeName: (context) => Home(),
+          Introduction.routeName: (context) => Introduction(),
+          AboutDeveloper.routeName: (context) => AboutDeveloper(),
+          Welcome.routeName: (context) => Welcome(),
+          SignIn.routeName: (context) => SignIn(),
+          Register.routeName: (context) => Register(),
+          AddNewMessage.routeName: (context) => AddNewMessage(),
+          EditMessage.routeName: (context) => EditMessage(),
+          ReplyLater.routeName: (context) => ReplyLater(),
         },
       ),
     );
   }
-
 }
 
+class LoadingCircle extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        child: CircularProgressIndicator(
+          backgroundColor: kPrimaryColorLight,
+        ),
+        alignment: Alignment(0.0, 0.0),
+      ),
+    );
+  }
+}

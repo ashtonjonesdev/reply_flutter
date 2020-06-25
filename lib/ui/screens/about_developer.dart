@@ -3,6 +3,9 @@ import 'package:material_about/material_about.dart';
 import 'package:reply_flutter/styles/colors.dart';
 
 class AboutDeveloper extends StatelessWidget {
+
+  static final String routeName = 'aboutdeveloper';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

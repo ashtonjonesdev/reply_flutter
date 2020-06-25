@@ -17,6 +17,9 @@ enum MessageCategory {
 }
 
 class AddNewMessage extends StatefulWidget {
+
+  static final String routeName = 'addnewmessage';
+
   @override
   _AddNewMessageState createState() => _AddNewMessageState();
 }

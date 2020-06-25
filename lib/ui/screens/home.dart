@@ -8,15 +8,28 @@ import 'package:reply_flutter/core/data/viewmodel/FirstAdditionalMessagesViewMod
 import 'package:reply_flutter/core/data/viewmodel/PersonalMessagesViewModel.dart';
 import 'package:reply_flutter/core/data/viewmodel/SecondAdditionalMessagesViewModel.dart';
 import 'package:reply_flutter/core/data/viewmodel/SocialMessagesViewModel.dart';
+import 'package:reply_flutter/core/services/AuthService.dart';
 import 'package:reply_flutter/styles/colors.dart';
+import 'package:reply_flutter/ui/screens/about_developer.dart';
+import 'package:reply_flutter/ui/screens/add_new_message.dart';
+import 'package:reply_flutter/ui/screens/edit_message.dart';
+import 'package:reply_flutter/ui/screens/introduction.dart';
+import 'package:reply_flutter/ui/screens/reply_later.dart';
+import 'package:reply_flutter/ui/screens/welcome.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key key}) : super(key: key);
+
+  static final String routeName = 'home';
+
+  final FirebaseUser firebaseUser;
+
+  Home({this.firebaseUser});
 
   @override
   _HomeState createState() => _HomeState();
+
 }
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
@@ -31,10 +44,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     _tabController.addListener(_onTabChanged);
 
     _currentTabIndex = 0;
+
   }
-
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-
 
   PersonalMessagesViewModel personalMessagesViewModel = PersonalMessagesViewModel();
   SocialMessagesViewModel socialMessagesViewModel = SocialMessagesViewModel();
@@ -263,7 +274,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             onTap: () {
               print('Tapped Add');
 //              personalMessagesModel.addPersonalMessage(MessageCard(cardTitle: 'New Message!', cardMessage: 'New Message!'));
-              Navigator.pushNamed(context, '/addnewmessage');
+              Navigator.pushNamed(context, AddNewMessage.routeName);
             },
             child: Icon(Icons.add),
           ),
@@ -271,7 +282,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             backgroundColor: kPrimaryColorLight,
             onTap: () {
               print('Tapped Edit');
-              Navigator.pushNamed(context, '/editmessage');
+              Navigator.pushNamed(context, EditMessage.routeName);
             },
             child: Icon(Icons.edit),
           ),
@@ -286,7 +297,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             backgroundColor: kPrimaryColorLight,
             onTap: () {
               print('Tapped Timer');
-              Navigator.pushNamed(context, '/replylater');
+              Navigator.pushNamed(context, ReplyLater.routeName);
             },
             child: Icon(Icons.timer),
           ),
@@ -301,7 +312,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     switch (value) {
       case 'Introduction':
         print('Tapped Introduction');
-        Navigator.pushNamed(context, '/introduction');
+        Navigator.pushNamed(context, Introduction.routeName);
         break;
       case 'Tips':
         print('Tapped Tips');
@@ -309,12 +320,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         break;
       case 'About Developer':
         print('Tapped About Developer');
-        Navigator.pushNamed(context, '/aboutdeveloper');
+        Navigator.pushNamed(context, AboutDeveloper.routeName);
         break;
       case 'Sign Out':
         print('Tapped Sign Out');
         _signOut();
-        Navigator.popAndPushNamed(context, '/signin');
+        Navigator.popAndPushNamed(context, Welcome.routeName);
         break;
     }
   }
@@ -375,8 +386,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   void _signOut() async {
-    await _auth.signOut();
-    print('Signed out user');
+    await Provider.of<AuthService>(context).signout();
   }
 
 

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:reply_flutter/styles/colors.dart';
 
 class Introduction extends StatelessWidget {
+
+  static final String routeName = 'introduction';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

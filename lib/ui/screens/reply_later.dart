@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ReplyLater extends StatefulWidget {
+
+  static final String routeName = 'replylater';
+
   @override
   _ReplyLaterState createState() => _ReplyLaterState();
 }
