@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reply_flutter/core/services/AuthService.dart';
 import 'package:reply_flutter/styles/colors.dart';
+import 'package:reply_flutter/ui/screens/home.dart';
 
 class SignIn extends StatefulWidget {
   static final String routeName = 'signin';
@@ -23,6 +24,7 @@ class _SignInState extends State<SignIn> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Sign in'),
+        centerTitle: true,
       ),
       body: Container(
         padding: EdgeInsets.all(20.0),
@@ -30,12 +32,11 @@ class _SignInState extends State<SignIn> {
           key: _formKey,
           child: Column(
             children: <Widget>[
-              SizedBox(height: 20.0), // <= NEW
               Text(
                 'Sign in Information',
                 style: TextStyle(fontSize: 20),
               ),
-              SizedBox(height: 20.0), // <= NEW
+              SizedBox(height: 5.0), // <= NEW
               TextFormField(
                 style: Theme.of(context).textTheme.bodyText1,
                 keyboardType: TextInputType.emailAddress,
@@ -51,7 +52,7 @@ class _SignInState extends State<SignIn> {
                   return null;
                 },
               ),
-              SizedBox(height: 20.0), // <= NEW
+              SizedBox(height: 5.0), // <= NEW
               TextFormField(
                 style: Theme.of(context).textTheme.bodyText1,
                 validator: (String value) {
@@ -64,7 +65,7 @@ class _SignInState extends State<SignIn> {
                 decoration: InputDecoration(labelText: "Password"),
                 onSaved: (value) => _password = value,
               ),
-              SizedBox(height: 20.0), // <= NEW
+              SizedBox(height: 5.0), // <= NEW
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Material(
@@ -73,7 +74,7 @@ class _SignInState extends State<SignIn> {
                   child: MaterialButton(
                     minWidth: 400,
                     child: Text("SIGN IN"),
-                    onPressed: _validateAndLogin,
+                    onPressed: _validateAndSignIn,
                   ),
                 ),
               ),
@@ -84,26 +85,32 @@ class _SignInState extends State<SignIn> {
     );
   }
 
-  _validateAndLogin() async {
+  _validateAndSignIn() async {
     final form = _formKey.currentState;
     form.save();
     // Validate information was correctly entered
     if (form.validate()) {
+      print('Form was successfully validated');
       print('Signing in user: Email: $_email Password: $_password');
       // Call the login method with the enter information
-      try {
-        FirebaseUser result = await Provider.of<AuthService>(context,
-                listen: false)
-            .signInUserWithEmailAndPassword(email: _email, password: _password);
-        print(result);
-        print('Signed in user: Email: ${result.email} Password: $_password}');
-      } on AuthException catch (error) {
-        print(error.message.toString());
-        return _buildErrorDialog(context, error.toString());
-      } on Exception catch (error) {
-        print(error.toString());
-        return _buildErrorDialog(context, error.toString());
-      }
+      _signInUserWithEmailAndPassword();
+    }
+  }
+
+  void _signInUserWithEmailAndPassword() async {
+    try {
+      FirebaseUser result = await Provider.of<AuthService>(context,
+          listen: false)
+          .signInUserWithEmailAndPassword(email: _email, password: _password);
+      print(result);
+      print('Signed in user: Email: ${result.email} Password: $_password}');
+      Navigator.popAndPushNamed(context, Home.routeName);
+    } on AuthException catch (error) {
+      print('AuthException: ' + error.message.toString());
+      return _buildErrorDialog(context, error.toString());
+    } on Exception catch (error) {
+      print('Exception: ' + error.toString());
+      return _buildErrorDialog(context, error.toString());
     }
   }
 

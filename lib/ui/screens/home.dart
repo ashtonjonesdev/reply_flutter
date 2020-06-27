@@ -20,7 +20,6 @@ import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Home extends StatefulWidget {
-
   static final String routeName = 'home';
 
   final FirebaseUser firebaseUser;
@@ -29,7 +28,6 @@ class Home extends StatefulWidget {
 
   @override
   _HomeState createState() => _HomeState();
-
 }
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
@@ -44,14 +42,17 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     _tabController.addListener(_onTabChanged);
 
     _currentTabIndex = 0;
-
   }
 
-  PersonalMessagesViewModel personalMessagesViewModel = PersonalMessagesViewModel();
+  PersonalMessagesViewModel personalMessagesViewModel =
+      PersonalMessagesViewModel();
   SocialMessagesViewModel socialMessagesViewModel = SocialMessagesViewModel();
-  BusinessMessagesViewModel businessMessagesViewModel = BusinessMessagesViewModel();
-  FirstAdditionalMessagesViewModel firstAdditionalMessagesViewModel = FirstAdditionalMessagesViewModel();
-  SecondAdditionalMessagesViewModel secondAdditionalMessagesViewModel = SecondAdditionalMessagesViewModel();
+  BusinessMessagesViewModel businessMessagesViewModel =
+      BusinessMessagesViewModel();
+  FirstAdditionalMessagesViewModel firstAdditionalMessagesViewModel =
+      FirstAdditionalMessagesViewModel();
+  SecondAdditionalMessagesViewModel secondAdditionalMessagesViewModel =
+      SecondAdditionalMessagesViewModel();
 
   List<String> appBarTitles = [
     'Personal Messages',
@@ -66,11 +67,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     new MessageCard(cardTitle: 'Title', cardMessage: 'Message'),
     new MessageCard(cardTitle: 'Title', cardMessage: 'Message'),
     new MessageCard(cardTitle: 'Title', cardMessage: 'Message'),
-
   ];
 
   Color cardBackgroundColor = kBackgroundColor;
-
 
   String appBarTitle = 'Personal Messages';
 
@@ -97,121 +96,151 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   ];
 
   Widget generatePersonalMessagesGridView() {
-
     return Consumer<PersonalMessagesViewModel>(
-      builder: (context, personalMessagesViewModel, child) => GridView.builder(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 40, mainAxisSpacing: 40), itemCount: personalMessagesViewModel.personalMessages.length, padding: EdgeInsets.all(24), itemBuilder: (context, index) {
-        return Container(
-          decoration: BoxDecoration(
-            color: kPrimaryColorLight,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(personalMessagesViewModel.personalMessages[index].cardTitle),
-              Text(personalMessagesViewModel.personalMessages[index].cardMessage)
-            ],
-          ),
-        );
-      }),
+      builder: (context, personalMessagesViewModel, child) => GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, crossAxisSpacing: 40, mainAxisSpacing: 40),
+          itemCount: personalMessagesViewModel.personalMessages.length,
+          padding: EdgeInsets.all(24),
+          itemBuilder: (context, index) {
+            return Container(
+              decoration: BoxDecoration(
+                color: kPrimaryColorLight,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(personalMessagesViewModel
+                      .personalMessages[index].cardTitle),
+                  Text(personalMessagesViewModel
+                      .personalMessages[index].cardMessage)
+                ],
+              ),
+            );
+          }),
     );
   }
 
-
   Widget generateSocialMessagesGridView() {
-
     return Consumer<SocialMessagesViewModel>(
-      builder: (context, socialMessagesViewModel, child) => GridView.builder(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 40, mainAxisSpacing: 40), itemCount: socialMessagesViewModel.socialMessages.length, padding: EdgeInsets.all(24), itemBuilder: (context, index) {
-        return Container(
-          decoration: BoxDecoration(
-            color: kPrimaryColorLight,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(socialMessagesViewModel.socialMessages[index].cardTitle),
-              Text(socialMessagesViewModel.socialMessages[index].cardMessage)
-            ],
-          ),
-        );
-      }),
+      builder: (context, socialMessagesViewModel, child) => GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, crossAxisSpacing: 40, mainAxisSpacing: 40),
+          itemCount: socialMessagesViewModel.socialMessages.length,
+          padding: EdgeInsets.all(24),
+          itemBuilder: (context, index) {
+            return Container(
+              decoration: BoxDecoration(
+                color: kPrimaryColorLight,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(socialMessagesViewModel.socialMessages[index].cardTitle),
+                  Text(
+                      socialMessagesViewModel.socialMessages[index].cardMessage)
+                ],
+              ),
+            );
+          }),
     );
   }
 
   Widget generateBusinessMessagesGridView() {
-
     return Consumer<BusinessMessagesViewModel>(
-      builder: (context, businessMessagesViewModel, child) => GridView.builder(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 40, mainAxisSpacing: 40), itemCount: businessMessagesViewModel.businessMessages.length, padding: EdgeInsets.all(24), itemBuilder: (context, index) {
-        return Container(
-          decoration: BoxDecoration(
-            color: kPrimaryColorLight,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(businessMessagesViewModel.businessMessages[index].cardTitle),
-              Text(businessMessagesViewModel.businessMessages[index].cardMessage)
-            ],
-          ),
-        );
-      }),
+      builder: (context, businessMessagesViewModel, child) => GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, crossAxisSpacing: 40, mainAxisSpacing: 40),
+          itemCount: businessMessagesViewModel.businessMessages.length,
+          padding: EdgeInsets.all(24),
+          itemBuilder: (context, index) {
+            return Container(
+              decoration: BoxDecoration(
+                color: kPrimaryColorLight,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(businessMessagesViewModel
+                      .businessMessages[index].cardTitle),
+                  Text(businessMessagesViewModel
+                      .businessMessages[index].cardMessage)
+                ],
+              ),
+            );
+          }),
     );
   }
 
   Widget generateFirstAdditionalMessagesGridView() {
-
     return Consumer<FirstAdditionalMessagesViewModel>(
-      builder: (context, firstAdditionalMessagesViewModel, child) => GridView.builder(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 40, mainAxisSpacing: 40), itemCount: firstAdditionalMessagesViewModel.firstAdditionalMessages.length, padding: EdgeInsets.all(24), itemBuilder: (context, index) {
-        return Container(
-          decoration: BoxDecoration(
-            color: kPrimaryColorLight,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(firstAdditionalMessagesViewModel.firstAdditionalMessages[index].cardTitle),
-              Text(firstAdditionalMessagesViewModel.firstAdditionalMessages[index].cardMessage)
-            ],
-          ),
-        );
-      }),
+      builder: (context, firstAdditionalMessagesViewModel, child) =>
+          GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, crossAxisSpacing: 40, mainAxisSpacing: 40),
+              itemCount: firstAdditionalMessagesViewModel
+                  .firstAdditionalMessages.length,
+              padding: EdgeInsets.all(24),
+              itemBuilder: (context, index) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color: kPrimaryColorLight,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(firstAdditionalMessagesViewModel
+                          .firstAdditionalMessages[index].cardTitle),
+                      Text(firstAdditionalMessagesViewModel
+                          .firstAdditionalMessages[index].cardMessage)
+                    ],
+                  ),
+                );
+              }),
     );
   }
 
   Widget generateSecondAdditionalMessagesGridView() {
-
     return Consumer<SecondAdditionalMessagesViewModel>(
-      builder: (context, secondAdditionalMessagesViewModel, child) => GridView.builder(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 40, mainAxisSpacing: 40), itemCount: secondAdditionalMessagesViewModel.secondAdditionalMessages.length, padding: EdgeInsets.all(24), itemBuilder: (context, index) {
-        return Container(
-          decoration: BoxDecoration(
-            color: kPrimaryColorLight,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(secondAdditionalMessagesViewModel.secondAdditionalMessages[index].cardTitle),
-              Text(secondAdditionalMessagesViewModel.secondAdditionalMessages[index].cardMessage)
-            ],
-          ),
-        );
-      }),
+      builder: (context, secondAdditionalMessagesViewModel, child) =>
+          GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, crossAxisSpacing: 40, mainAxisSpacing: 40),
+              itemCount: secondAdditionalMessagesViewModel
+                  .secondAdditionalMessages.length,
+              padding: EdgeInsets.all(24),
+              itemBuilder: (context, index) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color: kPrimaryColorLight,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(secondAdditionalMessagesViewModel
+                          .secondAdditionalMessages[index].cardTitle),
+                      Text(secondAdditionalMessagesViewModel
+                          .secondAdditionalMessages[index].cardMessage)
+                    ],
+                  ),
+                );
+              }),
     );
   }
-  
 
   @override
   Widget build(BuildContext context) {
-
-    var personalMessagesModel =  Provider.of<PersonalMessagesViewModel>(context);
+    var personalMessagesModel = Provider.of<PersonalMessagesViewModel>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -306,8 +335,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     );
   }
 
-
-
   void handleClick(String value) {
     switch (value) {
       case 'Introduction':
@@ -325,7 +352,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       case 'Sign Out':
         print('Tapped Sign Out');
         _signOut();
-        Navigator.popAndPushNamed(context, Welcome.routeName);
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (BuildContext context) => Welcome()),
+            (Route<dynamic> route) => false);
         break;
     }
   }
@@ -388,8 +417,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void _signOut() async {
     await Provider.of<AuthService>(context).signout();
   }
-
-
 
   @override
   void dispose() {

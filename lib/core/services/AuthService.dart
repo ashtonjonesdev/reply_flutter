@@ -21,7 +21,7 @@ class AuthService with ChangeNotifier {
   }
 
   // wrapping the firebase calls
-  Future createUser(
+  Future createUserWithEmailAndPassword(
       {String firstName,
         String lastName,
         String email,

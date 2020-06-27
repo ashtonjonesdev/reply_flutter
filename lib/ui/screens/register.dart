@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reply_flutter/core/services/AuthService.dart';
 import 'package:reply_flutter/styles/colors.dart';
-class Register extends StatefulWidget {
+import 'package:reply_flutter/ui/screens/home.dart';
+import 'package:reply_flutter/ui/screens/welcome.dart';
 
+class Register extends StatefulWidget {
   static final String routeName = 'register';
 
   @override
@@ -12,9 +14,10 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-
   final _formKey = GlobalKey<FormState>();
 
+  String _firstName;
+  String _lastName;
   String _email;
   String _password;
 
@@ -23,6 +26,7 @@ class _RegisterState extends State<Register> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Register'),
+        centerTitle: true,
       ),
       body: Container(
         padding: EdgeInsets.all(20.0),
@@ -30,12 +34,34 @@ class _RegisterState extends State<Register> {
           key: _formKey,
           child: Column(
             children: <Widget>[
-              SizedBox(height: 20.0), // <= NEW
               Text(
                 'Registration Information',
                 style: TextStyle(fontSize: 20),
               ),
-              SizedBox(height: 20.0), // <= NEW
+              TextFormField(
+                style: Theme.of(context).textTheme.bodyText1,
+                validator: (String value) {
+                  if (value.isEmpty) {
+                    return 'Please enter a first name';
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(labelText: "First Name"),
+                onSaved: (value) => _firstName = value,
+              ),
+              SizedBox(height: 5.0),
+              TextFormField(
+                style: Theme.of(context).textTheme.bodyText1,
+                validator: (String value) {
+                  if (value.isEmpty) {
+                    return 'Please enter a last name';
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(labelText: "Last Name"),
+                onSaved: (value) => _lastName = value,
+              ),
+              SizedBox(height: 5.0), // <= NEW// <= NEW
               TextFormField(
                 style: Theme.of(context).textTheme.bodyText1,
                 keyboardType: TextInputType.emailAddress,
@@ -51,12 +77,15 @@ class _RegisterState extends State<Register> {
                   return null;
                 },
               ),
-              SizedBox(height: 20.0), // <= NEW
+              SizedBox(height: 5.0), // <= NEW
               TextFormField(
                 style: Theme.of(context).textTheme.bodyText1,
                 validator: (String value) {
                   if (value.isEmpty) {
                     return 'Please enter a password';
+                  }
+                  if(value.length < 6) {
+                    return 'Password should be at least 6 characters';
                   }
                   return null;
                 },
@@ -64,7 +93,7 @@ class _RegisterState extends State<Register> {
                 decoration: InputDecoration(labelText: "Password"),
                 onSaved: (value) => _password = value,
               ),
-              SizedBox(height: 20.0), // <= NEW
+              SizedBox(height: 5.0), // <= NEW
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Material(
@@ -73,7 +102,7 @@ class _RegisterState extends State<Register> {
                   child: MaterialButton(
                     minWidth: 400,
                     child: Text("SIGN UP"),
-                    onPressed: _registerAndValidateUser,
+                    onPressed: validateAndRegisterUser,
                   ),
                 ),
               ),
@@ -84,41 +113,68 @@ class _RegisterState extends State<Register> {
     );
   }
 
-  _registerAndValidateUser() async {
+  validateAndRegisterUser() async {
     final form = _formKey.currentState;
     form.save();
     // Validate information was correctly entered
     if (form.validate()) {
+      print('Form was successfully validated');
       print('Registering user: Email: $_email Password: $_password');
       // Call the login method with the enter information
-      try {
-        FirebaseUser result = await Provider.of<AuthService>(context,
-            listen: false)
-            .createUser(email: _email, password: _password);
-        print(result);
-        print('Registered user: Email: ${result.email} Password: $_password}');
-      } on AuthException catch (error) {
-        print(error.message.toString());
-        return _buildErrorDialog(context, error.toString());
-      } on Exception catch (error) {
-        print(error.toString());
-        return _buildErrorDialog(context, error.toString());
-      }
+      createUserWithEmailAndPassword();
+    }
+  }
+
+  void createUserWithEmailAndPassword() async {
+    try {
+      FirebaseUser result =
+          await Provider.of<AuthService>(context, listen: false)
+              .createUserWithEmailAndPassword(
+                  firstName: _firstName,
+                  lastName: _lastName,
+                  email: _email,
+                  password: _password);
+      print(result);
+      print('Registered user: Email: ${result.email} Password: $_password}');
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => Home()),
+          (Route<dynamic> route) => false);
+    } on AuthException catch (error) {
+      print('AuthException: ' + error.message.toString());
+      return _buildErrorDialog(context, error.toString());
+    } on Exception catch (error) {
+      print('Exception: ' + error.toString());
+      return _buildErrorDialog(context, error.toString());
     }
   }
 
   Future _buildErrorDialog(BuildContext context, _message) {
+
+    String errorMessage = 'error';
+    bool returnToSignIn = false;
+
     return showDialog(
       builder: (context) {
+        switch(_message) {
+          case 'PlatformException(ERROR_EMAIL_ALREADY_IN_USE, The email address is already in use by another account., null)':
+            errorMessage = 'This account is already registered. Please return to sign in';
+            returnToSignIn = true;
+            break;
+          default:
+            break;
+        }
         return AlertDialog(
           title: Text('Error Message'),
-          content: Text(_message),
+          content: Text(errorMessage, style: Theme.of(context).textTheme.bodyText1,),
           actions: [
             FlatButton(
-                child: Text('Cancel'),
+                child: Text('OK'),
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  returnToSignIn ? Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (BuildContext context) => Welcome()),
+                          (Route<dynamic> route) => false) : Navigator.of(context).pop();
                 })
+
           ],
         );
       },

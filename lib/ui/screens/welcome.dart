@@ -48,14 +48,7 @@ class Welcome extends StatelessWidget {
                       borderRadius: BorderRadius.circular(40),
                     ),
                     onPressed: () {
-                      Navigator.popAndPushNamed(context, SignIn.routeName);
-              _handleSignIn()
-                  .then((FirebaseUser firebaseUser) =>
-                  print(
-                      '${firebaseUser.displayName} signed in with Google'))
-                  .whenComplete(() =>
-                  Navigator.popAndPushNamed(context, Home.routeName))
-                  .catchError((e) => print(e));
+                      Navigator.pushNamed(context, SignIn.routeName);
                     },
                     child: Text(
                       'Sign in',
@@ -76,7 +69,7 @@ class Welcome extends StatelessWidget {
                       style: Theme.of(context).textTheme.button,
                     ),
                     onPressed: () {
-                      Navigator.popAndPushNamed(context, Register.routeName);
+                      Navigator.pushNamed(context, Register.routeName);
                     },
                   ),
                 ),
@@ -114,7 +107,7 @@ class Welcome extends StatelessWidget {
                         children: <Widget>[
                           Image(
                               image: AssetImage("images/google_logo.png"),
-                              height: 35.0),
+                              height: 30.0),
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
@@ -183,7 +176,7 @@ class Welcome extends StatelessWidget {
     final FirebaseUser user =
         (await _auth.signInWithCredential(credential)).user;
     print('Successfully signed in user with Google Provider');
-    print('Name: ' + user.displayName + 'uID: ' + user.uid);
+    print('Name: ${user.displayName} | uID: ${user.uid}');
     return user;
   }
 

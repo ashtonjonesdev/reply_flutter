@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
                   print("error");
                   return Text(snapshot.error.toString());
                 }
-                return snapshot.hasData ? Home(firebaseUser: snapshot.data,) : Welcome();
+                return snapshot.hasData ? Home(firebaseUser: snapshot.data) : Welcome();
               } else {
                 return LoadingCircle();
               }
