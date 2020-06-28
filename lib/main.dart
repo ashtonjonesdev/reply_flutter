@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
         title: 'Reply',
         theme: AppTheme.appThemeData,
         home: FutureBuilder(
-            future: Provider.of<AuthService>(context).getUser(),
+            future: Provider.of<AuthService>(context, listen: false).getUser(),
             builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.error != null) {

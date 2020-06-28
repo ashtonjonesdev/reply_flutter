@@ -127,18 +127,20 @@ class _RegisterState extends State<Register> {
 
   void createUserWithEmailAndPassword() async {
     try {
-      FirebaseUser result =
+      FirebaseUser newUser =
           await Provider.of<AuthService>(context, listen: false)
               .createUserWithEmailAndPassword(
                   firstName: _firstName,
                   lastName: _lastName,
                   email: _email,
                   password: _password);
-      print(result);
-      print('Registered user: Email: ${result.email} Password: $_password}');
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => Home()),
-          (Route<dynamic> route) => false);
+      print(newUser);
+      print('Registered user: Email: ${newUser.email} Password: $_password}');
+      if(newUser != null) {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (BuildContext context) => Home()),
+                (Route<dynamic> route) => false);
+      }
     } on AuthException catch (error) {
       print('AuthException: ' + error.message.toString());
       return _buildErrorDialog(context, error.toString());
@@ -151,16 +153,26 @@ class _RegisterState extends State<Register> {
   Future _buildErrorDialog(BuildContext context, _message) {
 
     String errorMessage = 'error';
-    bool returnToSignIn = false;
+    bool returnToWelcomeScreen = false;
 
     return showDialog(
       builder: (context) {
         switch(_message) {
           case 'PlatformException(ERROR_EMAIL_ALREADY_IN_USE, The email address is already in use by another account., null)':
             errorMessage = 'This account is already registered. Please return to sign in';
-            returnToSignIn = true;
+            returnToWelcomeScreen = true;
+            break;
+          case 'PlatformException(ERROR_NETWORK_REQUEST_FAILED, A network error (such as timeout, interrupted connection or unreachable host) has occurred., null)':
+            errorMessage = 'A network error has occurred. Please try again when the connection is stable';
+            returnToWelcomeScreen = true;
+            break;
+          case 'PlatformException(ERROR_INVALID_EMAIL, The email address is badly formatted., null)':
+            errorMessage = 'Invalid email. Please enter a valid email';
+            returnToWelcomeScreen = false;
             break;
           default:
+            errorMessage = 'Unknown error occurred';
+            returnToWelcomeScreen = true;
             break;
         }
         return AlertDialog(
@@ -170,7 +182,7 @@ class _RegisterState extends State<Register> {
             FlatButton(
                 child: Text('OK'),
                 onPressed: () {
-                  returnToSignIn ? Navigator.of(context).pushAndRemoveUntil(
+                  returnToWelcomeScreen ? Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (BuildContext context) => Welcome()),
                           (Route<dynamic> route) => false) : Navigator.of(context).pop();
                 })

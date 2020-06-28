@@ -415,7 +415,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   void _signOut() async {
-    await Provider.of<AuthService>(context).signout();
+    await Provider.of<AuthService>(context, listen: false).signout();
   }
 
   @override

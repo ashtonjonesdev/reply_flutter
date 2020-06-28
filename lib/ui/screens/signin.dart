@@ -104,7 +104,9 @@ class _SignInState extends State<SignIn> {
           .signInUserWithEmailAndPassword(email: _email, password: _password);
       print(result);
       print('Signed in user: Email: ${result.email} Password: $_password}');
-      Navigator.popAndPushNamed(context, Home.routeName);
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => Home()),
+              (Route<dynamic> route) => false);
     } on AuthException catch (error) {
       print('AuthException: ' + error.message.toString());
       return _buildErrorDialog(context, error.toString());

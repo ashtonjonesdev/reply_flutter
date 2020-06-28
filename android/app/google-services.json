@@ -38,6 +38,13 @@
             {
               "client_id": "388256772324-3qurb634pl5jds358ue1j54bfo29vco1.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "388256772324-q15hpuv60kal9qahb2uc39r6t8cpg3au.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "dev.ashtonjones.replyflutter"
+              }
             }
           ]
         }
