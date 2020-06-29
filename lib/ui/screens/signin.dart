@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:reply_flutter/core/services/AuthService.dart';
 import 'package:reply_flutter/styles/colors.dart';
 import 'package:reply_flutter/ui/screens/home.dart';
+import 'package:reply_flutter/ui/screens/welcome.dart';
 
 class SignIn extends StatefulWidget {
   static final String routeName = 'signin';
@@ -13,7 +14,6 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-
   final _formKey = GlobalKey<FormState>();
 
   String _email;
@@ -38,7 +38,10 @@ class _SignInState extends State<SignIn> {
               ),
               SizedBox(height: 5.0), // <= NEW
               TextFormField(
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .bodyText1,
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(labelText: "Email Address"),
                 onSaved: (value) => _email = value,
@@ -54,7 +57,10 @@ class _SignInState extends State<SignIn> {
               ),
               SizedBox(height: 5.0), // <= NEW
               TextFormField(
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .bodyText1,
                 validator: (String value) {
                   if (value.isEmpty) {
                     return 'Please enter a password';
@@ -99,17 +105,22 @@ class _SignInState extends State<SignIn> {
 
   void _signInUserWithEmailAndPassword() async {
     try {
-      FirebaseUser result = await Provider.of<AuthService>(context,
+      FirebaseUser signedInUser = await Provider.of<AuthService>(context,
           listen: false)
           .signInUserWithEmailAndPassword(email: _email, password: _password);
-      print(result);
-      print('Signed in user: Email: ${result.email} Password: $_password}');
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => Home()),
-              (Route<dynamic> route) => false);
+      if (signedInUser != null) {
+        print(
+            'Signed in user: Email: ${signedInUser
+                .email} Password: $_password}');
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (BuildContext context) => Home()),
+                (Route<dynamic> route) => false);
+      } else {
+        print('Signed in user is null!');
+      }
     } on AuthException catch (error) {
       print('AuthException: ' + error.message.toString());
-      return _buildErrorDialog(context, error.toString());
+      return _buildErrorDialog(context, error.message.toString());
     } on Exception catch (error) {
       print('Exception: ' + error.toString());
       return _buildErrorDialog(context, error.toString());
@@ -117,16 +128,66 @@ class _SignInState extends State<SignIn> {
   }
 
   Future _buildErrorDialog(BuildContext context, _message) {
+    String errorMessage = 'error';
+    bool returnToWelcomeScreen = false;
+
     return showDialog(
       builder: (context) {
+        switch (_message) {
+          case 'The password is invalid or the user does not have a password.':
+            errorMessage = 'Invalid password';
+            returnToWelcomeScreen = false;
+            break;
+          case 'There is no user record corresponding to this identifier. The user may have been deleted.':
+            errorMessage = 'Account not found. Please register an account';
+            returnToWelcomeScreen = true;
+            break;
+          case 'The email address is badly formatted.':
+            errorMessage = 'Invalid email. Please enter a valid email';
+            returnToWelcomeScreen = false;
+            break;
+          case 'We have blocked all requests from this device due to unusual activity. Try again later. [ Too many unsuccessful login attempts. Please try again later. ]':
+            errorMessage =
+            'Too many unsuccessful login attempts. Please try again later';
+            returnToWelcomeScreen = true;
+            break;
+          case 'The user account has been disabled by an administrator.':
+            errorMessage = 'Your account has been disabled';
+            returnToWelcomeScreen = true;
+            break;
+          case 'The given sign-in provider is disabled for this Firebase project. Enable it in the Firebase console, under the sign-in method tab of the Auth section.':
+            print('The given sign-in provider is disabled for this Firebase project. Enable it in the Firebase console, under the sign-in method tab of the Auth section.');
+            break;
+          default:
+            errorMessage = 'Unknown error occurred';
+            returnToWelcomeScreen = true;
+            break;
+        }
         return AlertDialog(
-          title: Text('Error Message'),
-          content: Text(_message),
+          title: Text(
+            'Error Message',
+            style: Theme
+                .of(context)
+                .textTheme
+                .headline6,
+          ),
+          content: Text(
+            errorMessage,
+            style: Theme
+                .of(context)
+                .textTheme
+                .bodyText1,
+          ),
           actions: [
             FlatButton(
-                child: Text('Cancel'),
+                child: Text('OK'),
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  returnToWelcomeScreen
+                      ? Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => Welcome()),
+                          (Route<dynamic> route) => false)
+                      : Navigator.of(context).pop();
                 })
           ],
         );

@@ -12,7 +12,12 @@ class AuthService with ChangeNotifier {
   Future<FirebaseUser> getUser() async {
     try {
       final user = await _auth.currentUser();
-      print('User signed in: ${user.email}');
+      if(user != null) {
+        print('User signed in: ${user.email}');
+      }
+      else {
+        print('No user signed in');
+      }
       notifyListeners();
       return user;
     }
@@ -25,25 +30,29 @@ class AuthService with ChangeNotifier {
   // wrapping the firebase calls
   Future signout() async {
     var result = await FirebaseAuth.instance.signOut();
+    print('Signing out user');
     notifyListeners();
     return result;
   }
 
   // wrapping the firebase calls
-  Future createUserWithEmailAndPassword(
+  Future<FirebaseUser> createUserWithEmailAndPassword(
       {String firstName,
         String lastName,
         String email,
         String password}) async {
-    var r = await FirebaseAuth.instance
+    var authResult = await FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password);
 
     // FirebaseUser
-    var u = r.user;
+    var newUser = authResult.user;
+
+    /// Add the first and last name to the FirebaseUser
     UserUpdateInfo info = UserUpdateInfo();
     info.displayName = '$firstName $lastName';
+    newUser.updateProfile(info);
     // Return FirebaseUser with updated information (setting the display name using their first and last name)
-    return await u.updateProfile(info);
+    return newUser;
   }
 
   ///

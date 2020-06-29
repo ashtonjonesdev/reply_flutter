@@ -15,6 +15,7 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
+  final _firebaseAuth = FirebaseAuth.instance;
 
   String _firstName;
   String _lastName;
@@ -119,7 +120,7 @@ class _RegisterState extends State<Register> {
     // Validate information was correctly entered
     if (form.validate()) {
       print('Form was successfully validated');
-      print('Registering user: Email: $_email Password: $_password');
+      print('Registering user: First Name: $_firstName | Last Name: $_lastName Email: | $_email Password: $_password');
       // Call the login method with the enter information
       createUserWithEmailAndPassword();
     }
@@ -134,9 +135,16 @@ class _RegisterState extends State<Register> {
                   lastName: _lastName,
                   email: _email,
                   password: _password);
-      print(newUser);
-      print('Registered user: Email: ${newUser.email} Password: $_password}');
       if(newUser != null) {
+        print('Registered user: ${newUser.uid} First Name: $_firstName | Last Name: $_lastName | Email: ${newUser.email} | Password: $_password}');
+        /// Make sure user was also signed in after registration
+        FirebaseUser currentUser = await Provider.of<AuthService>(context, listen: false).getUser();
+        if(currentUser != null) {
+          print('Registered user was signed in: ${currentUser.uid}');
+        }
+        else {
+          print('User was registered but not signed in!');
+        }
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (BuildContext context) => Home()),
                 (Route<dynamic> route) => false);
@@ -176,8 +184,8 @@ class _RegisterState extends State<Register> {
             break;
         }
         return AlertDialog(
-          title: Text('Error Message'),
-          content: Text(errorMessage, style: Theme.of(context).textTheme.bodyText1,),
+          title: Text('Error Message', style: Theme.of(context).textTheme.headline6),
+          content: Text(errorMessage, style: Theme.of(context).textTheme.bodyText1),
           actions: [
             FlatButton(
                 child: Text('OK'),

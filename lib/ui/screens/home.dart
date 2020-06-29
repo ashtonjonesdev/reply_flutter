@@ -416,6 +416,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   void _signOut() async {
     await Provider.of<AuthService>(context, listen: false).signout();
+    if (await Provider.of<AuthService>(context, listen: false).getUser() == null
+    ) {
+      print('Successfully signed out user');
+    }
+    else {
+      print('Failed to sign out user!');
+    }
   }
 
   @override
