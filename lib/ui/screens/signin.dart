@@ -80,7 +80,7 @@ class _SignInState extends State<SignIn> {
                   child: MaterialButton(
                     minWidth: 400,
                     child: Text("SIGN IN"),
-                    onPressed: _validateAndSignIn,
+                    onPressed: _validateAndSignInWithEmailAndPassword,
                   ),
                 ),
               ),
@@ -91,7 +91,7 @@ class _SignInState extends State<SignIn> {
     );
   }
 
-  _validateAndSignIn() async {
+  _validateAndSignInWithEmailAndPassword() async {
     final form = _formKey.currentState;
     form.save();
     // Validate information was correctly entered

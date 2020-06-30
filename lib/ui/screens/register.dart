@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reply_flutter/core/data/repository/firebase_repository.dart';
 import 'package:reply_flutter/core/services/AuthService.dart';
 import 'package:reply_flutter/styles/colors.dart';
 import 'package:reply_flutter/ui/screens/home.dart';
@@ -16,6 +17,7 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
   final _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseRepository firebaseRepository = FirebaseRepository();
 
   String _firstName;
   String _lastName;
@@ -122,21 +124,23 @@ class _RegisterState extends State<Register> {
       print('Form was successfully validated');
       print('Registering user: First Name: $_firstName | Last Name: $_lastName Email: | $_email Password: $_password');
       // Call the login method with the enter information
-      createUserWithEmailAndPassword();
+      registerUserWithEmailAndPassword();
     }
   }
 
-  void createUserWithEmailAndPassword() async {
+  void registerUserWithEmailAndPassword() async {
     try {
       FirebaseUser newUser =
           await Provider.of<AuthService>(context, listen: false)
-              .createUserWithEmailAndPassword(
+              .registerUserWithEmailAndPassword(
                   firstName: _firstName,
                   lastName: _lastName,
                   email: _email,
                   password: _password);
       if(newUser != null) {
-        print('Registered user: ${newUser.uid} First Name: $_firstName | Last Name: $_lastName | Email: ${newUser.email} | Password: $_password}');
+        print('Registered user: ${newUser.uid} | Name: ${newUser.displayName} | Email: ${newUser.email} | Password: $_password}');
+        // Create a new user in the database
+        firebaseRepository.createUserInDatabaseWithEmail(newUser);
         /// Make sure user was also signed in after registration
         FirebaseUser currentUser = await Provider.of<AuthService>(context, listen: false).getUser();
         if(currentUser != null) {

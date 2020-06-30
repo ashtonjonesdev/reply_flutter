@@ -1,14 +1,16 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:reply_flutter/core/data/repository/firebase_repository.dart';
 
 class AuthService with ChangeNotifier {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  ///
-  /// return the Future with firebase user object FirebaseUser if one exists
-  ///
+
   Future<FirebaseUser> getUser() async {
     try {
       final user = await _auth.currentUser();
@@ -27,7 +29,6 @@ class AuthService with ChangeNotifier {
     }
   }
 
-  // wrapping the firebase calls
   Future signout() async {
     var result = await FirebaseAuth.instance.signOut();
     print('Signing out user');
@@ -35,8 +36,7 @@ class AuthService with ChangeNotifier {
     return result;
   }
 
-  // wrapping the firebase calls
-  Future<FirebaseUser> createUserWithEmailAndPassword(
+  Future<FirebaseUser> registerUserWithEmailAndPassword(
       {String firstName,
         String lastName,
         String email,
@@ -48,18 +48,26 @@ class AuthService with ChangeNotifier {
     var newUser = authResult.user;
 
     /// Add the first and last name to the FirebaseUser
-    UserUpdateInfo info = UserUpdateInfo();
-    info.displayName = '$firstName $lastName';
-    newUser.updateProfile(info);
+
+    String newDisplayName = '$firstName $lastName';
+    UserUpdateInfo updateInfo = UserUpdateInfo();
+    updateInfo.displayName = newDisplayName;
+
+    await newUser.updateProfile(updateInfo).catchError((error) => print(error));
+
+    // Refresh data
+    await newUser.reload();
+
+    // Need to make this call to get the updated display name; or else display name will be null
+    FirebaseUser updatedUser = await FirebaseAuth.instance.currentUser();
+
+    print('new display name: ${updatedUser.displayName}');
+
     // Return FirebaseUser with updated information (setting the display name using their first and last name)
-    return newUser;
+    return updatedUser;
   }
 
-  ///
-  /// wrapping the firebase call to signInWithEmailAndPassword
-  /// `email` String
-  /// `password` String
-  ///
+
   Future<FirebaseUser> signInUserWithEmailAndPassword({String email, String password}) async {
     try {
       var result = await FirebaseAuth.instance
@@ -72,20 +80,21 @@ class AuthService with ChangeNotifier {
     }
   }
 
-//  Future<FirebaseUser> _handleSignIn() async {
-//    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-//    final GoogleSignInAuthentication googleAuth =
-//    await googleUser.authentication;
-//
-//    final AuthCredential credential = GoogleAuthProvider.getCredential(
-//      accessToken: googleAuth.accessToken,
-//      idToken: googleAuth.idToken,
-//    );
-//
-//    final FirebaseUser user =
-//        (await _auth.signInWithCredential(credential)).user;
-//    print('Successfully signed in user with Google Provider');
-//    print('Name: ' + user.displayName + 'uID: ' + user.uid);
-//    return user;
-//  }
+  Future<FirebaseUser> signInWithGoogle() async {
+    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+    final GoogleSignInAuthentication googleAuth =
+    await googleUser.authentication;
+
+    final AuthCredential credential = GoogleAuthProvider.getCredential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    final FirebaseUser user =
+        (await _auth.signInWithCredential(credential)).user;
+    print('Successfully signed in user with Google Provider');
+    print('Name: ${user.displayName} | uID: ${user.uid}');
+
+    return user;
+  }
 }

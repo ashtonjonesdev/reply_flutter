@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
+import 'package:reply_flutter/core/data/repository/firebase_repository.dart';
+import 'package:reply_flutter/core/services/AuthService.dart';
 import 'package:reply_flutter/styles/colors.dart';
 import 'package:reply_flutter/ui/screens/home.dart';
 import 'package:reply_flutter/ui/screens/register.dart';
@@ -14,10 +17,9 @@ class Welcome extends StatelessWidget {
 
   static final String routeName = 'welcome';
 
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-
   final bool isAndroid = Platform.isAndroid;
+
+  final FirebaseRepository firebaseRepository = FirebaseRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -93,12 +95,14 @@ class Welcome extends StatelessWidget {
                     color: Colors.grey.shade100,
                     minWidth: 400,
                     splashColor: Colors.grey,
-                    onPressed: () {
-                      _signInWithGoogle()
-                          .then((FirebaseUser firebaseUser) =>
-                          print(
-                              '${firebaseUser.displayName} signed in with Google'))
-                          .whenComplete(() =>
+                    onPressed: () async {
+                      await Provider.of<AuthService>(context, listen: false).signInWithGoogle()
+                          .then((FirebaseUser firebaseUser) async {
+                            // If it is a new user (signing in for the first time), create a user in the database
+                          if(firebaseUser.metadata.creationTime == firebaseUser.metadata.lastSignInTime) {
+                            firebaseRepository.createUserInDatabaseWithGoogleProvider(firebaseUser);
+                          }
+                      }).whenComplete(() =>
                           Navigator.popAndPushNamed(context, Home.routeName))
                           .catchError((e) => print(e));
                     },
@@ -224,7 +228,9 @@ class Welcome extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: SignInWithAppleButton(
-                  onPressed: () async {
+                  // TODO: Implement SigninwithApple
+
+                onPressed: () async {
                     final credential = await SignInWithApple.getAppleIDCredential(
                       scopes: [
                         AppleIDAuthorizationScopes.email,
@@ -236,41 +242,6 @@ class Welcome extends StatelessWidget {
                     // after they have been validated with Apple (see `Integration` section for more information on how to do this)
                   },
                 ),
-//                child: Material(
-//                  child: MaterialButton(
-//                    color: Colors.black,
-//                    minWidth: 400,
-//                    splashColor: Colors.grey,
-//                    onPressed: () {
-//                      // TODO: Implement SigninwithApple
-//                    },
-//                    shape: RoundedRectangleBorder(
-//                        borderRadius: BorderRadius.circular(40)),
-//                    highlightElevation: 0,
-//                    child: Padding(
-//                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-//                      child: Row(
-//                        mainAxisSize: MainAxisSize.min,
-//                        mainAxisAlignment: MainAxisAlignment.center,
-//                        children: <Widget>[
-//                          Image(
-//                              image: AssetImage("images/apple_logo.png"),
-//                              height: 30.0),
-//                          Padding(
-//                            padding: const EdgeInsets.only(left: 10),
-//                            child: Text(
-//                              'Sign in with Apple',
-//                              style: TextStyle(
-//                                fontSize: 14,
-//                                color: Colors.black,
-//                              ),
-//                            ),
-//                          ),
-//                        ],
-//                      ),
-//                    ),
-//                  ),
-//                ),
               ),
             ],
           ),
@@ -309,23 +280,6 @@ class Welcome extends StatelessWidget {
     } else {
       throw 'Could not launch $url';
     }
-  }
-
-  Future<FirebaseUser> _signInWithGoogle() async {
-    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth =
-    await googleUser.authentication;
-
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-
-    final FirebaseUser user =
-        (await _auth.signInWithCredential(credential)).user;
-    print('Successfully signed in user with Google Provider');
-    print('Name: ${user.displayName} | uID: ${user.uid}');
-    return user;
   }
 
 }
