@@ -145,6 +145,7 @@ class _RegisterState extends State<Register> {
         FirebaseUser currentUser = await Provider.of<AuthService>(context, listen: false).getUser();
         if(currentUser != null) {
           print('Registered user was signed in: ${currentUser.uid}');
+          await firebaseRepository.getPersonalMessages(currentUser);
         }
         else {
           print('User was registered but not signed in!');

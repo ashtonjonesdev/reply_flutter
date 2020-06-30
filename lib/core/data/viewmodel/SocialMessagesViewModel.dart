@@ -3,7 +3,7 @@ import 'package:reply_flutter/core/data/model/MessageCard.dart';
 
 class SocialMessagesViewModel with ChangeNotifier {
 
-  List<MessageCard> _socialMessages = [MessageCard(cardTitle: 'Welcome!', cardMessage: 'Write your own message')];
+  List<MessageCard> _socialMessages = [MessageCard(title: 'Welcome!', message: 'Write your own message')];
 
   List<MessageCard> get socialMessages => _socialMessages;
 

@@ -63,10 +63,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   ];
 
   List<MessageCard> placeholderMessageCards = [
-    new MessageCard(cardTitle: 'Title', cardMessage: 'Message'),
-    new MessageCard(cardTitle: 'Title', cardMessage: 'Message'),
-    new MessageCard(cardTitle: 'Title', cardMessage: 'Message'),
-    new MessageCard(cardTitle: 'Title', cardMessage: 'Message'),
+    new MessageCard(title: 'Title', message: 'Message'),
+    new MessageCard(title: 'Title', message: 'Message'),
+    new MessageCard(title: 'Title', message: 'Message'),
+    new MessageCard(title: 'Title', message: 'Message'),
   ];
 
   Color cardBackgroundColor = kBackgroundColor;
@@ -113,9 +113,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(personalMessagesViewModel
-                      .personalMessages[index].cardTitle),
+                      .personalMessages[index].title),
                   Text(personalMessagesViewModel
-                      .personalMessages[index].cardMessage)
+                      .personalMessages[index].message)
                 ],
               ),
             );
@@ -140,9 +140,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(socialMessagesViewModel.socialMessages[index].cardTitle),
+                  Text(socialMessagesViewModel.socialMessages[index].title),
                   Text(
-                      socialMessagesViewModel.socialMessages[index].cardMessage)
+                      socialMessagesViewModel.socialMessages[index].message)
                 ],
               ),
             );
@@ -168,9 +168,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(businessMessagesViewModel
-                      .businessMessages[index].cardTitle),
+                      .businessMessages[index].title),
                   Text(businessMessagesViewModel
-                      .businessMessages[index].cardMessage)
+                      .businessMessages[index].message)
                 ],
               ),
             );
@@ -198,9 +198,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(firstAdditionalMessagesViewModel
-                          .firstAdditionalMessages[index].cardTitle),
+                          .firstAdditionalMessages[index].title),
                       Text(firstAdditionalMessagesViewModel
-                          .firstAdditionalMessages[index].cardMessage)
+                          .firstAdditionalMessages[index].message)
                     ],
                   ),
                 );
@@ -228,9 +228,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(secondAdditionalMessagesViewModel
-                          .secondAdditionalMessages[index].cardTitle),
+                          .secondAdditionalMessages[index].title),
                       Text(secondAdditionalMessagesViewModel
-                          .secondAdditionalMessages[index].cardMessage)
+                          .secondAdditionalMessages[index].message)
                     ],
                   ),
                 );

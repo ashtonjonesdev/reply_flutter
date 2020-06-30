@@ -168,35 +168,35 @@ class _AddNewMessageState extends State<AddNewMessage> {
           print('Saving Message to Personal Category..');
           Provider.of<PersonalMessagesViewModel>(context, listen: false)
               .addPersonalMessage(
-              MessageCard(cardTitle: cardTitle, cardMessage: cardMessage));
+              MessageCard(title: cardTitle, message: cardMessage));
           break;
 
         case MessageCategory.Social:
           print('Saving Message to Social Category..');
           Provider.of<SocialMessagesViewModel>(context, listen: false)
               .addSocialMessage(
-              MessageCard(cardTitle: cardTitle, cardMessage: cardMessage));
+              MessageCard(title: cardTitle, message: cardMessage));
           break;
 
         case MessageCategory.Business:
           print('Saving Message to Business Category..');
           Provider.of<BusinessMessagesViewModel>(context, listen: false)
               .addBusinessMessage(
-              MessageCard(cardTitle: cardTitle, cardMessage: cardMessage));
+              MessageCard(title: cardTitle, message: cardMessage));
           break;
 
         case MessageCategory.FirstAdditional:
           print('Saving Message to First Additional Category..');
           Provider.of<FirstAdditionalMessagesViewModel>(context, listen: false)
               .addFirstAdditionalMessage(
-              MessageCard(cardTitle: cardTitle, cardMessage: cardMessage));
+              MessageCard(title: cardTitle, message: cardMessage));
           break;
 
         case MessageCategory.SecondAdditional:
           print('Saving Message to Second Additional Category..');
           Provider.of<SecondAdditionalMessagesViewModel>(context, listen: false)
               .addSecondAdditionalMessage(
-              MessageCard(cardTitle: cardTitle, cardMessage: cardMessage));
+              MessageCard(title: cardTitle, message: cardMessage));
           break;
 
         default:
