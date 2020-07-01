@@ -36,81 +36,83 @@ class _RegisterState extends State<Register> {
         padding: EdgeInsets.all(20.0),
         child: Form(
           key: _formKey,
-          child: Column(
-            children: <Widget>[
-              Text(
-                'Registration Information',
-                style: TextStyle(fontSize: 20),
-              ),
-              TextFormField(
-                style: Theme.of(context).textTheme.bodyText1,
-                validator: (String value) {
-                  if (value.isEmpty) {
-                    return 'Please enter a first name';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(labelText: "First Name"),
-                onSaved: (value) => _firstName = value,
-              ),
-              SizedBox(height: 5.0),
-              TextFormField(
-                style: Theme.of(context).textTheme.bodyText1,
-                validator: (String value) {
-                  if (value.isEmpty) {
-                    return 'Please enter a last name';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(labelText: "Last Name"),
-                onSaved: (value) => _lastName = value,
-              ),
-              SizedBox(height: 5.0), // <= NEW// <= NEW
-              TextFormField(
-                style: Theme.of(context).textTheme.bodyText1,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(labelText: "Email Address"),
-                onSaved: (value) => _email = value,
-                validator: (String value) {
-                  if (value.isEmpty) {
-                    return 'Please enter an email';
-                  }
-                  if (!value.contains('@')) {
-                    return 'Please enter a valid email';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 5.0), // <= NEW
-              TextFormField(
-                style: Theme.of(context).textTheme.bodyText1,
-                validator: (String value) {
-                  if (value.isEmpty) {
-                    return 'Please enter a password';
-                  }
-                  if(value.length < 6) {
-                    return 'Password should be at least 6 characters';
-                  }
-                  return null;
-                },
-                obscureText: true,
-                decoration: InputDecoration(labelText: "Password"),
-                onSaved: (value) => _password = value,
-              ),
-              SizedBox(height: 5.0), // <= NEW
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Material(
-                  borderRadius: BorderRadius.circular(30.0),
-                  color: kPrimaryColor200,
-                  child: MaterialButton(
-                    minWidth: 400,
-                    child: Text("SIGN UP"),
-                    onPressed: validateAndRegisterUser,
+          child: Expanded(
+            child: Column(
+              children: <Widget>[
+                Text(
+                  'Registration Information',
+                  style: TextStyle(fontSize: 20),
+                ),
+                TextFormField(
+                  style: Theme.of(context).textTheme.bodyText1,
+                  validator: (String value) {
+                    if (value.isEmpty) {
+                      return 'Please enter a first name';
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(labelText: "First Name"),
+                  onSaved: (value) => _firstName = value,
+                ),
+                SizedBox(height: 5.0),
+                TextFormField(
+                  style: Theme.of(context).textTheme.bodyText1,
+                  validator: (String value) {
+                    if (value.isEmpty) {
+                      return 'Please enter a last name';
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(labelText: "Last Name"),
+                  onSaved: (value) => _lastName = value,
+                ),
+                SizedBox(height: 5.0), // <= NEW// <= NEW
+                TextFormField(
+                  style: Theme.of(context).textTheme.bodyText1,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(labelText: "Email Address"),
+                  onSaved: (value) => _email = value,
+                  validator: (String value) {
+                    if (value.isEmpty) {
+                      return 'Please enter an email';
+                    }
+                    if (!value.contains('@')) {
+                      return 'Please enter a valid email';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 5.0), // <= NEW
+                TextFormField(
+                  style: Theme.of(context).textTheme.bodyText1,
+                  validator: (String value) {
+                    if (value.isEmpty) {
+                      return 'Please enter a password';
+                    }
+                    if(value.length < 6) {
+                      return 'Password should be at least 6 characters';
+                    }
+                    return null;
+                  },
+                  obscureText: true,
+                  decoration: InputDecoration(labelText: "Password"),
+                  onSaved: (value) => _password = value,
+                ),
+                SizedBox(height: 5.0), // <= NEW
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Material(
+                    borderRadius: BorderRadius.circular(30.0),
+                    color: kPrimaryColor200,
+                    child: MaterialButton(
+                      minWidth: 400,
+                      child: Text("SIGN UP"),
+                      onPressed: validateAndRegisterUser,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

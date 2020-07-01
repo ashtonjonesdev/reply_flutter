@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reply_flutter/core/data/model/MessageCard.dart';
@@ -6,6 +7,7 @@ import 'package:reply_flutter/core/data/viewmodel/FirstAdditionalMessagesViewMod
 import 'package:reply_flutter/core/data/viewmodel/PersonalMessagesViewModel.dart';
 import 'package:reply_flutter/core/data/viewmodel/SecondAdditionalMessagesViewModel.dart';
 import 'package:reply_flutter/core/data/viewmodel/SocialMessagesViewModel.dart';
+import 'package:reply_flutter/core/services/AuthService.dart';
 import 'package:reply_flutter/styles/colors.dart';
 
 enum MessageCategory {
@@ -35,9 +37,6 @@ class _AddNewMessageState extends State<AddNewMessage> {
 
   final cardMessageMessageTextController = TextEditingController();
 
-  String cardMessage;
-
-  String cardTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +147,10 @@ class _AddNewMessageState extends State<AddNewMessage> {
     );
   }
 
-  void saveNewMessage() {
+  void saveNewMessage() async {
+
+    FirebaseUser firebaseUser = await Provider.of<AuthService>(context, listen: false).getUser();
+
 
     if (cardMessageTitleTextController.text.isEmpty || cardMessageMessageTextController.text.isEmpty) {
       print('User did not enter a title or a message');
@@ -160,15 +162,20 @@ class _AddNewMessageState extends State<AddNewMessage> {
 
     else {
 
+      String cardMessage;
+      String cardTitle;
+      MessageCard messageCardToAdd;
+
       cardTitle = cardMessageTitleTextController.text;
       cardMessage = cardMessageMessageTextController.text;
+
+      messageCardToAdd = MessageCard(title: cardTitle, message: cardMessage);
 
       switch (selectedValue) {
         case MessageCategory.Personal:
           print('Saving Message to Personal Category..');
           Provider.of<PersonalMessagesViewModel>(context, listen: false)
-              .addPersonalMessage(
-              MessageCard(title: cardTitle, message: cardMessage));
+              .addPersonalMessage(firebaseUser, messageCardToAdd);
           break;
 
         case MessageCategory.Social:

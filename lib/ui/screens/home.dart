@@ -31,8 +31,24 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
+
+  PersonalMessagesViewModel personalMessagesViewModel =
+  PersonalMessagesViewModel();
+  SocialMessagesViewModel socialMessagesViewModel = SocialMessagesViewModel();
+  BusinessMessagesViewModel businessMessagesViewModel =
+  BusinessMessagesViewModel();
+  FirstAdditionalMessagesViewModel firstAdditionalMessagesViewModel =
+  FirstAdditionalMessagesViewModel();
+  SecondAdditionalMessagesViewModel secondAdditionalMessagesViewModel =
+  SecondAdditionalMessagesViewModel();
+
+
+
   @override
   void initState() {
+
+    Provider.of<PersonalMessagesViewModel>(context, listen: false).loadPersonalMessagesList(widget.firebaseUser);
+
     super.initState();
 
     _tabController = TabController(length: _tabs.length, vsync: this);
@@ -41,17 +57,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
     _currentTabIndex = 0;
 
+
   }
 
-  PersonalMessagesViewModel personalMessagesViewModel =
-      PersonalMessagesViewModel();
-  SocialMessagesViewModel socialMessagesViewModel = SocialMessagesViewModel();
-  BusinessMessagesViewModel businessMessagesViewModel =
-      BusinessMessagesViewModel();
-  FirstAdditionalMessagesViewModel firstAdditionalMessagesViewModel =
-      FirstAdditionalMessagesViewModel();
-  SecondAdditionalMessagesViewModel secondAdditionalMessagesViewModel =
-      SecondAdditionalMessagesViewModel();
+
 
   List<String> appBarTitles = [
     'Personal Messages',
@@ -59,13 +68,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     'Business Messages',
     '+1 Messages',
     '+2 Messages',
-  ];
-
-  List<MessageCard> placeholderMessageCards = [
-    new MessageCard(title: 'Title', message: 'Message'),
-    new MessageCard(title: 'Title', message: 'Message'),
-    new MessageCard(title: 'Title', message: 'Message'),
-    new MessageCard(title: 'Title', message: 'Message'),
   ];
 
   Color cardBackgroundColor = kBackgroundColor;
@@ -95,11 +97,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   ];
 
   Widget generatePersonalMessagesGridView() {
+
+
     return Consumer<PersonalMessagesViewModel>(
       builder: (context, personalMessagesViewModel, child) => GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2, crossAxisSpacing: 40, mainAxisSpacing: 40),
-          itemCount: personalMessagesViewModel.personalMessages.length,
+          itemCount: personalMessagesViewModel.personalMessagesList.length,
           padding: EdgeInsets.all(24),
           itemBuilder: (context, index) {
             return Container(
@@ -111,10 +115,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(personalMessagesViewModel
-                      .personalMessages[index].title),
-                  Text(personalMessagesViewModel
-                      .personalMessages[index].message)
+                  Text('${Provider.of<PersonalMessagesViewModel>(context).personalMessagesList[index].title} | ${Provider.of<PersonalMessagesViewModel>(context).personalMessagesList[index].message}', style: Theme.of(context).textTheme.bodyText1,),
                 ],
               ),
             );
@@ -239,7 +240,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    var personalMessagesModel = Provider.of<PersonalMessagesViewModel>(context);
 
     return Scaffold(
       appBar: AppBar(

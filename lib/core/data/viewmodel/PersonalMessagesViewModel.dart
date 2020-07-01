@@ -1,15 +1,39 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:reply_flutter/core/data/model/MessageCard.dart';
+import 'package:reply_flutter/core/data/repository/firebase_repository.dart';
 
 class PersonalMessagesViewModel with ChangeNotifier {
 
-  List<MessageCard> _personalMessages = [MessageCard(title: 'Welcome!', message: 'Write your own message')];
 
-  List<MessageCard> get personalMessages => _personalMessages;
 
-  void addPersonalMessage(MessageCard messageCard) {
-    _personalMessages.add(messageCard);
+  List<MessageCard> _personalMessagesList = [];
+  FirebaseRepository firebaseRepository = FirebaseRepository();
+
+
+
+  void loadPersonalMessagesList(FirebaseUser firebaseUser) async {
+
+    _personalMessagesList = await firebaseRepository.getPersonalMessages(firebaseUser);
+
+    notifyListeners();
+
+  }
+
+  Future<void> addPersonalMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) async {
+
+    await firebaseRepository.addPersonalMessage(firebaseUser, messageCardToAdd);
+
     notifyListeners();
   }
 
+  int getPersonalMessagesListLength() {
+
+    return _personalMessagesList.length;
+
+  }
+
+  List<MessageCard> get personalMessagesList => _personalMessagesList;
+
+  PersonalMessagesViewModel();
 }
