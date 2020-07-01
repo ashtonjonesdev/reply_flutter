@@ -16,8 +16,8 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+
   final _formKey = GlobalKey<FormState>();
-  final _firebaseAuth = FirebaseAuth.instance;
   final FirebaseRepository firebaseRepository = FirebaseRepository();
 
   String _firstName;
