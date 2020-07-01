@@ -35,13 +35,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    print('initState');
-
     _tabController = TabController(length: _tabs.length, vsync: this);
 
     _tabController.addListener(_onTabChanged);
 
     _currentTabIndex = 0;
+
   }
 
   PersonalMessagesViewModel personalMessagesViewModel =

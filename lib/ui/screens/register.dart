@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reply_flutter/core/data/model/MessageCard.dart';
 import 'package:reply_flutter/core/data/repository/firebase_repository.dart';
 import 'package:reply_flutter/core/services/AuthService.dart';
 import 'package:reply_flutter/styles/colors.dart';
@@ -145,7 +146,10 @@ class _RegisterState extends State<Register> {
         FirebaseUser currentUser = await Provider.of<AuthService>(context, listen: false).getUser();
         if(currentUser != null) {
           print('Registered user was signed in: ${currentUser.uid}');
-          await firebaseRepository.getPersonalMessages(currentUser);
+          List<MessageCard> personalMessages = await firebaseRepository.getPersonalMessages(currentUser);
+          for(MessageCard messageCard in personalMessages) {
+            print(messageCard);
+          }
         }
         else {
           print('User was registered but not signed in!');

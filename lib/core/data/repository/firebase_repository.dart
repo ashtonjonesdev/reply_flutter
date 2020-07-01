@@ -36,7 +36,7 @@ class FirebaseRepository with ChangeNotifier {
     await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).setData({
       NAME_FIELD : firebaseUser.displayName,
       EMAIL_FIELD: firebaseUser.email,
-      PERSONAL_MESSAGES_FIELD : [MessageCard(title: 'Hi ${firebaseUser.displayName}! 👋🏼', message: 'Add your own message!').toJson(),]
+      PERSONAL_MESSAGES_FIELD : [MessageCard(title: 'Hi ${firebaseUser.displayName}! 👋🏼', message: 'Add your own message!').toJson(),MessageCard(title: 'Hello ${firebaseUser.displayName}! 👋🏼', message: 'Add your own message!').toJson()]
     }).whenComplete(() => print('Created user in database with email. Name: ${firebaseUser.displayName} | Email: ${firebaseUser.email}'));
 
   }
@@ -54,19 +54,31 @@ class FirebaseRepository with ChangeNotifier {
 
   Future<List<MessageCard>> getPersonalMessages(FirebaseUser firebaseUser) async {
 
-    List<MessageCard> personalMessages;
+    List<MessageCard> personalMessages = List();
 
     await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).get().then((document) {
-      print(
-        // TODO: Need to figure out how to get all the MessageCards from the document's personalMessages field
-        'Personal Messages data: ${document.data[PERSONAL_MESSAGES_FIELD][0]}'
-      );
-      // Create a MessageCard object from the DocumentSnapshot
-      // Use the fromJson method in MessageCard to decode the map
-      MessageCard messageCard = MessageCard.fromJson(document.data[PERSONAL_MESSAGES_FIELD][0]);
-      print('Message card data: Title: ${messageCard.title} | Message: ${messageCard.message}');
+
+      if(document.exists) {
+
+        // Get the List of Maps
+        List values = document.data[PERSONAL_MESSAGES_FIELD];
+        print('List received: $values');
 
 
+        // For each map (each message card) in the list, add a MessageCard to the MessageCard list (using the fromJson method)
+        for(Map<String, dynamic> map in values ) {
+          print('Map received in List: $map');
+
+          /// Create the MessageCard from the map
+          MessageCard messageCard = MessageCard.fromJson(map);
+          print('Retrieved Message Card: ${messageCard.title} | ${messageCard.message}');
+
+          /// Add the MessageCard to the list
+          personalMessages.add(messageCard);
+          print('Added MessageCard to list: ${personalMessages.last}');
+
+        }
+      }
     });
 
 

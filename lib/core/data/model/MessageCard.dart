@@ -18,4 +18,9 @@ class MessageCard  {
         'message': message,
       };
 
+  @override
+  String toString() {
+    return '$title | $message';
+  }
+
 }
