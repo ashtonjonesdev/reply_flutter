@@ -6,6 +6,7 @@ import 'package:reply_flutter/core/data/repository/firebase_repository.dart';
 class PersonalMessagesViewModel with ChangeNotifier {
 
 
+  PersonalMessagesViewModel();
 
   List<MessageCard> _personalMessagesList = [];
   FirebaseRepository firebaseRepository = FirebaseRepository();
@@ -35,5 +36,4 @@ class PersonalMessagesViewModel with ChangeNotifier {
 
   List<MessageCard> get personalMessagesList => _personalMessagesList;
 
-  PersonalMessagesViewModel();
 }

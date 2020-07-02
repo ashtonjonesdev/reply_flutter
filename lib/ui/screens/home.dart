@@ -47,9 +47,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   void initState() {
 
-    Provider.of<PersonalMessagesViewModel>(context, listen: false).loadPersonalMessagesList(widget.firebaseUser);
-
     super.initState();
+
+    Provider.of<PersonalMessagesViewModel>(context, listen: false).loadPersonalMessagesList(widget.firebaseUser);
 
     _tabController = TabController(length: _tabs.length, vsync: this);
 
@@ -59,6 +59,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
 
   }
+
+
 
 
 
@@ -119,7 +121,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text('${Provider.of<PersonalMessagesViewModel>(context).personalMessagesList[index].title} | ${Provider.of<PersonalMessagesViewModel>(context).personalMessagesList[index].message}', style: Theme.of(context).textTheme.bodyText1,),
+                  Text('${personalMessagesViewModel.personalMessagesList[index].title} | ${personalMessagesViewModel.personalMessagesList[index].message}', style: Theme.of(context).textTheme.bodyText1,),
                 ],
               ),
             );
