@@ -21,7 +21,7 @@ class PersonalMessagesViewModel with ChangeNotifier {
 
   }
 
-  Future<void> addPersonalMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) async {
+  void addPersonalMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) async {
 
     await firebaseRepository.addPersonalMessage(firebaseUser, messageCardToAdd);
 

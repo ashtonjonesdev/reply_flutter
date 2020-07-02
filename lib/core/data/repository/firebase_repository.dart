@@ -3,9 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reply_flutter/core/data/model/MessageCard.dart';
+import 'package:reply_flutter/core/data/repository/RepositoryInterface.dart';
 import 'package:reply_flutter/core/services/AuthService.dart';
 
-class FirebaseRepository with ChangeNotifier {
+class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
 
   FirebaseRepository();
 
@@ -31,7 +32,7 @@ class FirebaseRepository with ChangeNotifier {
 
 
 
-  void createUserInDatabaseWithEmail(FirebaseUser firebaseUser) async {
+  void createUserInDatabaseWithEmail(var firebaseUser) async {
 
     await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).setData({
       NAME_FIELD : firebaseUser.displayName,
@@ -45,7 +46,7 @@ class FirebaseRepository with ChangeNotifier {
 
   }
 
-  void createUserInDatabaseWithGoogleProvider(FirebaseUser firebaseUser) async {
+  void createUserInDatabaseWithGoogleProvider(var firebaseUser) async {
 
 
     await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).setData({
@@ -61,7 +62,7 @@ class FirebaseRepository with ChangeNotifier {
 
   }
 
-  Future<List<MessageCard>> getPersonalMessages(FirebaseUser firebaseUser) async {
+  Future<List<MessageCard>> getPersonalMessages(var firebaseUser) async {
 
     List<MessageCard> personalMessages = List();
 
@@ -95,7 +96,7 @@ class FirebaseRepository with ChangeNotifier {
 
   }
 
-  Future<void> addPersonalMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) async {
+  void addPersonalMessage(var firebaseUser, MessageCard messageCardToAdd) async {
 
     Map messageCardData = messageCardToAdd.toJson();
 
@@ -106,6 +107,107 @@ class FirebaseRepository with ChangeNotifier {
       PERSONAL_MESSAGES_FIELD : FieldValue.arrayUnion(messageCardList)
 
     });
+  }
+
+  @override
+  void addBusinessMessage(user, MessageCard messageCardToAdd) {
+    print('hello');
+    // TODO: implement addBusinessMessage
+  }
+
+  @override
+  void addFirstAdditionalMessage(user, MessageCard messageCardToAdd) {
+    // TODO: implement addFirstAdditionalMessage
+  }
+
+  @override
+  void addSecondAdditionalMessage(user, MessageCard messageCardToAdd) {
+    // TODO: implement addSecondAdditionalMessage
+  }
+
+  @override
+  void addSocialMessage(user, MessageCard messageCardToAdd) {
+    // TODO: implement addSocialMessage
+  }
+
+  @override
+  void deleteBusinessMessage(user, MessageCard messageCardToAdd) {
+    // TODO: implement deleteBusinessMessage
+  }
+
+  @override
+  void deleteFirstAdditionalMessage(user, MessageCard messageCardToAdd) {
+    // TODO: implement deleteFirstAdditionalMessage
+  }
+
+  @override
+  void deletePersonalMessage(user, MessageCard messageCardToAdd) {
+    // TODO: implement deletePersonalMessage
+  }
+
+  @override
+  void deleteSecondAdditionalMessage(user, MessageCard messageCardToAdd) {
+    // TODO: implement deleteSecondAdditionalMessage
+  }
+
+  @override
+  void deleteSocialMessage(user, MessageCard messageCardToAdd) {
+    // TODO: implement deleteSocialMessage
+  }
+
+  @override
+  void editBusinessMessage(user, MessageCard messageCardToAdd) {
+    // TODO: implement editBusinessMessage
+  }
+
+  @override
+  void editFirstAdditionalMessage(user, MessageCard messageCardToAdd) {
+    // TODO: implement editFirstAdditionalMessage
+  }
+
+  @override
+  void editPersonalMessage(user, MessageCard messageCardToAdd) {
+    // TODO: implement editPersonalMessage
+  }
+
+  @override
+  void editSecondAdditionalMessage(user, MessageCard messageCardToAdd) {
+    // TODO: implement editSecondAdditionalMessage
+  }
+
+  @override
+  void editSocialMessage(user, MessageCard messageCardToAdd) {
+    // TODO: implement editSocialMessage
+  }
+
+  @override
+  Future<List<MessageCard>> getBusinessMessages(user) {
+    // TODO: implement getBusinessMessages
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<MessageCard>> getFirstAdditionalMessages(user) {
+    // TODO: implement getFirstAdditionalMessages
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<MessageCard> getReplyLaterMessage(user) {
+    // TODO: implement getReplyLaterMessage
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<MessageCard>> getSecondAdditionalMessages(user) {
+    // TODO: implement getSecondAdditionalMessages
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<MessageCard>> getSocialMessages(user) {
+    // TODO: implement getSocialMessages
+    throw UnimplementedError();
   }
 
 
