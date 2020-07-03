@@ -42,28 +42,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   SecondAdditionalMessagesViewModel secondAdditionalMessagesViewModel =
   SecondAdditionalMessagesViewModel();
 
-
-
-  @override
-  void initState() {
-
-    super.initState();
-
-    Provider.of<PersonalMessagesViewModel>(context, listen: false).loadPersonalMessagesList(widget.firebaseUser);
-
-    _tabController = TabController(length: _tabs.length, vsync: this);
-
-    _tabController.addListener(_onTabChanged);
-
-    _currentTabIndex = 0;
-
-
-  }
-
-
-
-
-
   List<String> appBarTitles = [
     'Personal Messages',
     'Social Messages',
@@ -73,6 +51,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   ];
 
   Color cardBackgroundColor = kBackgroundColor;
+
+  int selectedItemIndex = -1;
+
+  bool isItemSelected = false;
+
+  bool selectedNewItem = true;
 
   String appBarTitle = 'Personal Messages';
 
@@ -98,6 +82,24 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     ),
   ];
 
+  MessageCard selectedMessage;
+
+
+  @override
+  void initState() {
+
+    super.initState();
+
+    _tabController = TabController(length: _tabs.length, vsync: this);
+
+    _tabController.addListener(_onTabChanged);
+
+    _currentTabIndex = 0;
+
+
+  }
+
+
   Widget generatePersonalMessagesGridView() {
 
     /// Had to add load method here as well to reload the data so an added message shows up immediately
@@ -108,25 +110,44 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     return Consumer<PersonalMessagesViewModel>(
       builder: (context, personalMessagesViewModel, child) => GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, crossAxisSpacing: 40, mainAxisSpacing: 40),
+              crossAxisCount: 2, crossAxisSpacing: 35, mainAxisSpacing: 40),
           itemCount: personalMessagesViewModel.personalMessagesList.length,
           padding: EdgeInsets.all(24),
           itemBuilder: (context, index) {
-            return Container(
-              decoration: BoxDecoration(
-                color: kPrimaryColorLight,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text('${personalMessagesViewModel.personalMessagesList[index].title} | ${personalMessagesViewModel.personalMessagesList[index].message}', style: Theme.of(context).textTheme.bodyText1,),
-                ],
+            return GestureDetector(
+              onTap: () => selectGridViewItem(index, personalMessagesViewModel),
+              child: Card(
+                color: index != selectedItemIndex ? kSurfaceColor : kPrimaryColor200,
+                elevation: 2,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text('${personalMessagesViewModel.personalMessagesList[index].title} | ${personalMessagesViewModel.personalMessagesList[index].message}', style: Theme.of(context).textTheme.bodyText1.copyWith(fontWeight: FontWeight.bold, fontSize: 14), textAlign: TextAlign.center,),
+                    ),
+                  ],
+                ),
               ),
             );
           }),
     );
+  }
+
+  /// This works for single selection (Unable to deselect the currently selected one by clicking on it, but that's ok because the previous one is deselected when a new one is selected
+  void selectGridViewItem(int index, PersonalMessagesViewModel personalMessagesViewModel) {
+    print('Tapped item: $index');
+    setState(() {
+      selectedItemIndex = index;
+    });
+    print('Selected Item: $index');
+
+    // Set the selected message
+    selectedMessage = personalMessagesViewModel.personalMessagesList[index];
+    print('Selected message: $selectedMessage');
+
   }
 
   Widget generateSocialMessagesGridView() {
@@ -248,6 +269,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      backgroundColor: kBackgroundColor,
       appBar: AppBar(
           title: Text(appBarTitle),
           centerTitle: true,

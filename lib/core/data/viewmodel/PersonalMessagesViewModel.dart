@@ -9,13 +9,13 @@ class PersonalMessagesViewModel with ChangeNotifier {
   PersonalMessagesViewModel();
 
   List<MessageCard> _personalMessagesList = [];
-  FirebaseRepository firebaseRepository = FirebaseRepository();
+  FirebaseRepository _firebaseRepository = FirebaseRepository();
 
 
 
   void loadPersonalMessagesList(FirebaseUser firebaseUser) async {
 
-    _personalMessagesList = await firebaseRepository.getPersonalMessages(firebaseUser);
+    _personalMessagesList = await _firebaseRepository.getPersonalMessages(firebaseUser);
 
     notifyListeners();
 
@@ -23,7 +23,7 @@ class PersonalMessagesViewModel with ChangeNotifier {
 
   void addPersonalMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) async {
 
-    await firebaseRepository.addPersonalMessage(firebaseUser, messageCardToAdd);
+    _firebaseRepository.addPersonalMessage(firebaseUser, messageCardToAdd);
 
     notifyListeners();
   }
