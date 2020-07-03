@@ -460,6 +460,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 style: Theme.of(context).textTheme.bodyText1.copyWith(color: kPrimaryColorDark),
               ),
               onPressed: () {
+                setState(() {
+                  // Set selectedItemIndex back to -1 to signify a card isn't selected (change the color back to unselected)
+                  selectedItemIndex = -1;
+                  // Set selectedMessage back to null after dialog is done showing
+                  selectedMessage = null;
+                });
                 Navigator.of(context).pop();
               },
             ),
@@ -472,6 +478,16 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void deletePersonalMessage(FirebaseUser firebaseUser, MessageCard messageCardToDelete) async {
 
     Provider.of<PersonalMessagesViewModel>(context, listen: false).deletePersonalMessage(firebaseUser, messageCardToDelete);
+
+    // Had to add it here to have the message removed from UI immediately upon deletion
+    Provider.of<PersonalMessagesViewModel>(context, listen: false).loadPersonalMessagesList(widget.firebaseUser);
+
+    setState(() {
+      // Set selectedItemIndex back to -1 to signify a card isn't selected (change the color back to unselected)
+      selectedItemIndex = -1;
+      // Set selectedMessage back to null after message has been deleted
+      selectedMessage = null;
+    });
 
   }
 

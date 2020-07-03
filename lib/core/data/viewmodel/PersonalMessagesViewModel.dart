@@ -38,6 +38,7 @@ class PersonalMessagesViewModel with ChangeNotifier {
 
     _firebaseRepository.deletePersonalMessage(firebaseUser, messageCardToDelete);
 
+    notifyListeners();
 
   }
 
