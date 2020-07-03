@@ -32,7 +32,7 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
 
 
 
-  void createUserInDatabaseWithEmail(var firebaseUser) async {
+  void createUserInDatabaseWithEmail(FirebaseUser firebaseUser) async {
 
     await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).setData({
       NAME_FIELD : firebaseUser.displayName,
@@ -46,7 +46,7 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
 
   }
 
-  void createUserInDatabaseWithGoogleProvider(var firebaseUser) async {
+  void createUserInDatabaseWithGoogleProvider(FirebaseUser firebaseUser) async {
 
 
     await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).setData({
@@ -62,7 +62,7 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
 
   }
 
-  Future<List<MessageCard>> getPersonalMessages(var firebaseUser) async {
+  Future<List<MessageCard>> getPersonalMessages(FirebaseUser firebaseUser) async {
 
     List<MessageCard> personalMessages = List();
 
@@ -96,7 +96,7 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
 
   }
 
-  void addPersonalMessage(var firebaseUser, MessageCard messageCardToAdd) async {
+  void addPersonalMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) async {
 
     Map messageCardData = messageCardToAdd.toJson();
 
@@ -110,102 +110,111 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
   }
 
   @override
-  void addBusinessMessage(user, MessageCard messageCardToAdd) {
+  void addBusinessMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) {
     print('hello');
     // TODO: implement addBusinessMessage
   }
 
   @override
-  void addFirstAdditionalMessage(user, MessageCard messageCardToAdd) {
+  void addFirstAdditionalMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) {
     // TODO: implement addFirstAdditionalMessage
   }
 
   @override
-  void addSecondAdditionalMessage(user, MessageCard messageCardToAdd) {
+  void addSecondAdditionalMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) {
     // TODO: implement addSecondAdditionalMessage
   }
 
   @override
-  void addSocialMessage(user, MessageCard messageCardToAdd) {
+  void addSocialMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) {
     // TODO: implement addSocialMessage
   }
 
   @override
-  void deleteBusinessMessage(user, MessageCard messageCardToAdd) {
+  void deleteBusinessMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) {
     // TODO: implement deleteBusinessMessage
   }
 
   @override
-  void deleteFirstAdditionalMessage(user, MessageCard messageCardToAdd) {
+  void deleteFirstAdditionalMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) {
     // TODO: implement deleteFirstAdditionalMessage
   }
 
   @override
-  void deletePersonalMessage(user, MessageCard messageCardToAdd) {
-    // TODO: implement deletePersonalMessage
+  void deletePersonalMessage(FirebaseUser firebaseUser, MessageCard messageCardToDelete) async {
+
+    Map messageCardData = messageCardToDelete.toJson();
+
+    List messageCardList = [messageCardData];
+
+    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+
+      PERSONAL_MESSAGES_FIELD : FieldValue.arrayRemove(messageCardList)
+
+    });
   }
 
   @override
-  void deleteSecondAdditionalMessage(user, MessageCard messageCardToAdd) {
+  void deleteSecondAdditionalMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) {
     // TODO: implement deleteSecondAdditionalMessage
   }
 
   @override
-  void deleteSocialMessage(user, MessageCard messageCardToAdd) {
+  void deleteSocialMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) {
     // TODO: implement deleteSocialMessage
   }
 
   @override
-  void editBusinessMessage(user, MessageCard messageCardToAdd) {
+  void editBusinessMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) {
     // TODO: implement editBusinessMessage
   }
 
   @override
-  void editFirstAdditionalMessage(user, MessageCard messageCardToAdd) {
+  void editFirstAdditionalMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) {
     // TODO: implement editFirstAdditionalMessage
   }
 
   @override
-  void editPersonalMessage(user, MessageCard messageCardToAdd) {
+  void editPersonalMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) {
     // TODO: implement editPersonalMessage
   }
 
   @override
-  void editSecondAdditionalMessage(user, MessageCard messageCardToAdd) {
+  void editSecondAdditionalMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) {
     // TODO: implement editSecondAdditionalMessage
   }
 
   @override
-  void editSocialMessage(user, MessageCard messageCardToAdd) {
+  void editSocialMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) {
     // TODO: implement editSocialMessage
   }
 
   @override
-  Future<List<MessageCard>> getBusinessMessages(user) {
+  Future<List<MessageCard>> getBusinessMessages(FirebaseUser firebaseUser) {
     // TODO: implement getBusinessMessages
     throw UnimplementedError();
   }
 
   @override
-  Future<List<MessageCard>> getFirstAdditionalMessages(user) {
+  Future<List<MessageCard>> getFirstAdditionalMessages(FirebaseUser firebaseUser) {
     // TODO: implement getFirstAdditionalMessages
     throw UnimplementedError();
   }
 
   @override
-  Future<MessageCard> getReplyLaterMessage(user) {
+  Future<MessageCard> getReplyLaterMessage(FirebaseUser firebaseUser) {
     // TODO: implement getReplyLaterMessage
     throw UnimplementedError();
   }
 
   @override
-  Future<List<MessageCard>> getSecondAdditionalMessages(user) {
+  Future<List<MessageCard>> getSecondAdditionalMessages(FirebaseUser firebaseUser) {
     // TODO: implement getSecondAdditionalMessages
     throw UnimplementedError();
   }
 
   @override
-  Future<List<MessageCard>> getSocialMessages(user) {
+  Future<List<MessageCard>> getSocialMessages(FirebaseUser firebaseUser) {
     // TODO: implement getSocialMessages
     throw UnimplementedError();
   }

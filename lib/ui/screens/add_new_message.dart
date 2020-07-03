@@ -28,7 +28,7 @@ class AddNewMessage extends StatefulWidget {
 
 class _AddNewMessageState extends State<AddNewMessage> {
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKeyAddNewMessage = GlobalKey<ScaffoldState>();
 
 
   MessageCategory selectedValue;
@@ -42,7 +42,7 @@ class _AddNewMessageState extends State<AddNewMessage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      key: _scaffoldKey,
+      key: _scaffoldKeyAddNewMessage,
       appBar: AppBar(
         title: Text('Add new message'),
       ),
@@ -156,7 +156,7 @@ class _AddNewMessageState extends State<AddNewMessage> {
       print('User did not enter a title or a message');
       final SnackBar snackBar = SnackBar(content: Text('Please enter a title and a message'
       ),);
-      _scaffoldKey.currentState.showSnackBar(snackBar);
+      _scaffoldKeyAddNewMessage.currentState.showSnackBar(snackBar);
       return;
     }
 

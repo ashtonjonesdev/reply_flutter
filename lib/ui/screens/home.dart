@@ -32,6 +32,9 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
+  final GlobalKey<ScaffoldState> _scaffoldKeyHome = GlobalKey<ScaffoldState>();
+
+
   PersonalMessagesViewModel personalMessagesViewModel =
   PersonalMessagesViewModel();
   SocialMessagesViewModel socialMessagesViewModel = SocialMessagesViewModel();
@@ -141,12 +144,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     print('Tapped item: $index');
     setState(() {
       selectedItemIndex = index;
+      // Set the selected message
+      selectedMessage = personalMessagesViewModel.personalMessagesList[index];
+      print('Selected message: $selectedMessage');
+      // Show a snackbar of the selected message
+      _scaffoldKeyHome.currentState.showSnackBar(SnackBar(content: Text(selectedMessage.message, textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.white),),backgroundColor: kPrimaryColor200,elevation: 8,duration: Duration(milliseconds: 5000),));
     });
     print('Selected Item: $index');
 
-    // Set the selected message
-    selectedMessage = personalMessagesViewModel.personalMessagesList[index];
-    print('Selected message: $selectedMessage');
+
 
   }
 
@@ -269,6 +275,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      key: _scaffoldKeyHome,
       backgroundColor: kBackgroundColor,
       appBar: AppBar(
           title: Text(appBarTitle),
@@ -312,8 +319,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           SpeedDialChild(
             backgroundColor: kPrimaryColorLight,
             onTap: () {
-              Share.share("My test message");
               print('Tapped Send');
+              if(selectedMessage == null) {
+                _scaffoldKeyHome.currentState.showSnackBar(SnackBar(content: Text('No message selected', textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.white),),backgroundColor: kPrimaryColor200,elevation: 8,duration: Duration(milliseconds: 5000),));
+                return;
+              }
+              Share.share(selectedMessage.message);
             },
             child: Icon(Icons.email),
           ),
@@ -321,7 +332,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             backgroundColor: kPrimaryColorLight,
             onTap: () {
               print('Tapped Preview');
-              _previewMessageDialog();
+              if(selectedMessage == null) {
+                _scaffoldKeyHome.currentState.showSnackBar(SnackBar(content: Text('No message selected', textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.white),),backgroundColor: kPrimaryColor200,elevation: 8,duration: Duration(milliseconds: 5000),));
+                return;
+              }
+              _previewMessageDialog(selectedMessage.message);
             },
             child: Icon(Icons.visibility),
           ),
@@ -338,6 +353,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             backgroundColor: kPrimaryColorLight,
             onTap: () {
               print('Tapped Edit');
+              if(selectedMessage == null) {
+                _scaffoldKeyHome.currentState.showSnackBar(SnackBar(content: Text('No message selected', textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.white),),backgroundColor: kPrimaryColor200,elevation: 8,duration: Duration(milliseconds: 5000),));
+                return;
+              }
               Navigator.pushNamed(context, EditMessage.routeName);
             },
             child: Icon(Icons.edit),
@@ -346,6 +365,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             backgroundColor: kPrimaryColorLight,
             onTap: () {
               print('Tapped Delete');
+              if(selectedMessage == null) {
+                _scaffoldKeyHome.currentState.showSnackBar(SnackBar(content: Text('No message selected', textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.white),),backgroundColor: kPrimaryColor200,elevation: 8,duration: Duration(milliseconds: 5000),));
+                return;
+              }
+              deletePersonalMessage(widget.firebaseUser, selectedMessage);
             },
             child: Icon(Icons.delete),
           ),
@@ -405,13 +429,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     }
   }
 
-  Future<void> _previewMessageDialog() async {
+  Future<void> _previewMessageDialog(String message) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          shape: Theme.of(context).dialogTheme.shape,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16)
+          ),
           title: Text(
             'Your Message:',
             textAlign: TextAlign.center,
@@ -420,8 +446,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             child: ListBody(
               children: <Widget>[
                 Text(
-                  'This is a preview of your message. hehe It is very long indeed lol',
+                  selectedMessage.message,
                   style: Theme.of(context).textTheme.bodyText1,
+                  textAlign: TextAlign.center,
                 ),
               ],
             ),
@@ -430,6 +457,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             FlatButton(
               child: Text(
                 'Got it',
+                style: Theme.of(context).textTheme.bodyText1.copyWith(color: kPrimaryColorDark),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -439,6 +467,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         );
       },
     );
+  }
+
+  void deletePersonalMessage(FirebaseUser firebaseUser, MessageCard messageCardToDelete) async {
+
+    Provider.of<PersonalMessagesViewModel>(context, listen: false).deletePersonalMessage(firebaseUser, messageCardToDelete);
+
   }
 
   void _signOut() async {

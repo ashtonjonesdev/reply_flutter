@@ -34,6 +34,14 @@ class PersonalMessagesViewModel with ChangeNotifier {
 
   }
 
+  void deletePersonalMessage(FirebaseUser firebaseUser, MessageCard messageCardToDelete) async {
+
+    _firebaseRepository.deletePersonalMessage(firebaseUser, messageCardToDelete);
+
+
+  }
+
+
   List<MessageCard> get personalMessagesList => _personalMessagesList;
 
 }

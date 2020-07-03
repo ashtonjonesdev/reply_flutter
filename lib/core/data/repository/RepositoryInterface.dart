@@ -1,59 +1,60 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:reply_flutter/core/data/model/MessageCard.dart';
 
 abstract class RepositoryInterface {
 
   /// CREATE
 
-  void createUserInDatabaseWithEmail(var user);
+  void createUserInDatabaseWithEmail(FirebaseUser user);
 
-  void createUserInDatabaseWithGoogleProvider(var user);
+  void createUserInDatabaseWithGoogleProvider(FirebaseUser user);
 
   /// GET
 
-  Future<List<MessageCard>> getPersonalMessages(var user);
+  Future<List<MessageCard>> getPersonalMessages(FirebaseUser user);
 
-  Future<List<MessageCard>> getSocialMessages(var user);
+  Future<List<MessageCard>> getSocialMessages(FirebaseUser user);
 
-  Future<List<MessageCard>> getBusinessMessages(var user);
+  Future<List<MessageCard>> getBusinessMessages(FirebaseUser user);
 
-  Future<List<MessageCard>> getFirstAdditionalMessages(var user);
+  Future<List<MessageCard>> getFirstAdditionalMessages(FirebaseUser user);
 
-  Future<List<MessageCard>> getSecondAdditionalMessages(var user);
+  Future<List<MessageCard>> getSecondAdditionalMessages(FirebaseUser user);
 
-  Future<MessageCard> getReplyLaterMessage(var user);
+  Future<MessageCard> getReplyLaterMessage(FirebaseUser user);
 
   /// ADD
-  void addPersonalMessage(var user, MessageCard messageCardToAdd);
+  void addPersonalMessage(FirebaseUser user, MessageCard messageCardToAdd);
 
-  void addSocialMessage(var user, MessageCard messageCardToAdd);
+  void addSocialMessage(FirebaseUser user, MessageCard messageCardToAdd);
 
-  void addBusinessMessage(var user, MessageCard messageCardToAdd);
+  void addBusinessMessage(FirebaseUser user, MessageCard messageCardToAdd);
 
-  void addFirstAdditionalMessage(var user, MessageCard messageCardToAdd);
+  void addFirstAdditionalMessage(FirebaseUser user, MessageCard messageCardToAdd);
 
-  void addSecondAdditionalMessage(var user, MessageCard messageCardToAdd);
+  void addSecondAdditionalMessage(FirebaseUser user, MessageCard messageCardToAdd);
 
   /// EDIT
-  void editPersonalMessage(var user, MessageCard messageCardToEdit);
+  void editPersonalMessage(FirebaseUser user, MessageCard messageCardToEdit);
 
-  void editSocialMessage(var user, MessageCard messageCardToEdit);
+  void editSocialMessage(FirebaseUser user, MessageCard messageCardToEdit);
 
-  void editBusinessMessage(var user, MessageCard messageCardToEdit);
+  void editBusinessMessage(FirebaseUser user, MessageCard messageCardToEdit);
 
-  void editFirstAdditionalMessage(var user, MessageCard messageCardToEdit);
+  void editFirstAdditionalMessage(FirebaseUser user, MessageCard messageCardToEdit);
 
-  void editSecondAdditionalMessage(var user, MessageCard messageCardToEdit);
+  void editSecondAdditionalMessage(FirebaseUser user, MessageCard messageCardToEdit);
 
   /// DELETE
-  void deletePersonalMessage(var user, MessageCard messageCardToDelete);
+  void deletePersonalMessage(FirebaseUser user, MessageCard messageCardToDelete);
 
-  void deleteSocialMessage(var user, MessageCard messageCardToDelete);
+  void deleteSocialMessage(FirebaseUser user, MessageCard messageCardToDelete);
 
-  void deleteBusinessMessage(var user, MessageCard messageCardToDelete);
+  void deleteBusinessMessage(FirebaseUser user, MessageCard messageCardToDelete);
 
-  void deleteFirstAdditionalMessage(var user, MessageCard messageCardToDelete);
+  void deleteFirstAdditionalMessage(FirebaseUser user, MessageCard messageCardToDelete);
 
-  void deleteSecondAdditionalMessage(var user, MessageCard messageCardToDelete);
+  void deleteSecondAdditionalMessage(FirebaseUser user, MessageCard messageCardToDelete);
 
 
 

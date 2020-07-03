@@ -23,11 +23,6 @@ class AppTheme {
         button: TextStyle(fontSize: 14.0, fontFamily: 'Roboto', color: kTextColor),
         caption: TextStyle(fontSize: 12.0, fontFamily: 'Roboto', color: kTextColor),
         overline: TextStyle(fontSize: 10.0, fontFamily: 'Roboto', color: kTextColor)),
-    dialogTheme: DialogTheme(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-    ),
   );
 
 }
