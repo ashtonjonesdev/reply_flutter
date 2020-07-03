@@ -42,6 +42,14 @@ class PersonalMessagesViewModel with ChangeNotifier {
 
   }
 
+  void editPersonalMessage(FirebaseUser firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) async {
+
+    _firebaseRepository.editPersonalMessage(firebaseUser, oldMessageCard, newMessageCard);
+
+    notifyListeners();
+
+  }
+
 
   List<MessageCard> get personalMessagesList => _personalMessagesList;
 

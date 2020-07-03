@@ -131,12 +131,12 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
   }
 
   @override
-  void deleteBusinessMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) {
+  void deleteBusinessMessage(FirebaseUser firebaseUser, MessageCard messageCardToDelete) {
     // TODO: implement deleteBusinessMessage
   }
 
   @override
-  void deleteFirstAdditionalMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) {
+  void deleteFirstAdditionalMessage(FirebaseUser firebaseUser, MessageCard messageCardToDelete) {
     // TODO: implement deleteFirstAdditionalMessage
   }
 
@@ -155,37 +155,59 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
   }
 
   @override
-  void deleteSecondAdditionalMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) {
+  void deleteSecondAdditionalMessage(FirebaseUser firebaseUser, MessageCard messageCardToDelete) {
     // TODO: implement deleteSecondAdditionalMessage
   }
 
   @override
-  void deleteSocialMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) {
+  void deleteSocialMessage(FirebaseUser firebaseUser, MessageCard messageCardToDelete) {
     // TODO: implement deleteSocialMessage
   }
 
   @override
-  void editBusinessMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) {
+  void editBusinessMessage(FirebaseUser firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) {
     // TODO: implement editBusinessMessage
   }
 
   @override
-  void editFirstAdditionalMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) {
+  void editFirstAdditionalMessage(FirebaseUser firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) {
     // TODO: implement editFirstAdditionalMessage
   }
 
   @override
-  void editPersonalMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) {
-    // TODO: implement editPersonalMessage
+  void editPersonalMessage(FirebaseUser firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) async {
+
+    /// Delete the oldMessageCard first
+    Map oldMessageCardData = oldMessageCard.toJson();
+
+    List oldMessageCardList = [oldMessageCardData];
+
+    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+
+      PERSONAL_MESSAGES_FIELD : FieldValue.arrayRemove(oldMessageCardList)
+
+    });
+
+    /// Then add the newMessageCard
+    Map newMessageCardData = newMessageCard.toJson();
+
+    List newMessageCardList = [newMessageCardData];
+
+    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+
+      PERSONAL_MESSAGES_FIELD : FieldValue.arrayUnion(newMessageCardList)
+
+    });
+
   }
 
   @override
-  void editSecondAdditionalMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) {
+  void editSecondAdditionalMessage(FirebaseUser firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) {
     // TODO: implement editSecondAdditionalMessage
   }
 
   @override
-  void editSocialMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) {
+  void editSocialMessage(FirebaseUser firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) {
     // TODO: implement editSocialMessage
   }
 

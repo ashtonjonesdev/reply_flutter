@@ -35,15 +35,15 @@ abstract class RepositoryInterface {
   void addSecondAdditionalMessage(FirebaseUser user, MessageCard messageCardToAdd);
 
   /// EDIT
-  void editPersonalMessage(FirebaseUser user, MessageCard messageCardToEdit);
+  void editPersonalMessage(FirebaseUser user, MessageCard oldMessageCard, MessageCard newMessageCard);
 
-  void editSocialMessage(FirebaseUser user, MessageCard messageCardToEdit);
+  void editSocialMessage(FirebaseUser user, MessageCard oldMessageCard, MessageCard newMessageCard);
 
-  void editBusinessMessage(FirebaseUser user, MessageCard messageCardToEdit);
+  void editBusinessMessage(FirebaseUser user, MessageCard oldMessageCard, MessageCard newMessageCard);
 
-  void editFirstAdditionalMessage(FirebaseUser user, MessageCard messageCardToEdit);
+  void editFirstAdditionalMessage(FirebaseUser user, MessageCard oldMessageCard, MessageCard newMessageCard);
 
-  void editSecondAdditionalMessage(FirebaseUser user, MessageCard messageCardToEdit);
+  void editSecondAdditionalMessage(FirebaseUser user, MessageCard oldMessageCard, MessageCard newMessageCard);
 
   /// DELETE
   void deletePersonalMessage(FirebaseUser user, MessageCard messageCardToDelete);

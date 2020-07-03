@@ -17,7 +17,7 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
 
-  final _formKey = GlobalKey<FormState>();
+  final _registerFormKey = GlobalKey<FormState>();
   final FirebaseRepository firebaseRepository = FirebaseRepository();
 
   String _firstName;
@@ -35,7 +35,7 @@ class _RegisterState extends State<Register> {
       body: Container(
         padding: EdgeInsets.all(20.0),
         child: Form(
-          key: _formKey,
+          key: _registerFormKey,
           child: Expanded(
             child: Column(
               children: <Widget>[
@@ -120,7 +120,7 @@ class _RegisterState extends State<Register> {
   }
 
   validateAndRegisterUser() async {
-    final form = _formKey.currentState;
+    final form = _registerFormKey.currentState;
     form.save();
     // Validate information was correctly entered
     if (form.validate()) {

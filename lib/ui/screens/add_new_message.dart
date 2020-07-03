@@ -154,8 +154,8 @@ class _AddNewMessageState extends State<AddNewMessage> {
 
     if (cardMessageTitleTextController.text.isEmpty || cardMessageMessageTextController.text.isEmpty) {
       print('User did not enter a title or a message');
-      final SnackBar snackBar = SnackBar(content: Text('Please enter a title and a message'
-      ),);
+      final SnackBar snackBar = SnackBar(content: Text('Please enter a title and a message', textAlign: TextAlign.center,
+      ),backgroundColor: kPrimaryColor200,elevation: 8,duration: Duration(milliseconds: 3000));
       _scaffoldKeyAddNewMessage.currentState.showSnackBar(snackBar);
       return;
     }

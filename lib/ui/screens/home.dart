@@ -9,6 +9,7 @@ import 'package:reply_flutter/core/data/viewmodel/PersonalMessagesViewModel.dart
 import 'package:reply_flutter/core/data/viewmodel/SecondAdditionalMessagesViewModel.dart';
 import 'package:reply_flutter/core/data/viewmodel/SocialMessagesViewModel.dart';
 import 'package:reply_flutter/core/services/AuthService.dart';
+import 'package:reply_flutter/core/utils/EditMessageArguments.dart';
 import 'package:reply_flutter/styles/colors.dart';
 import 'package:reply_flutter/ui/screens/about_developer.dart';
 import 'package:reply_flutter/ui/screens/add_new_message.dart';
@@ -33,6 +34,9 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   final GlobalKey<ScaffoldState> _scaffoldKeyHome = GlobalKey<ScaffoldState>();
+
+
+
 
 
   PersonalMessagesViewModel personalMessagesViewModel =
@@ -148,7 +152,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       selectedMessage = personalMessagesViewModel.personalMessagesList[index];
       print('Selected message: $selectedMessage');
       // Show a snackbar of the selected message
-      _scaffoldKeyHome.currentState.showSnackBar(SnackBar(content: Text(selectedMessage.message, textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.white),),backgroundColor: kPrimaryColor200,elevation: 8,duration: Duration(milliseconds: 5000),));
+      _scaffoldKeyHome.currentState.showSnackBar(SnackBar(content: Text(selectedMessage.message, textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.white),),backgroundColor: kPrimaryColor200,elevation: 8,duration: Duration(milliseconds: 3000),));
     });
     print('Selected Item: $index');
 
@@ -344,20 +348,24 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             backgroundColor: kPrimaryColorLight,
             onTap: () {
               print('Tapped Add');
-//              personalMessagesModel.addPersonalMessage(MessageCard(cardTitle: 'New Message!', cardMessage: 'New Message!'));
               Navigator.pushNamed(context, AddNewMessage.routeName);
             },
             child: Icon(Icons.add),
           ),
           SpeedDialChild(
             backgroundColor: kPrimaryColorLight,
-            onTap: () {
+            onTap: () async {
               print('Tapped Edit');
               if(selectedMessage == null) {
                 _scaffoldKeyHome.currentState.showSnackBar(SnackBar(content: Text('No message selected', textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.white),),backgroundColor: kPrimaryColor200,elevation: 8,duration: Duration(milliseconds: 5000),));
                 return;
               }
-              Navigator.pushNamed(context, EditMessage.routeName);
+
+              // TODO: Need to figure out how to reload data to show new edit card immediately after editing
+              Navigator.pushNamed(context, EditMessage.routeName, arguments: EditMessageArguments(selectedMessage.title, selectedMessage.message)).whenComplete(() {reloadData();});
+
+
+
             },
             child: Icon(Icons.edit),
           ),
@@ -370,6 +378,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 return;
               }
               deletePersonalMessage(widget.firebaseUser, selectedMessage);
+              _scaffoldKeyHome.currentState.showSnackBar(SnackBar(content: Text('Message Deleted!', textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.white),),backgroundColor: kPrimaryColor200,elevation: 8,duration: Duration(milliseconds: 2000),));
+
             },
             child: Icon(Icons.delete),
           ),
@@ -486,6 +496,19 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       // Set selectedItemIndex back to -1 to signify a card isn't selected (change the color back to unselected)
       selectedItemIndex = -1;
       // Set selectedMessage back to null after message has been deleted
+      selectedMessage = null;
+    });
+
+  }
+
+  void reloadData() {
+
+    // Had to add it here to have edited message show up in UI immediately upon editing
+    Provider.of<PersonalMessagesViewModel>(context, listen: false).loadPersonalMessagesList(widget.firebaseUser);
+    setState(() {
+      // Set selectedItemIndex back to -1 to signify a card isn't selected (change the color back to unselected)
+      selectedItemIndex = -1;
+      // Set selectedMessage back to null after dialog is done showing
       selectedMessage = null;
     });
 
