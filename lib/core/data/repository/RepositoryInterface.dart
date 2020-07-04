@@ -34,6 +34,8 @@ abstract class RepositoryInterface {
 
   void addSecondAdditionalMessage(FirebaseUser user, MessageCard messageCardToAdd);
 
+  void addReplyLaterMessage(FirebaseUser user, MessageCard replyLaterMessageCard);
+
   /// EDIT
   void editPersonalMessage(FirebaseUser user, MessageCard oldMessageCard, MessageCard newMessageCard);
 

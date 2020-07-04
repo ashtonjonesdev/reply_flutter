@@ -13,6 +13,7 @@ class PersonalMessagesViewModel with ChangeNotifier {
 
 
 
+
   void loadPersonalMessagesList(FirebaseUser firebaseUser) async {
 
     _personalMessagesList = await _firebaseRepository.getPersonalMessages(firebaseUser);
@@ -50,7 +51,21 @@ class PersonalMessagesViewModel with ChangeNotifier {
 
   }
 
+  void addReplyLaterMessage(FirebaseUser firebaseUser, MessageCard replyLaterMessageCard) async {
 
-  List<MessageCard> get personalMessagesList => _personalMessagesList;
+    _firebaseRepository.addReplyLaterMessage(firebaseUser, replyLaterMessageCard);
+
+  }
+
+  Future<MessageCard> getReplyLaterMessage(FirebaseUser firebaseUser) async {
+
+    MessageCard replyLaterMessage = await _firebaseRepository.getReplyLaterMessage(firebaseUser);
+
+    return replyLaterMessage;
+
+  }
+
+
+    List<MessageCard> get personalMessagesList => _personalMessagesList;
 
 }

@@ -40,6 +40,8 @@ dependencies:
   cloud_firestore: ^0.13.5
   google_sign_in: ^4.5.1
   sign_in_with_apple: ^2.5.1
+  flutter_local_notifications: ^1.4.4+1
+
 
 
 

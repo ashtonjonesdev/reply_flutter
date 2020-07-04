@@ -9,7 +9,7 @@ import 'package:reply_flutter/core/data/viewmodel/PersonalMessagesViewModel.dart
 import 'package:reply_flutter/core/data/viewmodel/SecondAdditionalMessagesViewModel.dart';
 import 'package:reply_flutter/core/data/viewmodel/SocialMessagesViewModel.dart';
 import 'package:reply_flutter/core/services/AuthService.dart';
-import 'package:reply_flutter/core/utils/EditMessageArguments.dart';
+import 'package:reply_flutter/core/utils/MessageCardArguments.dart';
 import 'package:reply_flutter/styles/colors.dart';
 import 'package:reply_flutter/ui/screens/about_developer.dart';
 import 'package:reply_flutter/ui/screens/add_new_message.dart';
@@ -152,7 +152,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       selectedMessage = personalMessagesViewModel.personalMessagesList[index];
       print('Selected message: $selectedMessage');
       // Show a snackbar of the selected message
-      _scaffoldKeyHome.currentState.showSnackBar(SnackBar(content: Text(selectedMessage.message, textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.white),),backgroundColor: kPrimaryColor200,elevation: 8,duration: Duration(milliseconds: 3000),));
+      _scaffoldKeyHome.currentState.showSnackBar(SnackBar(content: Text(selectedMessage.message, textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.white),),backgroundColor: kPrimaryColor200,elevation: 8,duration: Duration(milliseconds: 2000),));
     });
     print('Selected Item: $index');
 
@@ -362,7 +362,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               }
 
               // TODO: Need to figure out how to reload data to show new edit card immediately after editing
-              Navigator.pushNamed(context, EditMessage.routeName, arguments: EditMessageArguments(selectedMessage.title, selectedMessage.message)).whenComplete(() {reloadData();});
+              Navigator.pushNamed(context, EditMessage.routeName, arguments: MessageCardArguments(title: selectedMessage.title, message: selectedMessage.message)).whenComplete(() {reloadData();});
 
 
 
@@ -386,8 +386,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           SpeedDialChild(
             backgroundColor: kPrimaryColorLight,
             onTap: () {
-              print('Tapped Timer');
-              Navigator.pushNamed(context, ReplyLater.routeName);
+              print('Tapped Reply Later');
+              if(selectedMessage == null) {
+                _scaffoldKeyHome.currentState.showSnackBar(SnackBar(content: Text('No message selected', textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.white),),backgroundColor: kPrimaryColor200,elevation: 8,duration: Duration(milliseconds: 5000),));
+                return;
+              }
+              Navigator.pushNamed(context, ReplyLater.routeName, arguments: MessageCardArguments(title: selectedMessage.title, message: selectedMessage.message));
             },
             child: Icon(Icons.timer),
           ),

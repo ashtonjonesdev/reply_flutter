@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:reply_flutter/core/data/model/MessageCard.dart';
 import 'package:reply_flutter/core/data/viewmodel/PersonalMessagesViewModel.dart';
 import 'package:reply_flutter/core/services/AuthService.dart';
-import 'package:reply_flutter/core/utils/EditMessageArguments.dart';
+import 'package:reply_flutter/core/utils/MessageCardArguments.dart';
 import 'package:reply_flutter/styles/colors.dart';
 
 class EditMessage extends StatefulWidget {
@@ -48,7 +48,7 @@ class _EditMessageState extends State<EditMessage> {
   Widget build(BuildContext context) {
 
     // Get the arguments passed from the selectedMessage
-    final EditMessageArguments args = ModalRoute.of(context).settings.arguments;
+    final MessageCardArguments args = ModalRoute.of(context).settings.arguments;
 
     // Set the text fields using the selected message data
     cardMessageTitleTextController.text = args.title;

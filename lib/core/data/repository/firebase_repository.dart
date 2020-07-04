@@ -22,6 +22,7 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
   static const String BUSINESS_MESSAGES_FIELD = 'businessMessages';
   static const String FIRST_ADDITIONAL_MESSAGES_FIELD = 'firstAdditionalMessages';
   static const String SECOND_ADDITIONAL_MESSAGES_FIELD = 'secondAdditionalMessages';
+  static const String REPLY_LATER_MESSAGE_FIELD = 'replyLater';
   static const String CARD_MESSAGE_TITLE_FIELD = 'title';
   static const String CARD_MESSAGE_MESSAGE_FIELD = 'message';
 
@@ -111,7 +112,6 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
 
   @override
   void addBusinessMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) {
-    print('hello');
     // TODO: implement addBusinessMessage
   }
 
@@ -128,6 +128,21 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
   @override
   void addSocialMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) {
     // TODO: implement addSocialMessage
+  }
+
+  @override
+  void addReplyLaterMessage(FirebaseUser firebaseUser, MessageCard replyLaterMessageCard) async {
+
+    Map messageCardData = replyLaterMessageCard.toJson();
+
+    List messageCardList = [messageCardData];
+
+    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+
+      REPLY_LATER_MESSAGE_FIELD : messageCardList
+
+    });
+
   }
 
   @override
@@ -224,9 +239,37 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
   }
 
   @override
-  Future<MessageCard> getReplyLaterMessage(FirebaseUser firebaseUser) {
-    // TODO: implement getReplyLaterMessage
-    throw UnimplementedError();
+  Future<MessageCard> getReplyLaterMessage(FirebaseUser firebaseUser) async {
+
+    List<MessageCard> replyLaterMessageList = List();
+
+    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).get().then((document) {
+
+      if(document.exists) {
+
+        // Get the List of Maps
+        List values = document.data[REPLY_LATER_MESSAGE_FIELD];
+        print('List received: $values');
+
+
+        // For each map (each message card) in the list, add a MessageCard to the MessageCard list (using the fromJson method)
+        for(Map<String, dynamic> map in values ) {
+          print('Map received in List: $map');
+
+          /// Create the MessageCard from the map
+          MessageCard messageCard = MessageCard.fromJson(map);
+          print('Retrieved Message Card: ${messageCard.title} | ${messageCard.message}');
+
+          /// Add the MessageCard to the list
+          replyLaterMessageList.add(messageCard);
+          print('Added MessageCard to list: ${replyLaterMessageList.last}');
+
+        }
+      }
+    });
+
+
+    return replyLaterMessageList[0];
   }
 
   @override
@@ -240,6 +283,8 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
     // TODO: implement getSocialMessages
     throw UnimplementedError();
   }
+
+
 
 
 }
