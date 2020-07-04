@@ -20,12 +20,15 @@ import 'package:reply_flutter/ui/screens/reply_later.dart';
 import 'package:reply_flutter/ui/screens/signin.dart';
 import 'package:reply_flutter/ui/screens/welcome.dart';
 
-void main() => runApp(
-      ChangeNotifierProvider<AuthService>(
-        create: (context) => AuthService(),
-        child: MyApp(),
-      ),
-    );
+
+void main() async {
+  runApp(
+    ChangeNotifierProvider<AuthService>(
+      create: (context) => AuthService(),
+      child: MyApp(),
+    ),
+  );
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

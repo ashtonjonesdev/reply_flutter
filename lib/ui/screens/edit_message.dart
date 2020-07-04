@@ -25,8 +25,6 @@ class _EditMessageState extends State<EditMessage> {
 
   }
 
-  final _editMessageFormKey = GlobalKey<FormState>();
-
   final GlobalKey<ScaffoldState> _scaffoldKeyEditMessage = GlobalKey<ScaffoldState>();
 
 
