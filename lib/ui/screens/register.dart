@@ -36,13 +36,15 @@ class _RegisterState extends State<Register> {
         padding: EdgeInsets.all(20.0),
         child: Form(
           key: _registerFormKey,
-          child: Expanded(
+          child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
+                SizedBox(height: 20.0),
                 Text(
                   'Registration Information',
                   style: TextStyle(fontSize: 20),
                 ),
+                SizedBox(height: 20.0),
                 TextFormField(
                   style: Theme.of(context).textTheme.bodyText1,
                   validator: (String value) {
@@ -54,7 +56,7 @@ class _RegisterState extends State<Register> {
                   decoration: InputDecoration(labelText: "First Name"),
                   onSaved: (value) => _firstName = value,
                 ),
-                SizedBox(height: 5.0),
+                SizedBox(height: 20.0),
                 TextFormField(
                   style: Theme.of(context).textTheme.bodyText1,
                   validator: (String value) {
@@ -66,7 +68,7 @@ class _RegisterState extends State<Register> {
                   decoration: InputDecoration(labelText: "Last Name"),
                   onSaved: (value) => _lastName = value,
                 ),
-                SizedBox(height: 5.0), // <= NEW// <= NEW
+                SizedBox(height: 20.0),
                 TextFormField(
                   style: Theme.of(context).textTheme.bodyText1,
                   keyboardType: TextInputType.emailAddress,
@@ -82,7 +84,7 @@ class _RegisterState extends State<Register> {
                     return null;
                   },
                 ),
-                SizedBox(height: 5.0), // <= NEW
+                SizedBox(height: 20.0),
                 TextFormField(
                   style: Theme.of(context).textTheme.bodyText1,
                   validator: (String value) {
@@ -98,7 +100,7 @@ class _RegisterState extends State<Register> {
                   decoration: InputDecoration(labelText: "Password"),
                   onSaved: (value) => _password = value,
                 ),
-                SizedBox(height: 5.0), // <= NEW
+                SizedBox(height: 40.0),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Material(

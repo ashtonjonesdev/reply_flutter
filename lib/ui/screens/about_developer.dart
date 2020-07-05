@@ -11,6 +11,7 @@ class AboutDeveloper extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('About Developer'),
+        centerTitle: true,
       ),
       body: MaterialAbout(
         banner: Padding(

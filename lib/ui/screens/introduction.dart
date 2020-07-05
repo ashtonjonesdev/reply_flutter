@@ -10,6 +10,8 @@ class Introduction extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kPrimaryColor,
+        title: Text('Introduction'),
+        centerTitle: true,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -32,7 +34,7 @@ class Introduction extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyText1
-                  .copyWith(color: kPrimaryColorLight),
+                  .copyWith( fontWeight: FontWeight.w900),
               textAlign: TextAlign.center,
             ),
           ),
@@ -58,7 +60,7 @@ class Introduction extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 32),
             child: MaterialButton(
               minWidth: double.infinity,
-              color: kPrimaryColorDark,
+              color: kPrimaryColorLight,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),

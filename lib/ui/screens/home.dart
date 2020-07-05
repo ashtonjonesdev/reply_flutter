@@ -310,7 +310,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           bottom: TabBar(
             tabs: _tabs,
             controller: _tabController,
-            indicatorColor: kPrimaryColor,
+            indicatorColor: kSurfaceColor,
           )),
       body: TabBarView(
         controller: _tabController,

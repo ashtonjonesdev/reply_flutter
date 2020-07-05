@@ -63,6 +63,8 @@ class AuthService with ChangeNotifier {
 
     print('new display name: ${updatedUser.displayName}');
 
+    notifyListeners();
+
     // Return FirebaseUser with updated information (setting the display name using their first and last name)
     return updatedUser;
   }
@@ -94,6 +96,8 @@ class AuthService with ChangeNotifier {
         (await _auth.signInWithCredential(credential)).user;
     print('Successfully signed in user with Google Provider');
     print('Name: ${user.displayName} | uID: ${user.uid}');
+
+    notifyListeners();
 
     return user;
   }

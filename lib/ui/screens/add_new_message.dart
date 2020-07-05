@@ -45,99 +45,107 @@ class _AddNewMessageState extends State<AddNewMessage> {
       key: _scaffoldKeyAddNewMessage,
       appBar: AppBar(
         title: Text('Add new message'),
+        centerTitle: true,
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8, 72, 8, 0),
-            child: TextField(
-              style: Theme.of(context).textTheme.bodyText2,
-              decoration: InputDecoration(
-                icon: Icon(Icons.collections),
-                hintText: 'Enter a title',
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.fromLTRB(16, 130, 16, 8),
+              child: TextField(
+                style: Theme.of(context).textTheme.bodyText2,
+                decoration: InputDecoration(
+                  icon: Icon(Icons.collections),
+                  hintText: 'Enter a title',
+                ),
+                controller: cardMessageTitleTextController,
               ),
-              controller: cardMessageTitleTextController,
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-            child: TextField(
-              style: Theme.of(context).textTheme.bodyText2,
-              decoration: InputDecoration(
-                icon: Icon(Icons.email),
-                hintText: 'Enter a message',
+            Padding(
+              padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
+              child: TextField(
+                style: Theme.of(context).textTheme.bodyText2,
+                decoration: InputDecoration(
+                  icon: Icon(Icons.email),
+                  hintText: 'Enter a message',
+                ),
+                controller: cardMessageMessageTextController,
               ),
-              controller: cardMessageMessageTextController,
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 96, bottom: 16),
-            child: Text('Choose a category: ', style: Theme.of(context).textTheme.bodyText1,),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 48),
-            child: Column(
-              children: <Widget>[
-                RadioListTile(
-                  secondary: Icon(Icons.person),
-                  title: Text('Personal', style: Theme.of(context).textTheme.bodyText1),
-                  value: MessageCategory.Personal,
-                  groupValue: selectedValue,
-                  onChanged: (MessageCategory value) {
-                    setState(() {
-                      selectedValue = value;
-                    });
-                  },
-                ),
-                RadioListTile(
-                  secondary: Icon(Icons.group),
-                  title: Text('Social', style: Theme.of(context).textTheme.bodyText1),
-                  value: MessageCategory.Social,
-                  groupValue: selectedValue,
-                  onChanged: (MessageCategory value) {
-                    setState(() {
-                      selectedValue = value;
-                    });
-                  },
-                ),
-                RadioListTile(
-                  secondary: Icon(Icons.business_center),
-                  title: Text('Business', style: Theme.of(context).textTheme.bodyText1),
-                  value: MessageCategory.Business,
-                  groupValue: selectedValue,
-                  onChanged: (MessageCategory value) {
-                    setState(() {
-                      selectedValue = value;
-                    });
-                  },
-                ),
-                RadioListTile(
-                  secondary: Icon(Icons.plus_one),
-                  title: Text('First Additional', style: Theme.of(context).textTheme.bodyText1),
-                  value: MessageCategory.FirstAdditional,
-                  groupValue: selectedValue,
-                  onChanged: (MessageCategory value) {
-                    setState(() {
-                      selectedValue = value;
-                    });
-                  },
-                ),
-                RadioListTile(
-                  secondary: Icon(Icons.exposure_plus_2),
-                  title: Text('Second Additional', style: Theme.of(context).textTheme.bodyText1),
-                  value: MessageCategory.SecondAdditional,
-                  groupValue: selectedValue,
-                  onChanged: (MessageCategory value) {
-                    setState(() {
-                      selectedValue = value;
-                    });
-                  },
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.only(top: 96, bottom: 16),
+              child: Text('Choose a category: ', style: Theme.of(context).textTheme.bodyText1,),
             ),
-          )
-        ],
+            Padding(
+              padding: const EdgeInsets.only(bottom: 48),
+              child: Column(
+                children: <Widget>[
+                  RadioListTile(
+                    activeColor: kPrimaryColorLight,
+                    secondary: Icon(Icons.person),
+                    title: Text('Personal', style: Theme.of(context).textTheme.bodyText1),
+                    value: MessageCategory.Personal,
+                    groupValue: selectedValue,
+                    onChanged: (MessageCategory value) {
+                      setState(() {
+                        selectedValue = value;
+                      });
+                    },
+                  ),
+                  RadioListTile(
+                    activeColor: kPrimaryColorLight,
+                    secondary: Icon(Icons.group),
+                    title: Text('Social', style: Theme.of(context).textTheme.bodyText1),
+                    value: MessageCategory.Social,
+                    groupValue: selectedValue,
+                    onChanged: (MessageCategory value) {
+                      setState(() {
+                        selectedValue = value;
+                      });
+                    },
+                  ),
+                  RadioListTile(
+                    activeColor: kPrimaryColorLight,
+                    secondary: Icon(Icons.business_center),
+                    title: Text('Business', style: Theme.of(context).textTheme.bodyText1),
+                    value: MessageCategory.Business,
+                    groupValue: selectedValue,
+                    onChanged: (MessageCategory value) {
+                      setState(() {
+                        selectedValue = value;
+                      });
+                    },
+                  ),
+                  RadioListTile(
+                    activeColor: kPrimaryColorLight,
+                    secondary: Icon(Icons.plus_one),
+                    title: Text('First Additional', style: Theme.of(context).textTheme.bodyText1),
+                    value: MessageCategory.FirstAdditional,
+                    groupValue: selectedValue,
+                    onChanged: (MessageCategory value) {
+                      setState(() {
+                        selectedValue = value;
+                      });
+                    },
+                  ),
+                  RadioListTile(
+                    activeColor: kPrimaryColorLight,
+                    secondary: Icon(Icons.exposure_plus_2),
+                    title: Text('Second Additional', style: Theme.of(context).textTheme.bodyText1),
+                    value: MessageCategory.SecondAdditional,
+                    groupValue: selectedValue,
+                    onChanged: (MessageCategory value) {
+                      setState(() {
+                        selectedValue = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: kPrimaryColorLight,
@@ -155,7 +163,15 @@ class _AddNewMessageState extends State<AddNewMessage> {
     if (cardMessageTitleTextController.text.isEmpty || cardMessageMessageTextController.text.isEmpty) {
       print('User did not enter a title or a message');
       final SnackBar snackBar = SnackBar(content: Text('Please enter a title and a message', textAlign: TextAlign.center,
-      ),backgroundColor: kPrimaryColor200,elevation: 8,duration: Duration(milliseconds: 3000));
+      ),backgroundColor: kPrimaryColor200, elevation: 8,duration: Duration(milliseconds: 3000));
+      _scaffoldKeyAddNewMessage.currentState.showSnackBar(snackBar);
+      return;
+    }
+
+    if(selectedValue == null) {
+      print('User did not select a message category');
+      final SnackBar snackBar = SnackBar(content: Text('Please select a message category', textAlign: TextAlign.center,
+      ),backgroundColor: kPrimaryColor200, elevation: 8,duration: Duration(milliseconds: 3000));
       _scaffoldKeyAddNewMessage.currentState.showSnackBar(snackBar);
       return;
     }

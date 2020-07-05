@@ -102,9 +102,10 @@ class Welcome extends StatelessWidget {
                           if(firebaseUser.metadata.creationTime == firebaseUser.metadata.lastSignInTime) {
                             firebaseRepository.createUserInDatabaseWithGoogleProvider(firebaseUser);
                           }
-                      }).whenComplete(() =>
-                          Navigator.popAndPushNamed(context, Home.routeName))
-                          .catchError((e) => print(e));
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(builder: (BuildContext context) => Home(firebaseUser: firebaseUser,)),
+                                  (Route<dynamic> route) => false);
+                      }).catchError((e) => print(e));
                     },
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(40)),

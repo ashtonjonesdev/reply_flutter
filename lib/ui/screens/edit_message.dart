@@ -69,12 +69,13 @@ class _EditMessageState extends State<EditMessage> {
       key: _scaffoldKeyEditMessage,
       appBar: AppBar(
         title: Text('Edit message'),
+        centerTitle: true,
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.fromLTRB(8, 32, 8, 0),
+            padding: EdgeInsets.fromLTRB(16, 130, 16, 8),
             child: TextField(
               onChanged: (text) {
                 _newMessageCardTitle = text;
@@ -88,7 +89,7 @@ class _EditMessageState extends State<EditMessage> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+            padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
             child: TextField(
               controller: cardMessageMessageTextController,
               onChanged: (text) {

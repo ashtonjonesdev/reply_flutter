@@ -94,6 +94,7 @@ class _ReplyLaterState extends State<ReplyLater> {
 
   }
 
+
   Future<void> _showNotification() async {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'primary_notification_channel',
@@ -155,101 +156,96 @@ class _ReplyLaterState extends State<ReplyLater> {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      body: Center(
-        child: Container(
-          alignment: Alignment.bottomCenter,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Text(
-                'Reply in',
-                style: Theme.of(context).textTheme.headline4.copyWith(
-                    color: kPrimaryColorLight, fontWeight: FontWeight.w900),
-                textAlign: TextAlign.center,
-              ),
-              _sliderValue == 1
-                  ? Text('${_sliderValue.toInt()} hour',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText2
-                          .copyWith(fontSize: 24, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center)
-                  : Text('${_sliderValue.toInt()} hours',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText2
-                          .copyWith(fontSize: 24, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center),
-              SliderTheme(
-                data: SliderThemeData(
-                    activeTrackColor: kPrimaryColorDark,
-                    inactiveTrackColor: kPrimaryColor100,
-                    thumbColor: kPrimaryColorDark,
-                    valueIndicatorColor: kPrimaryColor),
-                child: Slider(
-                  min: 0.0,
-                  max: 24.0,
-                  label: '${_sliderValue.toInt()}',
-                  divisions: 24,
-                  value: _sliderValue,
-                  onChanged: (value) {
-                    setState(() {
-                      _sliderValue = value;
-                      print(value);
-                    });
-                  },
-                ),
-              ),
-              Text(
-                'with your message',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText2
-                    .copyWith(fontSize: 16),
-                textAlign: TextAlign.center,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  '${replyLaterMessageCard.title}:',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText2
-                      .copyWith(fontSize: 20, fontWeight: FontWeight.w700),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  replyLaterMessageCard.message,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText2
-                      .copyWith(fontSize: 14),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              MaterialButton(
-                color: kPrimaryColor700,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16)),
-                textColor: Colors.white,
-                child: Text('SET TIMER'),
-                onPressed: () {
-                  print('Pressed set timer button');
-                  // Show feedback to the user
-                  showUserFeedback();
-                  // Save reply later message to Firebase
-                  addReplyLaterMessage();
-                  // start the timer (which will launch the notification once the time is up)
-                  startTimer();
-                },
-              )
-            ],
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Text(
+            'Reply in',
+            style: Theme.of(context).textTheme.headline4.copyWith(
+                color: kPrimaryColorLight, fontWeight: FontWeight.w900),
+            textAlign: TextAlign.center,
           ),
-        ),
+          _sliderValue == 1
+              ? Text('${_sliderValue.toInt()} hour',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText2
+                      .copyWith(fontSize: 24, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center)
+              : Text('${_sliderValue.toInt()} hours',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText2
+                      .copyWith(fontSize: 24, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center),
+          SliderTheme(
+            data: SliderThemeData(
+                activeTrackColor: kPrimaryColorDark,
+                inactiveTrackColor: kPrimaryColor100,
+                thumbColor: kPrimaryColorDark,
+                valueIndicatorColor: kPrimaryColor),
+            child: Slider(
+              min: 0.0,
+              max: 24.0,
+              label: '${_sliderValue.toInt()}',
+              divisions: 24,
+              value: _sliderValue,
+              onChanged: (value) {
+                setState(() {
+                  _sliderValue = value;
+                  print(value);
+                });
+              },
+            ),
+          ),
+          Text(
+            'with your message',
+            style: Theme.of(context)
+                .textTheme
+                .bodyText2
+                .copyWith(fontSize: 16),
+            textAlign: TextAlign.center,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              '${replyLaterMessageCard.title}:',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText2
+                  .copyWith(fontSize: 20, fontWeight: FontWeight.w700),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              replyLaterMessageCard.message,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText2
+                  .copyWith(fontSize: 14),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          MaterialButton(
+            color: kPrimaryColor700,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16)),
+            textColor: Colors.white,
+            child: Text('SET TIMER'),
+            onPressed: () {
+              print('Pressed set timer button');
+              // Show feedback to the user
+              showUserFeedback();
+              // Save reply later message to Firebase
+              addReplyLaterMessage();
+              // start the timer (which will launch the notification once the time is up)
+              startTimer();
+            },
+          )
+        ],
       ),
     );
   }
@@ -300,7 +296,14 @@ class _ReplyLaterState extends State<ReplyLater> {
             backgroundColor: kPrimaryColor700,
             elevation: 8,
             duration: Duration(milliseconds: 5000),
-          ))
+        action: SnackBarAction(
+          textColor: Colors.white,
+          label: 'OK',
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+          ),)
         : _scaffoldKeyReplyLater.currentState.showSnackBar(SnackBar(
             content: Text(
               'You will be reminded in ${_sliderValue.toInt()} hours!',
@@ -314,12 +317,13 @@ class _ReplyLaterState extends State<ReplyLater> {
             elevation: 8,
             duration: Duration(milliseconds: 3000),
             action: SnackBarAction(
+              textColor: Colors.white,
               label: 'OK',
               onPressed: () {
                 Navigator.pop(context);
               },
             ),
-          ));
+          ),);
 
 
   }

@@ -30,61 +30,64 @@ class _SignInState extends State<SignIn> {
         padding: EdgeInsets.all(20.0),
         child: Form(
           key: _formKey,
-          child: Column(
-            children: <Widget>[
-              Text(
-                'Sign in Information',
-                style: TextStyle(fontSize: 20),
-              ),
-              SizedBox(height: 5.0), // <= NEW
-              TextFormField(
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .bodyText1,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(labelText: "Email Address"),
-                onSaved: (value) => _email = value,
-                validator: (String value) {
-                  if (value.isEmpty) {
-                    return 'Please enter an email';
-                  }
-                  if (!value.contains('@')) {
-                    return 'Please enter a valid email';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 5.0), // <= NEW
-              TextFormField(
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .bodyText1,
-                validator: (String value) {
-                  if (value.isEmpty) {
-                    return 'Please enter a password';
-                  }
-                  return null;
-                },
-                obscureText: true,
-                decoration: InputDecoration(labelText: "Password"),
-                onSaved: (value) => _password = value,
-              ),
-              SizedBox(height: 5.0), // <= NEW
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Material(
-                  borderRadius: BorderRadius.circular(30.0),
-                  color: kPrimaryColor200,
-                  child: MaterialButton(
-                    minWidth: 400,
-                    child: Text("SIGN IN"),
-                    onPressed: _validateAndSignInWithEmailAndPassword,
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                SizedBox(height: 20.0),
+                Text(
+                  'Sign in Information',
+                  style: TextStyle(fontSize: 20),
+                ),
+                SizedBox(height: 20.0),
+                TextFormField(
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .bodyText1,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(labelText: "Email Address"),
+                  onSaved: (value) => _email = value,
+                  validator: (String value) {
+                    if (value.isEmpty) {
+                      return 'Please enter an email';
+                    }
+                    if (!value.contains('@')) {
+                      return 'Please enter a valid email';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 20.0),
+                TextFormField(
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .bodyText1,
+                  validator: (String value) {
+                    if (value.isEmpty) {
+                      return 'Please enter a password';
+                    }
+                    return null;
+                  },
+                  obscureText: true,
+                  decoration: InputDecoration(labelText: "Password"),
+                  onSaved: (value) => _password = value,
+                ),
+                SizedBox(height: 40.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Material(
+                    borderRadius: BorderRadius.circular(30.0),
+                    color: kPrimaryColor200,
+                    child: MaterialButton(
+                      minWidth: 400,
+                      child: Text("SIGN IN"),
+                      onPressed: _validateAndSignInWithEmailAndPassword,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
