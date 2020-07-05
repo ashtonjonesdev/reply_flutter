@@ -44,7 +44,7 @@ class AboutDeveloper extends StatelessWidget {
         appIcon: "images/app_icon.png",
         appName: "Reply",
         appVersion: "1.0",
-        donate: "mailto: ashtonjonesdev@gmail.com",
+        donate: "https://www.buymeacoffee.com/ashtonjonesdev",
         share: "https://play.google.com/store/apps/details?id=dev.ashtonjones.reply",
         devID: "8786079395794167171",
         help: "help",
