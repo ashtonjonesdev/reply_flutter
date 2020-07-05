@@ -157,7 +157,7 @@ class _RegisterState extends State<Register> {
           print('User was registered but not signed in!');
         }
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (BuildContext context) => Home()),
+            MaterialPageRoute(builder: (BuildContext context) => Home(firebaseUser: newUser,)),
                 (Route<dynamic> route) => false);
       }
     } on AuthException catch (error) {

@@ -113,7 +113,7 @@ class _SignInState extends State<SignIn> {
             'Signed in user: Email: ${signedInUser
                 .email} Password: $_password}');
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (BuildContext context) => Home()),
+            MaterialPageRoute(builder: (BuildContext context) => Home(firebaseUser: signedInUser,)),
                 (Route<dynamic> route) => false);
       } else {
         print('Signed in user is null!');

@@ -101,6 +101,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   Widget generatePersonalMessagesGridView() {
     /// Had to add load method here as well to reload the data so an added message shows up immediately
+    ///
     Provider.of<PersonalMessagesViewModel>(context, listen: false)
         .loadPersonalMessagesList(widget.firebaseUser);
 
