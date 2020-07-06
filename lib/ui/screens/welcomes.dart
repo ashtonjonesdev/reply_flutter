@@ -15,15 +15,33 @@ import 'package:reply_flutter/ui/screens/signin.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Welcome extends StatelessWidget {
+class Welcomes extends StatefulWidget {
+  @override
+  _WelcomesState createState() => _WelcomesState();
+}
 
-  static final String routeName = 'welcome';
+class _WelcomesState extends State<Welcomes> {
+
+  static final String routeName = 'welcomes';
+
+  static String route = 'welcomes';
 
   final bool isAndroid = Platform.isAndroid;
 
   final FirebaseRepository firebaseRepository = FirebaseRepository();
 
-//  String appleSignInErrorMessage;
+  String appleSignInErrorMessage;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if(Platform.isIOS){                                                      //check for ios if developing for both android & ios
+      AppleSignIn.onCredentialRevoked.listen((_) {
+        print("Apple Credentials revoked");
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,13 +120,13 @@ class Welcome extends StatelessWidget {
                     onPressed: () async {
                       await Provider.of<AuthService>(context, listen: false).signInWithGoogle()
                           .then((FirebaseUser firebaseUser) async {
-                            // If it is a new user (signing in for the first time), create a user in the database
-                          if(firebaseUser.metadata.creationTime == firebaseUser.metadata.lastSignInTime) {
-                            firebaseRepository.createUserInDatabaseWithGoogleProvider(firebaseUser);
-                          }
-                          Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(builder: (BuildContext context) => Home(firebaseUser: firebaseUser,)),
-                                  (Route<dynamic> route) => false);
+                        // If it is a new user (signing in for the first time), create a user in the database
+                        if(firebaseUser.metadata.creationTime == firebaseUser.metadata.lastSignInTime) {
+                          firebaseRepository.createUserInDatabaseWithGoogleProvider(firebaseUser);
+                        }
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(builder: (BuildContext context) => Home(firebaseUser: firebaseUser,)),
+                                (Route<dynamic> route) => false);
                       }).catchError((e) => print(e));
                     },
                     shape: RoundedRectangleBorder(
@@ -232,13 +250,10 @@ class Welcome extends StatelessWidget {
               SizedBox(height: 20.0),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: SignInWithAppleButton(
-                  // TODO: Implement SigninwithApple
-
-                onPressed: () async {
-                    checkLoggedInState();
-                    signInWithApple();
-                  },
+                child: AppleSignInButton(
+                  style: ButtonStyle.black,
+                  type: ButtonType.continueButton,
+                  onPressed: signInWithApple,
                 ),
               ),
             ],
@@ -273,26 +288,21 @@ class Welcome extends StatelessWidget {
 
   void signInWithApple() async {
 
-    final AuthorizationResult result = await AppleSignIn.performRequests([
-      AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
-    ]);
-
-    switch (result.status) {
-      case AuthorizationStatus.authorized:
-
-      // Store user ID
-        await FlutterSecureStorage()
-            .write(key: "userId", value: result.credential.user);
-        print('${result.credential.user} signed in with Apple!');
-        break;
-
-      case AuthorizationStatus.error:
-        print("Sign in failed: ${result.error.localizedDescription}");
-        break;
-
-      case AuthorizationStatus.cancelled:
-        print('User cancelled');
-        break;
+    if(await AppleSignIn.isAvailable()) {
+      final AuthorizationResult result = await AppleSignIn.performRequests([
+        AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+      ]);
+      switch (result.status) {
+        case AuthorizationStatus.authorized:
+          print('${result.credential.user} signed in with Apple');//All the required credentials
+          break;
+        case AuthorizationStatus.error:
+          print("Sign in failed: ${result.error.localizedDescription}");
+          break;
+        case AuthorizationStatus.cancelled:
+          print('User cancelled');
+          break;
+      }
     }
   }
 
@@ -336,5 +346,4 @@ class Welcome extends StatelessWidget {
       throw 'Could not launch $url';
     }
   }
-
 }

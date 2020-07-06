@@ -217,6 +217,8 @@ PODS:
     - AppAuth/ExternalUserAgent (= 1.4.0)
   - AppAuth/Core (1.4.0)
   - AppAuth/ExternalUserAgent (1.4.0)
+  - apple_sign_in (0.0.1):
+    - Flutter
   - BoringSSL-GRPC (0.0.7):
     - BoringSSL-GRPC/Implementation (= 0.0.7)
     - BoringSSL-GRPC/Interface (= 0.0.7)
@@ -299,6 +301,8 @@ PODS:
     - PromisesObjC (~> 1.2)
   - Flutter (1.0.0)
   - flutter_local_notifications (0.0.1):
+    - Flutter
+  - flutter_secure_storage (3.3.1):
     - Flutter
   - google_sign_in (0.0.1):
     - Flutter
@@ -391,6 +395,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - apple_sign_in (from `.symlinks/plugins/apple_sign_in/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - cloud_firestore_web (from `.symlinks/plugins/cloud_firestore_web/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
@@ -399,6 +404,7 @@ DEPENDENCIES:
   - firebase_core_web (from `.symlinks/plugins/firebase_core_web/ios`)
   - Flutter (from `Flutter`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
+  - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
   - google_sign_in_web (from `.symlinks/plugins/google_sign_in_web/ios`)
   - material_about (from `.symlinks/plugins/material_about/ios`)
@@ -436,6 +442,8 @@ SPEC REPOS:
     - PromisesObjC
 
 EXTERNAL SOURCES:
+  apple_sign_in:
+    :path: ".symlinks/plugins/apple_sign_in/ios"
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
   cloud_firestore_web:
@@ -452,6 +460,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_local_notifications:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
+  flutter_secure_storage:
+    :path: ".symlinks/plugins/flutter_secure_storage/ios"
   google_sign_in:
     :path: ".symlinks/plugins/google_sign_in/ios"
   google_sign_in_web:
@@ -472,6 +482,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
+  apple_sign_in: 7716c7ddfa195aeab7dec0dc374ef4ff45d1adb4
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
   cloud_firestore: 2a4f8f802fb0b701cf809b283b6bec7477ebaa6f
   cloud_firestore_web: 9ec3dc7f5f98de5129339802d491c1204462bfec
@@ -490,6 +501,7 @@ SPEC CHECKSUMS:
   FirebaseInstallations: 6f5f680e65dc374397a483c32d1799ba822a395b
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_local_notifications: 9e4738ce2471c5af910d961a6b7eadcf57c50186
+  flutter_secure_storage: 7953c38a04c3fdbb00571bcd87d8e3b5ceb9daec
   google_sign_in: 6bd214b9c154f881422f5fe27b66aaa7bbd580cc
   google_sign_in_web: 52deb24929ac0992baff65c57956031c44ed44c3
   GoogleAppMeasurement: 67458367830514fb20fd9e233496f1eef9d90185

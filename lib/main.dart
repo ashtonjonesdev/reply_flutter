@@ -19,6 +19,7 @@ import 'package:reply_flutter/ui/screens/register.dart';
 import 'package:reply_flutter/ui/screens/reply_later.dart';
 import 'package:reply_flutter/ui/screens/signin.dart';
 import 'package:reply_flutter/ui/screens/welcome.dart';
+import 'package:reply_flutter/ui/screens/welcomes.dart';
 
 
 void main() async {
@@ -68,7 +69,7 @@ class MyApp extends StatelessWidget {
                   print("error");
                   return Text(snapshot.error.toString());
                 }
-                return snapshot.hasData ? Home(firebaseUser: snapshot.data) : Welcome();
+                return snapshot.hasData ? Home(firebaseUser: snapshot.data) : Welcomes();
               } else {
                 return LoadingCircle();
               }
@@ -83,6 +84,7 @@ class MyApp extends StatelessWidget {
           AddNewMessage.routeName: (context) => AddNewMessage(),
           EditMessage.routeName: (context) => EditMessage(),
           ReplyLater.routeName: (context) => ReplyLater(),
+          'welcomes': (context) => Welcomes(),
         },
       ),
     );
