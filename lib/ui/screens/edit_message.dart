@@ -4,10 +4,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reply_flutter/core/data/model/MessageCard.dart';
+import 'package:reply_flutter/core/data/viewmodel/BusinessMessagesViewModel.dart';
+import 'package:reply_flutter/core/data/viewmodel/FirstAdditionalMessagesViewModel.dart';
 import 'package:reply_flutter/core/data/viewmodel/PersonalMessagesViewModel.dart';
+import 'package:reply_flutter/core/data/viewmodel/SecondAdditionalMessagesViewModel.dart';
+import 'package:reply_flutter/core/data/viewmodel/SocialMessagesViewModel.dart';
 import 'package:reply_flutter/core/services/AuthService.dart';
 import 'package:reply_flutter/core/utils/MessageCardArguments.dart';
 import 'package:reply_flutter/styles/colors.dart';
+import 'package:reply_flutter/ui/screens/add_new_message.dart';
 
 class EditMessage extends StatefulWidget {
 
@@ -42,6 +47,8 @@ class _EditMessageState extends State<EditMessage> {
 
   MessageCard _newMessageCard;
 
+  MessageCategory selectedMessageCategory;
+
   @override
   Widget build(BuildContext context) {
 
@@ -61,6 +68,9 @@ class _EditMessageState extends State<EditMessage> {
     // Initialize the newMessageCardData in case one or both of the fields are not changed
     _newMessageCardTitle = args.title;
     _newMessageCardMessage = args.message;
+
+    // Set the MessageCategory
+    selectedMessageCategory = args.messageCategory;
 
     _newMessageCard = MessageCard(title: _newMessageCardTitle, message: _newMessageCardMessage);
 
@@ -109,14 +119,14 @@ class _EditMessageState extends State<EditMessage> {
         child: Icon(Icons.save),
         onPressed: () {
 
-          editPersonalMessage();
+          editMessage(selectedMessageCategory);
 
         },
       ),
     );
   }
 
-  void editPersonalMessage() async {
+  void editMessage(MessageCategory messageCategory) async {
 
     if(cardMessageTitleTextController.text.isEmpty || cardMessageMessageTextController.text.isEmpty) {
       print('User did not enter a title or a message');
@@ -131,7 +141,28 @@ class _EditMessageState extends State<EditMessage> {
 
       _newMessageCard = MessageCard(title: _newMessageCardTitle, message: _newMessageCardMessage);
 
-      Provider.of<PersonalMessagesViewModel>(context, listen: false).editPersonalMessage(firebaseUser, _oldMessageCard, _newMessageCard);
+      // Get the MessageCategory of the Message to edit
+      switch(messageCategory) {
+        case MessageCategory.Personal:
+          Provider.of<PersonalMessagesViewModel>(context, listen: false).editPersonalMessage(firebaseUser, _oldMessageCard, _newMessageCard);
+          break;
+        case MessageCategory.Social:
+          Provider.of<SocialMessagesViewModel>(context, listen: false).editSocialMessage(firebaseUser, _oldMessageCard, _newMessageCard);
+          break;
+        case MessageCategory.Business:
+          Provider.of<BusinessMessagesViewModel>(context, listen: false).editBusinessMessage(firebaseUser, _oldMessageCard, _newMessageCard);
+          break;
+        case MessageCategory.FirstAdditional:
+          Provider.of<FirstAdditionalMessagesViewModel>(context, listen: false).editFirstAdditionalMessage(firebaseUser, _oldMessageCard, _newMessageCard);
+          break;
+        case MessageCategory.SecondAdditional:
+          Provider.of<SecondAdditionalMessagesViewModel>(context, listen: false).editSecondAdditionalMessage(firebaseUser, _oldMessageCard, _newMessageCard);
+          break;
+        default:
+          print('Error in retrieving selected message MessageCategory');
+          break;
+      }
+
 
       Navigator.pop(context);
 

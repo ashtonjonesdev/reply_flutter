@@ -42,6 +42,8 @@ dependencies:
   sign_in_with_apple: ^2.5.1
   flutter_local_notifications: ^1.4.4+1
   rxdart: ^0.24.1
+  apple_sign_in: ^0.1.0
+
 
 
 

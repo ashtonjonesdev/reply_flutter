@@ -97,145 +97,140 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
 
   }
 
-  void addPersonalMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) async {
-
-    Map messageCardData = messageCardToAdd.toJson();
-
-    List messageCardList = [messageCardData];
-
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
-
-      PERSONAL_MESSAGES_FIELD : FieldValue.arrayUnion(messageCardList)
-
-    });
-  }
-
   @override
-  void addBusinessMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) {
-    // TODO: implement addBusinessMessage
-  }
+  Future<List<MessageCard>> getBusinessMessages(FirebaseUser firebaseUser) async {
 
-  @override
-  void addFirstAdditionalMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) {
-    // TODO: implement addFirstAdditionalMessage
-  }
+    List<MessageCard> businessMessages = List();
 
-  @override
-  void addSecondAdditionalMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) {
-    // TODO: implement addSecondAdditionalMessage
-  }
+    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).get().then((document) {
 
-  @override
-  void addSocialMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) {
-    // TODO: implement addSocialMessage
-  }
+      if(document.exists) {
 
-  @override
-  void addReplyLaterMessage(FirebaseUser firebaseUser, MessageCard replyLaterMessageCard) async {
+        // Get the List of Maps
+        List values = document.data[BUSINESS_MESSAGES_FIELD];
+        print('List received: $values');
 
-    Map messageCardData = replyLaterMessageCard.toJson();
 
-    List messageCardList = [messageCardData];
+        // For each map (each message card) in the list, add a MessageCard to the MessageCard list (using the fromJson method)
+        for(Map<String, dynamic> map in values ) {
+          print('Map received in List: $map');
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+          /// Create the MessageCard from the map
+          MessageCard messageCard = MessageCard.fromJson(map);
+          print('Retrieved Message Card: ${messageCard.title} | ${messageCard.message}');
 
-      REPLY_LATER_MESSAGE_FIELD : messageCardList
+          /// Add the MessageCard to the list
+          businessMessages.add(messageCard);
+          print('Added MessageCard to list: ${businessMessages.last}');
 
+        }
+      }
     });
 
+
+    return businessMessages;
   }
 
   @override
-  void deleteBusinessMessage(FirebaseUser firebaseUser, MessageCard messageCardToDelete) {
-    // TODO: implement deleteBusinessMessage
-  }
+  Future<List<MessageCard>> getFirstAdditionalMessages(FirebaseUser firebaseUser) async {
 
-  @override
-  void deleteFirstAdditionalMessage(FirebaseUser firebaseUser, MessageCard messageCardToDelete) {
-    // TODO: implement deleteFirstAdditionalMessage
-  }
+    List<MessageCard> firstAdditionalMessages = List();
 
-  @override
-  void deletePersonalMessage(FirebaseUser firebaseUser, MessageCard messageCardToDelete) async {
+    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).get().then((document) {
 
-    Map messageCardData = messageCardToDelete.toJson();
+      if(document.exists) {
 
-    List messageCardList = [messageCardData];
+        // Get the List of Maps
+        List values = document.data[FIRST_ADDITIONAL_MESSAGES_FIELD];
+        print('List received: $values');
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
 
-      PERSONAL_MESSAGES_FIELD : FieldValue.arrayRemove(messageCardList)
+        // For each map (each message card) in the list, add a MessageCard to the MessageCard list (using the fromJson method)
+        for(Map<String, dynamic> map in values ) {
+          print('Map received in List: $map');
 
-    });
-  }
+          /// Create the MessageCard from the map
+          MessageCard messageCard = MessageCard.fromJson(map);
+          print('Retrieved Message Card: ${messageCard.title} | ${messageCard.message}');
 
-  @override
-  void deleteSecondAdditionalMessage(FirebaseUser firebaseUser, MessageCard messageCardToDelete) {
-    // TODO: implement deleteSecondAdditionalMessage
-  }
+          /// Add the MessageCard to the list
+          firstAdditionalMessages.add(messageCard);
+          print('Added MessageCard to list: ${firstAdditionalMessages.last}');
 
-  @override
-  void deleteSocialMessage(FirebaseUser firebaseUser, MessageCard messageCardToDelete) {
-    // TODO: implement deleteSocialMessage
-  }
-
-  @override
-  void editBusinessMessage(FirebaseUser firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) {
-    // TODO: implement editBusinessMessage
-  }
-
-  @override
-  void editFirstAdditionalMessage(FirebaseUser firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) {
-    // TODO: implement editFirstAdditionalMessage
-  }
-
-  @override
-  void editPersonalMessage(FirebaseUser firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) async {
-
-    /// Delete the oldMessageCard first
-    Map oldMessageCardData = oldMessageCard.toJson();
-
-    List oldMessageCardList = [oldMessageCardData];
-
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
-
-      PERSONAL_MESSAGES_FIELD : FieldValue.arrayRemove(oldMessageCardList)
-
+        }
+      }
     });
 
-    /// Then add the newMessageCard
-    Map newMessageCardData = newMessageCard.toJson();
 
-    List newMessageCardList = [newMessageCardData];
+    return firstAdditionalMessages;
+  }
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+  @override
+  Future<List<MessageCard>> getSecondAdditionalMessages(FirebaseUser firebaseUser) async {
 
-      PERSONAL_MESSAGES_FIELD : FieldValue.arrayUnion(newMessageCardList)
+    List<MessageCard> secondAdditionalMessages = List();
 
+    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).get().then((document) {
+
+      if(document.exists) {
+
+        // Get the List of Maps
+        List values = document.data[SECOND_ADDITIONAL_MESSAGES_FIELD];
+        print('List received: $values');
+
+
+        // For each map (each message card) in the list, add a MessageCard to the MessageCard list (using the fromJson method)
+        for(Map<String, dynamic> map in values ) {
+          print('Map received in List: $map');
+
+          /// Create the MessageCard from the map
+          MessageCard messageCard = MessageCard.fromJson(map);
+          print('Retrieved Message Card: ${messageCard.title} | ${messageCard.message}');
+
+          /// Add the MessageCard to the list
+          secondAdditionalMessages.add(messageCard);
+          print('Added MessageCard to list: ${secondAdditionalMessages.last}');
+
+        }
+      }
     });
 
+
+    return secondAdditionalMessages;
   }
 
   @override
-  void editSecondAdditionalMessage(FirebaseUser firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) {
-    // TODO: implement editSecondAdditionalMessage
-  }
+  Future<List<MessageCard>> getSocialMessages(FirebaseUser firebaseUser) async {
 
-  @override
-  void editSocialMessage(FirebaseUser firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) {
-    // TODO: implement editSocialMessage
-  }
+    List<MessageCard> socialMessages = List();
 
-  @override
-  Future<List<MessageCard>> getBusinessMessages(FirebaseUser firebaseUser) {
-    // TODO: implement getBusinessMessages
-    throw UnimplementedError();
-  }
+    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).get().then((document) {
 
-  @override
-  Future<List<MessageCard>> getFirstAdditionalMessages(FirebaseUser firebaseUser) {
-    // TODO: implement getFirstAdditionalMessages
-    throw UnimplementedError();
+      if(document.exists) {
+
+        // Get the List of Maps
+        List values = document.data[SOCIAL_MESSAGES_FIELD];
+        print('List received: $values');
+
+
+        // For each map (each message card) in the list, add a MessageCard to the MessageCard list (using the fromJson method)
+        for(Map<String, dynamic> map in values ) {
+          print('Map received in List: $map');
+
+          /// Create the MessageCard from the map
+          MessageCard messageCard = MessageCard.fromJson(map);
+          print('Retrieved Message Card: ${messageCard.title} | ${messageCard.message}');
+
+          /// Add the MessageCard to the list
+          socialMessages.add(messageCard);
+          print('Added MessageCard to list: ${socialMessages.last}');
+
+        }
+      }
+    });
+
+
+    return socialMessages;
   }
 
   @override
@@ -272,17 +267,295 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
     return replyLaterMessageList[0];
   }
 
-  @override
-  Future<List<MessageCard>> getSecondAdditionalMessages(FirebaseUser firebaseUser) {
-    // TODO: implement getSecondAdditionalMessages
-    throw UnimplementedError();
+  void addPersonalMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) async {
+
+    Map messageCardData = messageCardToAdd.toJson();
+
+    List messageCardList = [messageCardData];
+
+    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+
+      PERSONAL_MESSAGES_FIELD : FieldValue.arrayUnion(messageCardList)
+
+    });
   }
 
   @override
-  Future<List<MessageCard>> getSocialMessages(FirebaseUser firebaseUser) {
-    // TODO: implement getSocialMessages
-    throw UnimplementedError();
+  void addBusinessMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) async {
+
+    Map messageCardData = messageCardToAdd.toJson();
+
+    List messageCardList = [messageCardData];
+
+    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+
+      BUSINESS_MESSAGES_FIELD : FieldValue.arrayUnion(messageCardList)
+
+    });
   }
+
+  @override
+  void addFirstAdditionalMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) async {
+
+    Map messageCardData = messageCardToAdd.toJson();
+
+    List messageCardList = [messageCardData];
+
+    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+
+      FIRST_ADDITIONAL_MESSAGES_FIELD : FieldValue.arrayUnion(messageCardList)
+
+    });
+  }
+
+  @override
+  void addSecondAdditionalMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) async {
+
+    Map messageCardData = messageCardToAdd.toJson();
+
+    List messageCardList = [messageCardData];
+
+    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+
+      SECOND_ADDITIONAL_MESSAGES_FIELD : FieldValue.arrayUnion(messageCardList)
+
+    });
+  }
+
+  @override
+  void addSocialMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) async {
+
+    Map messageCardData = messageCardToAdd.toJson();
+
+    List messageCardList = [messageCardData];
+
+    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+
+      SOCIAL_MESSAGES_FIELD : FieldValue.arrayUnion(messageCardList)
+
+    });
+  }
+
+  @override
+  void addReplyLaterMessage(FirebaseUser firebaseUser, MessageCard replyLaterMessageCard) async {
+
+    Map messageCardData = replyLaterMessageCard.toJson();
+
+    List messageCardList = [messageCardData];
+
+    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+
+      REPLY_LATER_MESSAGE_FIELD : messageCardList
+
+    });
+
+  }
+
+  @override
+  void deleteBusinessMessage(FirebaseUser firebaseUser, MessageCard messageCardToDelete) async {
+
+    Map messageCardData = messageCardToDelete.toJson();
+
+    List messageCardList = [messageCardData];
+
+    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+
+      BUSINESS_MESSAGES_FIELD : FieldValue.arrayRemove(messageCardList)
+
+    });
+  }
+
+  @override
+  void deleteFirstAdditionalMessage(FirebaseUser firebaseUser, MessageCard messageCardToDelete) async {
+
+    Map messageCardData = messageCardToDelete.toJson();
+
+    List messageCardList = [messageCardData];
+
+    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+
+      FIRST_ADDITIONAL_MESSAGES_FIELD : FieldValue.arrayRemove(messageCardList)
+
+    });
+  }
+
+  @override
+  void deletePersonalMessage(FirebaseUser firebaseUser, MessageCard messageCardToDelete) async {
+
+    Map messageCardData = messageCardToDelete.toJson();
+
+    List messageCardList = [messageCardData];
+
+    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+
+      PERSONAL_MESSAGES_FIELD : FieldValue.arrayRemove(messageCardList)
+
+    });
+  }
+
+  @override
+  void deleteSecondAdditionalMessage(FirebaseUser firebaseUser, MessageCard messageCardToDelete) async {
+
+    Map messageCardData = messageCardToDelete.toJson();
+
+    List messageCardList = [messageCardData];
+
+    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+
+      SECOND_ADDITIONAL_MESSAGES_FIELD : FieldValue.arrayRemove(messageCardList)
+
+    });
+  }
+
+  @override
+  void deleteSocialMessage(FirebaseUser firebaseUser, MessageCard messageCardToDelete) async {
+
+    Map messageCardData = messageCardToDelete.toJson();
+
+    List messageCardList = [messageCardData];
+
+    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+
+      SOCIAL_MESSAGES_FIELD : FieldValue.arrayRemove(messageCardList)
+
+    });
+  }
+
+  @override
+  void editBusinessMessage(FirebaseUser firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) async {
+
+    /// Delete the oldMessageCard first
+    Map oldMessageCardData = oldMessageCard.toJson();
+
+    List oldMessageCardList = [oldMessageCardData];
+
+    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+
+      BUSINESS_MESSAGES_FIELD : FieldValue.arrayRemove(oldMessageCardList)
+
+    });
+
+    /// Then add the newMessageCard
+    Map newMessageCardData = newMessageCard.toJson();
+
+    List newMessageCardList = [newMessageCardData];
+
+    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+
+      BUSINESS_MESSAGES_FIELD : FieldValue.arrayUnion(newMessageCardList)
+
+    });
+  }
+
+  @override
+  void editFirstAdditionalMessage(FirebaseUser firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) async {
+
+    /// Delete the oldMessageCard first
+    Map oldMessageCardData = oldMessageCard.toJson();
+
+    List oldMessageCardList = [oldMessageCardData];
+
+    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+
+      FIRST_ADDITIONAL_MESSAGES_FIELD : FieldValue.arrayRemove(oldMessageCardList)
+
+    });
+
+    /// Then add the newMessageCard
+    Map newMessageCardData = newMessageCard.toJson();
+
+    List newMessageCardList = [newMessageCardData];
+
+    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+
+      FIRST_ADDITIONAL_MESSAGES_FIELD : FieldValue.arrayUnion(newMessageCardList)
+
+    });
+  }
+
+  @override
+  void editPersonalMessage(FirebaseUser firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) async {
+
+    /// Delete the oldMessageCard first
+    Map oldMessageCardData = oldMessageCard.toJson();
+
+    List oldMessageCardList = [oldMessageCardData];
+
+    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+
+      PERSONAL_MESSAGES_FIELD : FieldValue.arrayRemove(oldMessageCardList)
+
+    });
+
+    /// Then add the newMessageCard
+    Map newMessageCardData = newMessageCard.toJson();
+
+    List newMessageCardList = [newMessageCardData];
+
+    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+
+      PERSONAL_MESSAGES_FIELD : FieldValue.arrayUnion(newMessageCardList)
+
+    });
+
+  }
+
+  @override
+  void editSecondAdditionalMessage(FirebaseUser firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) async {
+
+    /// Delete the oldMessageCard first
+    Map oldMessageCardData = oldMessageCard.toJson();
+
+    List oldMessageCardList = [oldMessageCardData];
+
+    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+
+      SECOND_ADDITIONAL_MESSAGES_FIELD : FieldValue.arrayRemove(oldMessageCardList)
+
+    });
+
+    /// Then add the newMessageCard
+    Map newMessageCardData = newMessageCard.toJson();
+
+    List newMessageCardList = [newMessageCardData];
+
+    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+
+      SECOND_ADDITIONAL_MESSAGES_FIELD : FieldValue.arrayUnion(newMessageCardList)
+
+    });
+  }
+
+  @override
+  void editSocialMessage(FirebaseUser firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) async {
+    /// Delete the oldMessageCard first
+    Map oldMessageCardData = oldMessageCard.toJson();
+
+    List oldMessageCardList = [oldMessageCardData];
+
+    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+
+      SOCIAL_MESSAGES_FIELD : FieldValue.arrayRemove(oldMessageCardList)
+
+    });
+
+    /// Then add the newMessageCard
+    Map newMessageCardData = newMessageCard.toJson();
+
+    List newMessageCardList = [newMessageCardData];
+
+    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+
+      SOCIAL_MESSAGES_FIELD : FieldValue.arrayUnion(newMessageCardList)
+
+    });
+  }
+
+
+
+
+
+
 
 
 

@@ -113,7 +113,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           padding: EdgeInsets.all(24),
           itemBuilder: (context, index) {
             return GestureDetector(
-              onTap: () => selectGridViewItem(index, personalMessagesViewModel),
+              onTap: () => selectPersonalMessagesGridViewItem(index, personalMessagesViewModel),
               child: Card(
                 color: index != selectedItemIndex
                     ? kSurfaceColor
@@ -143,7 +143,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   /// This works for single selection (Unable to deselect the currently selected one by clicking on it, but that's ok because the previous one is deselected when a new one is selected
-  void selectGridViewItem(
+  void selectPersonalMessagesGridViewItem(
       int index, PersonalMessagesViewModel personalMessagesViewModel) {
     print('Tapped item: $index');
     setState(() {
@@ -170,116 +170,283 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   Widget generateSocialMessagesGridView() {
+    /// Had to add load method here as well to reload the data so an added message shows up immediately
+    ///
+    Provider.of<SocialMessagesViewModel>(context, listen: false)
+        .loadSocialMessagesList(widget.firebaseUser);
+
     return Consumer<SocialMessagesViewModel>(
       builder: (context, socialMessagesViewModel, child) => GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, crossAxisSpacing: 40, mainAxisSpacing: 40),
-          itemCount: socialMessagesViewModel.socialMessages.length,
+              crossAxisCount: 2, crossAxisSpacing: 35, mainAxisSpacing: 40),
+          itemCount: socialMessagesViewModel.socialMessagesList.length,
           padding: EdgeInsets.all(24),
           itemBuilder: (context, index) {
-            return Container(
-              decoration: BoxDecoration(
-                color: kPrimaryColorLight,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(socialMessagesViewModel.socialMessages[index].title),
-                  Text(socialMessagesViewModel.socialMessages[index].message)
-                ],
+            return GestureDetector(
+              onTap: () => selectSocialMessagesGridViewItem(index, socialMessagesViewModel),
+              child: Card(
+                color: index != selectedItemIndex
+                    ? kSurfaceColor
+                    : kPrimaryColor200,
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        '${socialMessagesViewModel.socialMessagesList[index].title} | ${socialMessagesViewModel.socialMessagesList[index].message}',
+                        style: Theme.of(context).textTheme.bodyText1.copyWith(
+                            fontWeight: FontWeight.bold, fontSize: 14),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           }),
     );
+  }
+
+  /// This works for single selection (Unable to deselect the currently selected one by clicking on it, but that's ok because the previous one is deselected when a new one is selected
+  void selectSocialMessagesGridViewItem(
+      int index, SocialMessagesViewModel socialMessagesViewModel) {
+    print('Tapped item: $index');
+    setState(() {
+      selectedItemIndex = index;
+      // Set the selected message
+      selectedMessage = socialMessagesViewModel.socialMessagesList[index];
+      print('Selected message: $selectedMessage');
+      // Show a snackbar of the selected message
+      _scaffoldKeyHome.currentState.showSnackBar(SnackBar(
+        content: Text(
+          selectedMessage.message,
+          textAlign: TextAlign.center,
+          style: Theme.of(context)
+              .textTheme
+              .bodyText1
+              .copyWith(color: Colors.white),
+        ),
+        backgroundColor: kPrimaryColor700,
+        elevation: 8,
+        duration: Duration(milliseconds: 2000),
+      ));
+    });
+    print('Selected Item: $index');
   }
 
   Widget generateBusinessMessagesGridView() {
+    /// Had to add load method here as well to reload the data so an added message shows up immediately
+    ///
+    Provider.of<BusinessMessagesViewModel>(context, listen: false)
+        .loadBusinessMessagesList(widget.firebaseUser);
+
     return Consumer<BusinessMessagesViewModel>(
       builder: (context, businessMessagesViewModel, child) => GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, crossAxisSpacing: 40, mainAxisSpacing: 40),
-          itemCount: businessMessagesViewModel.businessMessages.length,
+              crossAxisCount: 2, crossAxisSpacing: 35, mainAxisSpacing: 40),
+          itemCount: businessMessagesViewModel.businessMessagesList.length,
           padding: EdgeInsets.all(24),
           itemBuilder: (context, index) {
-            return Container(
-              decoration: BoxDecoration(
-                color: kPrimaryColorLight,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(businessMessagesViewModel.businessMessages[index].title),
-                  Text(
-                      businessMessagesViewModel.businessMessages[index].message)
-                ],
+            return GestureDetector(
+              onTap: () => selectBusinessMessagesGridViewItem(index, businessMessagesViewModel),
+              child: Card(
+                color: index != selectedItemIndex
+                    ? kSurfaceColor
+                    : kPrimaryColor200,
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        '${businessMessagesViewModel.businessMessagesList[index].title} | ${businessMessagesViewModel.businessMessagesList[index].message}',
+                        style: Theme.of(context).textTheme.bodyText1.copyWith(
+                            fontWeight: FontWeight.bold, fontSize: 14),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           }),
     );
   }
 
+  /// This works for single selection (Unable to deselect the currently selected one by clicking on it, but that's ok because the previous one is deselected when a new one is selected
+  void selectBusinessMessagesGridViewItem(
+      int index, BusinessMessagesViewModel businessMessagesViewModel) {
+    print('Tapped item: $index');
+    setState(() {
+      selectedItemIndex = index;
+      // Set the selected message
+      selectedMessage = businessMessagesViewModel.businessMessagesList[index];
+      print('Selected message: $selectedMessage');
+      // Show a snackbar of the selected message
+      _scaffoldKeyHome.currentState.showSnackBar(SnackBar(
+        content: Text(
+          selectedMessage.message,
+          textAlign: TextAlign.center,
+          style: Theme.of(context)
+              .textTheme
+              .bodyText1
+              .copyWith(color: Colors.white),
+        ),
+        backgroundColor: kPrimaryColor700,
+        elevation: 8,
+        duration: Duration(milliseconds: 2000),
+      ));
+    });
+    print('Selected Item: $index');
+  }
+
   Widget generateFirstAdditionalMessagesGridView() {
+    /// Had to add load method here as well to reload the data so an added message shows up immediately
+    ///
+    Provider.of<FirstAdditionalMessagesViewModel>(context, listen: false)
+        .loadFirstAdditionalMessagesList(widget.firebaseUser);
+
     return Consumer<FirstAdditionalMessagesViewModel>(
-      builder: (context, firstAdditionalMessagesViewModel, child) =>
-          GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, crossAxisSpacing: 40, mainAxisSpacing: 40),
-              itemCount: firstAdditionalMessagesViewModel
-                  .firstAdditionalMessages.length,
-              padding: EdgeInsets.all(24),
-              itemBuilder: (context, index) {
-                return Container(
-                  decoration: BoxDecoration(
-                    color: kPrimaryColorLight,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(firstAdditionalMessagesViewModel
-                          .firstAdditionalMessages[index].title),
-                      Text(firstAdditionalMessagesViewModel
-                          .firstAdditionalMessages[index].message)
-                    ],
-                  ),
-                );
-              }),
+      builder: (context, firstAdditionalMessagesViewModel, child) => GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, crossAxisSpacing: 35, mainAxisSpacing: 40),
+          itemCount: firstAdditionalMessagesViewModel.firstAdditionalMessagesList.length,
+          padding: EdgeInsets.all(24),
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: () => selectFirstAdditionalMessagesGridViewItem(index, firstAdditionalMessagesViewModel),
+              child: Card(
+                color: index != selectedItemIndex
+                    ? kSurfaceColor
+                    : kPrimaryColor200,
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        '${firstAdditionalMessagesViewModel.firstAdditionalMessagesList[index].title} | ${firstAdditionalMessagesViewModel.firstAdditionalMessagesList[index].message}',
+                        style: Theme.of(context).textTheme.bodyText1.copyWith(
+                            fontWeight: FontWeight.bold, fontSize: 14),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }),
     );
   }
 
+  /// This works for single selection (Unable to deselect the currently selected one by clicking on it, but that's ok because the previous one is deselected when a new one is selected
+  void selectFirstAdditionalMessagesGridViewItem(
+      int index, FirstAdditionalMessagesViewModel firstAdditionalMessagesViewModel) {
+    print('Tapped item: $index');
+    setState(() {
+      selectedItemIndex = index;
+      // Set the selected message
+      selectedMessage = firstAdditionalMessagesViewModel.firstAdditionalMessagesList[index];
+      print('Selected message: $selectedMessage');
+      // Show a snackbar of the selected message
+      _scaffoldKeyHome.currentState.showSnackBar(SnackBar(
+        content: Text(
+          selectedMessage.message,
+          textAlign: TextAlign.center,
+          style: Theme.of(context)
+              .textTheme
+              .bodyText1
+              .copyWith(color: Colors.white),
+        ),
+        backgroundColor: kPrimaryColor700,
+        elevation: 8,
+        duration: Duration(milliseconds: 2000),
+      ));
+    });
+    print('Selected Item: $index');
+  }
+
   Widget generateSecondAdditionalMessagesGridView() {
+    /// Had to add load method here as well to reload the data so an added message shows up immediately
+    ///
+    Provider.of<SecondAdditionalMessagesViewModel>(context, listen: false)
+        .loadSecondAdditionalMessagesList(widget.firebaseUser);
+
     return Consumer<SecondAdditionalMessagesViewModel>(
-      builder: (context, secondAdditionalMessagesViewModel, child) =>
-          GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, crossAxisSpacing: 40, mainAxisSpacing: 40),
-              itemCount: secondAdditionalMessagesViewModel
-                  .secondAdditionalMessages.length,
-              padding: EdgeInsets.all(24),
-              itemBuilder: (context, index) {
-                return Container(
-                  decoration: BoxDecoration(
-                    color: kPrimaryColorLight,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(secondAdditionalMessagesViewModel
-                          .secondAdditionalMessages[index].title),
-                      Text(secondAdditionalMessagesViewModel
-                          .secondAdditionalMessages[index].message)
-                    ],
-                  ),
-                );
-              }),
+      builder: (context, secondAdditionalMessagesViewModel, child) => GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, crossAxisSpacing: 35, mainAxisSpacing: 40),
+          itemCount: secondAdditionalMessagesViewModel.secondAdditionalMessagesList.length,
+          padding: EdgeInsets.all(24),
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: () => selectSecondAdditionalMessagesGridViewItem(index, secondAdditionalMessagesViewModel),
+              child: Card(
+                color: index != selectedItemIndex
+                    ? kSurfaceColor
+                    : kPrimaryColor200,
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        '${secondAdditionalMessagesViewModel.secondAdditionalMessagesList[index].title} | ${secondAdditionalMessagesViewModel.secondAdditionalMessagesList[index].message}',
+                        style: Theme.of(context).textTheme.bodyText1.copyWith(
+                            fontWeight: FontWeight.bold, fontSize: 14),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }),
     );
+  }
+
+  /// This works for single selection (Unable to deselect the currently selected one by clicking on it, but that's ok because the previous one is deselected when a new one is selected
+  void selectSecondAdditionalMessagesGridViewItem(
+      int index, SecondAdditionalMessagesViewModel secondAdditionalMessagesViewModel) {
+    print('Tapped item: $index');
+    setState(() {
+      selectedItemIndex = index;
+      // Set the selected message
+      selectedMessage = secondAdditionalMessagesViewModel.secondAdditionalMessagesList[index];
+      print('Selected message: $selectedMessage');
+      // Show a snackbar of the selected message
+      _scaffoldKeyHome.currentState.showSnackBar(SnackBar(
+        content: Text(
+          selectedMessage.message,
+          textAlign: TextAlign.center,
+          style: Theme.of(context)
+              .textTheme
+              .bodyText1
+              .copyWith(color: Colors.white),
+        ),
+        backgroundColor: kPrimaryColor700,
+        elevation: 8,
+        duration: Duration(milliseconds: 2000),
+      ));
+    });
+    print('Selected Item: $index');
   }
 
   @override
@@ -403,11 +570,34 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 return;
               }
 
-              // TODO: Need to figure out how to reload data to show new edit card immediately after editing
+              MessageCategory selectedMessageCategory;
+
+              // Get the MessageCategory of the Message to edit
+              switch(_currentTabIndex) {
+                case 0:
+                  selectedMessageCategory = MessageCategory.Personal;
+                  break;
+                case 1:
+                  selectedMessageCategory = MessageCategory.Social;
+                  break;
+                case 2:
+                  selectedMessageCategory = MessageCategory.Business;
+                  break;
+                case 3:
+                  selectedMessageCategory = MessageCategory.FirstAdditional;
+                  break;
+                case 4:
+                  selectedMessageCategory = MessageCategory.SecondAdditional;
+                  break;
+                default:
+                  print('Error in retrieving selected message MessageCategory');
+                  break;
+              }
               Navigator.pushNamed(context, EditMessage.routeName,
                       arguments: MessageCardArguments(
                           title: selectedMessage.title,
-                          message: selectedMessage.message))
+                          message: selectedMessage.message,
+                          messageCategory: selectedMessageCategory))
                   .whenComplete(() {
                 reloadData();
               });
@@ -434,7 +624,28 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 ));
                 return;
               }
-              deletePersonalMessage(widget.firebaseUser, selectedMessage);
+              switch(_currentTabIndex) {
+                case 0:
+                  deletePersonalMessage(widget.firebaseUser, selectedMessage);
+                  break;
+                case 1:
+                  deleteSocialMessage(widget.firebaseUser, selectedMessage);
+                  break;
+                case 2:
+                  deleteBusinessMessage(widget.firebaseUser, selectedMessage);
+                  break;
+                case 3:
+                  deleteFirstAdditionalMessage(widget.firebaseUser, selectedMessage);
+                  break;
+                case 4:
+                  deleteSecondAdditionalMessage(widget.firebaseUser, selectedMessage);
+                  break;
+                default:
+                  print('Error in deleting message');
+                  break;
+
+
+              }
               _scaffoldKeyHome.currentState.showSnackBar(SnackBar(
                 content: Text(
                   'Message Deleted!',
@@ -582,6 +793,74 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     // Had to add it here to have the message removed from UI immediately upon deletion
     Provider.of<PersonalMessagesViewModel>(context, listen: false)
         .loadPersonalMessagesList(widget.firebaseUser);
+
+    setState(() {
+      // Set selectedItemIndex back to -1 to signify a card isn't selected (change the color back to unselected)
+      selectedItemIndex = -1;
+      // Set selectedMessage back to null after message has been deleted
+      selectedMessage = null;
+    });
+  }
+
+  void deleteSocialMessage(
+      FirebaseUser firebaseUser, MessageCard messageCardToDelete) async {
+    Provider.of<SocialMessagesViewModel>(context, listen: false)
+        .deleteSocialMessage(firebaseUser, messageCardToDelete);
+
+    // Had to add it here to have the message removed from UI immediately upon deletion
+    Provider.of<SocialMessagesViewModel>(context, listen: false)
+        .loadSocialMessagesList(widget.firebaseUser);
+
+    setState(() {
+      // Set selectedItemIndex back to -1 to signify a card isn't selected (change the color back to unselected)
+      selectedItemIndex = -1;
+      // Set selectedMessage back to null after message has been deleted
+      selectedMessage = null;
+    });
+  }
+
+  void deleteBusinessMessage(
+      FirebaseUser firebaseUser, MessageCard messageCardToDelete) async {
+    Provider.of<BusinessMessagesViewModel>(context, listen: false)
+        .deleteBusinessMessage(firebaseUser, messageCardToDelete);
+
+    // Had to add it here to have the message removed from UI immediately upon deletion
+    Provider.of<BusinessMessagesViewModel>(context, listen: false)
+        .loadBusinessMessagesList(widget.firebaseUser);
+
+    setState(() {
+      // Set selectedItemIndex back to -1 to signify a card isn't selected (change the color back to unselected)
+      selectedItemIndex = -1;
+      // Set selectedMessage back to null after message has been deleted
+      selectedMessage = null;
+    });
+  }
+
+  void deleteFirstAdditionalMessage(
+      FirebaseUser firebaseUser, MessageCard messageCardToDelete) async {
+    Provider.of<FirstAdditionalMessagesViewModel>(context, listen: false)
+        .deleteFirstAdditionalMessage(firebaseUser, messageCardToDelete);
+
+    // Had to add it here to have the message removed from UI immediately upon deletion
+    Provider.of<FirstAdditionalMessagesViewModel>(context, listen: false)
+        .loadFirstAdditionalMessagesList(widget.firebaseUser);
+
+    setState(() {
+      // Set selectedItemIndex back to -1 to signify a card isn't selected (change the color back to unselected)
+      selectedItemIndex = -1;
+      // Set selectedMessage back to null after message has been deleted
+      selectedMessage = null;
+    });
+  }
+
+  void deleteSecondAdditionalMessage(
+      FirebaseUser firebaseUser, MessageCard messageCardToDelete) async {
+    Provider.of<SecondAdditionalMessagesViewModel>(context, listen: false)
+        .deleteSecondAdditionalMessage(firebaseUser, messageCardToDelete);
+
+    // Had to add it here to have the message removed from UI immediately upon deletion
+    Provider.of<SecondAdditionalMessagesViewModel>(context, listen: false)
+        .loadSecondAdditionalMessagesList(widget.firebaseUser);
 
     setState(() {
       // Set selectedItemIndex back to -1 to signify a card isn't selected (change the color back to unselected)

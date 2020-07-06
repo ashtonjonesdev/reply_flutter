@@ -197,29 +197,25 @@ class _AddNewMessageState extends State<AddNewMessage> {
         case MessageCategory.Social:
           print('Saving Message to Social Category..');
           Provider.of<SocialMessagesViewModel>(context, listen: false)
-              .addSocialMessage(
-              MessageCard(title: cardTitle, message: cardMessage));
+              .addSocialMessage(firebaseUser, messageCardToAdd);
           break;
 
         case MessageCategory.Business:
           print('Saving Message to Business Category..');
           Provider.of<BusinessMessagesViewModel>(context, listen: false)
-              .addBusinessMessage(
-              MessageCard(title: cardTitle, message: cardMessage));
+              .addBusinessMessage(firebaseUser, messageCardToAdd);
           break;
 
         case MessageCategory.FirstAdditional:
           print('Saving Message to First Additional Category..');
           Provider.of<FirstAdditionalMessagesViewModel>(context, listen: false)
-              .addFirstAdditionalMessage(
-              MessageCard(title: cardTitle, message: cardMessage));
+              .addFirstAdditionalMessage(firebaseUser, messageCardToAdd);
           break;
 
         case MessageCategory.SecondAdditional:
           print('Saving Message to Second Additional Category..');
           Provider.of<SecondAdditionalMessagesViewModel>(context, listen: false)
-              .addSecondAdditionalMessage(
-              MessageCard(title: cardTitle, message: cardMessage));
+              .addSecondAdditionalMessage(firebaseUser, messageCardToAdd);
           break;
 
         default:
