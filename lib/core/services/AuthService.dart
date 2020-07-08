@@ -16,7 +16,7 @@ class AuthService with ChangeNotifier {
   Future<FirebaseUser> getUser() async {
     try {
       final user = await _auth.currentUser();
-      if(user != null) {
+      if (user != null) {
         print('User signed in: ${user.email}');
       }
       else {
@@ -38,11 +38,10 @@ class AuthService with ChangeNotifier {
     return result;
   }
 
-  Future<FirebaseUser> registerUserWithEmailAndPassword(
-      {String firstName,
-        String lastName,
-        String email,
-        String password}) async {
+  Future<FirebaseUser> registerUserWithEmailAndPassword({String firstName,
+    String lastName,
+    String email,
+    String password}) async {
     var authResult = await FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password);
 
@@ -72,14 +71,15 @@ class AuthService with ChangeNotifier {
   }
 
 
-  Future<FirebaseUser> signInUserWithEmailAndPassword({String email, String password}) async {
+  Future<FirebaseUser> signInUserWithEmailAndPassword(
+      {String email, String password}) async {
     try {
       var result = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
       // since something changed, let's notify the listeners...
       notifyListeners();
       return result.user;
-    }  catch (e) {
+    } catch (e) {
       throw new AuthException(e.code, e.message);
     }
   }
@@ -104,42 +104,5 @@ class AuthService with ChangeNotifier {
     return user;
   }
 
-  Future<FirebaseUser> signInWithApple({List<Scope> scopes = const []}) async {
-    // 1. perform the sign-in request
-    final result = await AppleSignIn.performRequests(
-        [AppleIdRequest(requestedScopes: scopes)]);
-    // 2. check the result
-    switch (result.status) {
-      case AuthorizationStatus.authorized:
-        final appleIdCredential = result.credential;
-        final oAuthProvider = OAuthProvider(providerId: 'apple.com');
-        final credential = oAuthProvider.getCredential(
-          idToken: String.fromCharCodes(appleIdCredential.identityToken),
-          accessToken:
-          String.fromCharCodes(appleIdCredential.authorizationCode),
-        );
-        final authResult = await _auth.signInWithCredential(credential);
-        final firebaseUser = authResult.user;
-        if (scopes.contains(Scope.fullName)) {
-          final updateUser = UserUpdateInfo();
-          updateUser.displayName =
-          '${appleIdCredential.fullName.givenName} ${appleIdCredential.fullName.familyName}';
-          await firebaseUser.updateProfile(updateUser);
-        }
-        return firebaseUser;
-      case AuthorizationStatus.error:
-        print(result.error.toString());
-        throw PlatformException(
-          code: 'ERROR_AUTHORIZATION_DENIED',
-          message: result.error.toString(),
-        );
-
-      case AuthorizationStatus.cancelled:
-        throw PlatformException(
-          code: 'ERROR_ABORTED_BY_USER',
-          message: 'Sign in aborted by user',
-        );
-    }
-    return null;
-  }
 }
+

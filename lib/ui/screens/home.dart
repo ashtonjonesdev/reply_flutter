@@ -121,20 +121,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 elevation: 2,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16)),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text(
-                        '${personalMessagesViewModel.personalMessagesList[index].title} | ${personalMessagesViewModel.personalMessagesList[index].message}',
-                        style: Theme.of(context).textTheme.bodyText1.copyWith(
-                            fontWeight: FontWeight.bold, fontSize: 14),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ],
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    '${personalMessagesViewModel.personalMessagesList[index].title}',
+                    style: Theme.of(context).textTheme.bodyText1.copyWith(
+                        fontWeight: FontWeight.bold, fontSize: 14),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
             );
@@ -198,7 +192,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
-                        '${socialMessagesViewModel.socialMessagesList[index].title} | ${socialMessagesViewModel.socialMessagesList[index].message}',
+                        '${socialMessagesViewModel.socialMessagesList[index].title}',
                         style: Theme.of(context).textTheme.bodyText1.copyWith(
                             fontWeight: FontWeight.bold, fontSize: 14),
                         textAlign: TextAlign.center,
@@ -268,7 +262,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
-                        '${businessMessagesViewModel.businessMessagesList[index].title} | ${businessMessagesViewModel.businessMessagesList[index].message}',
+                        '${businessMessagesViewModel.businessMessagesList[index].title}',
                         style: Theme.of(context).textTheme.bodyText1.copyWith(
                             fontWeight: FontWeight.bold, fontSize: 14),
                         textAlign: TextAlign.center,
@@ -338,7 +332,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
-                        '${firstAdditionalMessagesViewModel.firstAdditionalMessagesList[index].title} | ${firstAdditionalMessagesViewModel.firstAdditionalMessagesList[index].message}',
+                        '${firstAdditionalMessagesViewModel.firstAdditionalMessagesList[index].title}',
                         style: Theme.of(context).textTheme.bodyText1.copyWith(
                             fontWeight: FontWeight.bold, fontSize: 14),
                         textAlign: TextAlign.center,
@@ -408,7 +402,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
-                        '${secondAdditionalMessagesViewModel.secondAdditionalMessagesList[index].title} | ${secondAdditionalMessagesViewModel.secondAdditionalMessagesList[index].message}',
+                        '${secondAdditionalMessagesViewModel.secondAdditionalMessagesList[index].title}',
                         style: Theme.of(context).textTheme.bodyText1.copyWith(
                             fontWeight: FontWeight.bold, fontSize: 14),
                         textAlign: TextAlign.center,

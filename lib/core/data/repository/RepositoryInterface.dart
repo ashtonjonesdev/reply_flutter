@@ -9,6 +9,9 @@ abstract class RepositoryInterface {
 
   void createUserInDatabaseWithGoogleProvider(FirebaseUser user);
 
+  void createUserInDatabaseWithAppleProvider(FirebaseUser user);
+
+
   /// GET
 
   Future<List<MessageCard>> getPersonalMessages(FirebaseUser user);
