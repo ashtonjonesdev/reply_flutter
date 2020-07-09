@@ -727,12 +727,19 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           title: Text(
-            'Your Message:',
+            'Message:',
             textAlign: TextAlign.center,
           ),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
+                Divider(
+                  thickness: 5,
+                  color: kPrimaryColorDark,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
                 Text(
                   selectedMessage.message,
                   style: Theme.of(context).textTheme.bodyText1,
