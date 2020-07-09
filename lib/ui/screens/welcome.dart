@@ -132,13 +132,17 @@ class _WelcomeState extends State<Welcome> {
                                     listen: false)
                                 .signInWithGoogle()
                                 .then((FirebaseUser firebaseUser) async {
-                              // If it is a new user (signing in for the first time), create a user in the database
-                              if (firebaseUser.metadata.creationTime ==
-                                  firebaseUser.metadata.lastSignInTime) {
-                                firebaseRepository
-                                    .createUserInDatabaseWithGoogleProvider(
-                                        firebaseUser);
-                              }
+                                  if(firebaseUser != null) {
+                                    print('FBUser creation time: ${firebaseUser.metadata.creationTime} FBUser lastSignInTime: ${firebaseUser.metadata.lastSignInTime}');
+                                    // If it is a new user (signing in for the first time), create a user in the database
+                                    if (firebaseUser.metadata.creationTime ==
+                                        firebaseUser.metadata.lastSignInTime) {
+                                      firebaseRepository
+                                          .createUserInDatabaseWithGoogleProvider(
+                                          firebaseUser);
+                                    }
+                                  }
+
                               Navigator.of(context).pushAndRemoveUntil(
                                   MaterialPageRoute(
                                       builder: (BuildContext context) => Home(

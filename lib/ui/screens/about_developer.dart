@@ -9,6 +9,7 @@ class AboutDeveloper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade900,
       appBar: AppBar(
         title: Text('About Developer'),
         centerTitle: true,
@@ -18,7 +19,7 @@ class AboutDeveloper extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 16),
           child: Image.asset(
             'images/gradient_purple_background.jpg',
-            height: 20.0,
+            height: 10.0,
             width: MediaQuery.of(context).size.width,
             fit: BoxFit.fill,
           ),
@@ -31,9 +32,9 @@ class AboutDeveloper extends StatelessWidget {
         name: "Ashton Jones",
         position: "Mobile Developer",
         description: "👨‍💻 Google Certified Android Engineer |\n ✍ Writer |\n🧘‍♂️ Stoic && Meditator",
-        seperatorColor: kPrimaryColor,
-        iconColor: Colors.black,
-        textColor: Colors.black,
+        seperatorColor: kPrimaryColor100,
+        iconColor: kPrimaryColor200,
+        textColor: Colors.white,
         playstoreID: "8786079395794167171",
         github: "ashtonjonesdev", //e.g JideGuru
         facebook: "TJgrapes", //e.g jideguru

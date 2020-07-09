@@ -98,7 +98,10 @@ class AuthService with ChangeNotifier {
 
     notifyListeners();
 
-    return user;
+    // Return the current user, which should now be signed in with Google
+    FirebaseUser firebaseUser = await FirebaseAuth.instance.currentUser();
+
+    return firebaseUser;
   }
 
   Future<FirebaseUser> signInWithApple() async {
