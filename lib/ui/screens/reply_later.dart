@@ -15,13 +15,13 @@ import 'package:rxdart/rxdart.dart';
 import 'package:share/share.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+FlutterLocalNotificationsPlugin();
 
 final BehaviorSubject<ReceivedNotification> didReceiveLocalNotificationSubject =
-    BehaviorSubject<ReceivedNotification>();
+BehaviorSubject<ReceivedNotification>();
 
 final BehaviorSubject<String> selectNotificationSubject =
-    BehaviorSubject<String>();
+BehaviorSubject<String>();
 
 class ReceivedNotification {
   final int id;
@@ -60,14 +60,17 @@ class _ReplyLaterState extends State<ReplyLater> {
 
   Timer timer;
 
+  String notificationPayload;
+
   final GlobalKey<ScaffoldState> _scaffoldKeyReplyLater =
-      GlobalKey<ScaffoldState>();
+  GlobalKey<ScaffoldState>();
 
   Future<void> initializeFlutterLocalNotifications() async {
+
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-        FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
     var initializationSettingsAndroid =
-        AndroidInitializationSettings('app_icon');
+    AndroidInitializationSettings('app_icon');
     var initializationSettingsIOS = IOSInitializationSettings(
         requestSoundPermission: true,
         requestBadgePermission: true,
@@ -81,17 +84,14 @@ class _ReplyLaterState extends State<ReplyLater> {
         initializationSettingsAndroid, initializationSettingsIOS);
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: (String payload) async {
-      if (payload != null) {
-        debugPrint('notification payload: ' + payload);
-        // Cancel the notification
-        await flutterLocalNotificationsPlugin.cancelAll();
-        /// Send the ReplyLatermessage, using the payload (Reply later message)
-        Share.share(payload);
+          if (payload != null) {
+            debugPrint('notification payload: ' + payload);
 
-      }
-    });
+            /// Send the ReplyLatermessage, using the payload (Reply later message)
+            Share.share(payload);
 
-
+          }
+        });
   }
 
 
@@ -110,10 +110,10 @@ class _ReplyLaterState extends State<ReplyLater> {
 
     // Get the ReplyLater message
     FirebaseUser firebaseUser =
-        await Provider.of<AuthService>(context, listen: false).getUser();
+    await Provider.of<AuthService>(context, listen: false).getUser();
     MessageCard replyLaterMessageCard =
-        await Provider.of<PersonalMessagesViewModel>(context, listen: false)
-            .getReplyLaterMessage(firebaseUser);
+    await Provider.of<PersonalMessagesViewModel>(context, listen: false)
+        .getReplyLaterMessage(firebaseUser);
 
     // Send the reply later message upon tapping the notification
 
@@ -139,7 +139,10 @@ class _ReplyLaterState extends State<ReplyLater> {
 
   @override
   Widget build(BuildContext context) {
-    final MessageCardArguments args = ModalRoute.of(context).settings.arguments;
+    final MessageCardArguments args = ModalRoute
+        .of(context)
+        .settings
+        .arguments;
 
     replyLaterMessageCardTitle = args.title;
     replyLaterMessageCardMessage = args.message;
@@ -162,23 +165,29 @@ class _ReplyLaterState extends State<ReplyLater> {
         children: <Widget>[
           Text(
             'Reply in',
-            style: Theme.of(context).textTheme.headline4.copyWith(
+            style: Theme
+                .of(context)
+                .textTheme
+                .headline4
+                .copyWith(
                 color: kPrimaryColorLight, fontWeight: FontWeight.w900),
             textAlign: TextAlign.center,
           ),
           _sliderValue == 1
               ? Text('${_sliderValue.toInt()} hour',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText2
-                      .copyWith(fontSize: 24, fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center)
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .bodyText2
+                  .copyWith(fontSize: 24, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center)
               : Text('${_sliderValue.toInt()} hours',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText2
-                      .copyWith(fontSize: 24, fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center),
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .bodyText2
+                  .copyWith(fontSize: 24, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center),
           SliderTheme(
             data: SliderThemeData(
                 activeTrackColor: kPrimaryColorDark,
@@ -201,7 +210,8 @@ class _ReplyLaterState extends State<ReplyLater> {
           ),
           Text(
             'with your message',
-            style: Theme.of(context)
+            style: Theme
+                .of(context)
                 .textTheme
                 .bodyText2
                 .copyWith(fontSize: 16),
@@ -211,7 +221,8 @@ class _ReplyLaterState extends State<ReplyLater> {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               '${replyLaterMessageCard.title}:',
-              style: Theme.of(context)
+              style: Theme
+                  .of(context)
                   .textTheme
                   .bodyText2
                   .copyWith(fontSize: 20, fontWeight: FontWeight.w700),
@@ -222,7 +233,8 @@ class _ReplyLaterState extends State<ReplyLater> {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               replyLaterMessageCard.message,
-              style: Theme.of(context)
+              style: Theme
+                  .of(context)
                   .textTheme
                   .bodyText2
                   .copyWith(fontSize: 14),
@@ -242,7 +254,7 @@ class _ReplyLaterState extends State<ReplyLater> {
               // Save reply later message to Firebase
               addReplyLaterMessage();
               // start the timer (which will launch the notification once the time is up)
-              startTimer();
+              scheduleNotification();
             },
           )
         ],
@@ -252,79 +264,111 @@ class _ReplyLaterState extends State<ReplyLater> {
 
   void addReplyLaterMessage() async {
     FirebaseUser firebaseUser =
-        await Provider.of<AuthService>(context, listen: false).getUser();
+    await Provider.of<AuthService>(context, listen: false).getUser();
 
     Provider.of<PersonalMessagesViewModel>(context, listen: false)
         .addReplyLaterMessage(firebaseUser, replyLaterMessageCard);
 
     MessageCard messageCard =
-        await Provider.of<PersonalMessagesViewModel>(context, listen: false)
-            .getReplyLaterMessage(firebaseUser);
+    await Provider.of<PersonalMessagesViewModel>(context, listen: false)
+        .getReplyLaterMessage(firebaseUser);
 
     print('Received reply later message: $messageCard');
   }
 
-  dynamic startTimer() {
-    // 1 hour: 3,600,000 milliseconds (1000 * 60 * 60)
-//    Duration timerDuration = Duration(milliseconds: 1000* 60 * 60 * _sliderValue.toInt());
 
-    // test duration TODO: Remove
-    Duration duration = Duration(milliseconds: 3000);
 
-    print('Setting timer');
+  Future<void> scheduleNotification() async {
+    int hoursToSend = _sliderValue.toInt();
 
-    return new Timer(duration, sendNotification);
+    var scheduledNotificationDateTime =
+    DateTime.now().add(Duration(seconds: 5));
+    var androidPlatformChannelSpecifics =
+    AndroidNotificationDetails(
+        'primary_notification_channel',
+        'Notifications',
+        'General notifications',
+        importance: Importance.Max,
+        priority: Priority.High,
+        ticker: 'ticker',
+        onlyAlertOnce: true);
+    var iOSPlatformChannelSpecifics =
+    IOSNotificationDetails();
+    NotificationDetails platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+
+    // Get the ReplyLater message
+    FirebaseUser firebaseUser =
+    await Provider.of<AuthService>(context, listen: false).getUser();
+    MessageCard replyLaterMessageCard =
+    await Provider.of<PersonalMessagesViewModel>(context, listen: false)
+        .getReplyLaterMessage(firebaseUser);
+
+    // Send the reply later message upon tapping the notification
+
+    String replyLaterMessage;
+
+    if (replyLaterMessageCard != null &&
+        replyLaterMessageCard.message != null &&
+        replyLaterMessageCard.message.length > 0) {
+      replyLaterMessage = replyLaterMessageCard.message;
+    }
+
+    notificationPayload = replyLaterMessage;
+
+    await flutterLocalNotificationsPlugin.schedule(
+        0,
+        'Time to Reply!',
+        'Tap to send your message',
+        scheduledNotificationDateTime,
+        platformChannelSpecifics,
+        payload: notificationPayload);
   }
 
-  void sendNotification() {
-    print('Timer expired!');
-    // Send notification
-    _showNotification();
-  }
 
   void showUserFeedback() {
     _sliderValue == 1
         ? _scaffoldKeyReplyLater.currentState.showSnackBar(SnackBar(
-            content: Text(
-              'You will be reminded in ${_sliderValue.toInt()} hour!',
-              textAlign: TextAlign.center,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText1
-                  .copyWith(color: Colors.white),
-            ),
-            backgroundColor: kPrimaryColor700,
-            elevation: 8,
-            duration: Duration(milliseconds: 5000),
-        action: SnackBarAction(
-          textColor: Colors.white,
-          label: 'OK',
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-          ),)
+      content: Text(
+        'You will be reminded in ${_sliderValue.toInt()} hour!',
+        textAlign: TextAlign.center,
+        style: Theme
+            .of(context)
+            .textTheme
+            .bodyText1
+            .copyWith(color: Colors.white),
+      ),
+      backgroundColor: kPrimaryColor700,
+      elevation: 8,
+      duration: Duration(milliseconds: 5000),
+      action: SnackBarAction(
+        textColor: Colors.white,
+        label: 'OK',
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+    ),)
         : _scaffoldKeyReplyLater.currentState.showSnackBar(SnackBar(
-            content: Text(
-              'You will be reminded in ${_sliderValue.toInt()} hours!',
-              textAlign: TextAlign.center,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText1
-                  .copyWith(color: Colors.white),
-            ),
-            backgroundColor: kPrimaryColor700,
-            elevation: 8,
-            duration: Duration(milliseconds: 3000),
-            action: SnackBarAction(
-              textColor: Colors.white,
-              label: 'OK',
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ),);
-
-
+      content: Text(
+        'You will be reminded in ${_sliderValue.toInt()} hours!',
+        textAlign: TextAlign.center,
+        style: Theme
+            .of(context)
+            .textTheme
+            .bodyText1
+            .copyWith(color: Colors.white),
+      ),
+      backgroundColor: kPrimaryColor700,
+      elevation: 8,
+      duration: Duration(milliseconds: 3000),
+      action: SnackBarAction(
+        textColor: Colors.white,
+        label: 'OK',
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+    ),);
   }
 }

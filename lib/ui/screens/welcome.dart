@@ -4,7 +4,6 @@ import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:reply_flutter/core/data/repository/firebase_repository.dart';
 import 'package:reply_flutter/core/services/AuthService.dart';
@@ -12,7 +11,6 @@ import 'package:reply_flutter/styles/colors.dart';
 import 'package:reply_flutter/ui/screens/home.dart';
 import 'package:reply_flutter/ui/screens/register.dart';
 import 'package:reply_flutter/ui/screens/signin.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Welcome extends StatefulWidget {

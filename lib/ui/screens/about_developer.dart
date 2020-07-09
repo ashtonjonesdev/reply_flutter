@@ -19,7 +19,7 @@ class AboutDeveloper extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 16),
           child: Image.asset(
             'images/gradient_purple_background.jpg',
-            height: 10.0,
+            height: 5.0,
             width: MediaQuery.of(context).size.width,
             fit: BoxFit.fill,
           ),
