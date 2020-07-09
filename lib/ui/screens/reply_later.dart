@@ -95,41 +95,6 @@ class _ReplyLaterState extends State<ReplyLater> {
   }
 
 
-  Future<void> _showNotification() async {
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'primary_notification_channel',
-        'Notifications',
-        'General notifications',
-        importance: Importance.Max,
-        priority: Priority.High,
-        ticker: 'ticker',
-        onlyAlertOnce: true);
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-    var platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-
-    // Get the ReplyLater message
-    FirebaseUser firebaseUser =
-    await Provider.of<AuthService>(context, listen: false).getUser();
-    MessageCard replyLaterMessageCard =
-    await Provider.of<PersonalMessagesViewModel>(context, listen: false)
-        .getReplyLaterMessage(firebaseUser);
-
-    // Send the reply later message upon tapping the notification
-
-    String replyLaterMessage;
-
-    if (replyLaterMessageCard != null &&
-        replyLaterMessageCard.message != null &&
-        replyLaterMessageCard.message.length > 0) {
-      replyLaterMessage = replyLaterMessageCard.message;
-    }
-
-    await flutterLocalNotificationsPlugin.show(0, 'Time to Reply!',
-        'Tap to send your message', platformChannelSpecifics,
-        payload: replyLaterMessage);
-  }
-
   @override
   void initState() {
     super.initState();

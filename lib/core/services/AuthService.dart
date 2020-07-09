@@ -181,6 +181,7 @@ class AuthService with ChangeNotifier {
     } else {
       print('Apple SignIn is not available for your device');
 
+
     }
 
     // If there is an error, return null for FirebaseUser
