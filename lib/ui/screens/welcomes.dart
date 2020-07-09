@@ -36,10 +36,14 @@ class _WelcomesState extends State<Welcomes> {
     super.initState();
 
     if (Platform.isIOS) {
-      //check for ios if developing for both android & ios
+
       AppleSignIn.onCredentialRevoked.listen((_) {
         print("Apple Credentials revoked");
+
+        checkAppleLoggedInState();
       });
+
+
     }
   }
 
@@ -276,8 +280,24 @@ class _WelcomesState extends State<Welcomes> {
                       child: AppleSignInButton(
                         style: ButtonStyle.black,
                         type: ButtonType.continueButton,
-                        onPressed: () {
-                          signInWithApple(context);
+                        onPressed: () async {
+                          await Provider.of<AuthService>(context, listen: false).signInWithApple().then((FirebaseUser firebaseUser) async
+                          {
+                            if(firebaseUser != null)  {
+                              print('FBUser creation time: ${firebaseUser.metadata.creationTime} FBUser lastSignInTime: ${firebaseUser.metadata.lastSignInTime}');
+                              // If it is a new user, create a new user in the database
+                              if(firebaseUser.metadata.creationTime == firebaseUser.metadata.lastSignInTime) {
+                                firebaseRepository.createUserInDatabaseWithAppleProvider(firebaseUser);
+                              }
+                            }
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) => Home(
+                                      firebaseUser: firebaseUser,
+                                    )),
+                                    (Route<dynamic> route) => false);
+                          });
+
                         },
                       ),
                     ),
@@ -315,94 +335,9 @@ class _WelcomesState extends State<Welcomes> {
           );
   }
 
-  void signInWithApple(BuildContext context) async {
-    // Sign In with Apple is only supported on iOS 13+
-    if (await AppleSignIn.isAvailable()) {
-      try {
-        final AuthorizationResult result = await AppleSignIn.performRequests([
-          AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
-        ]);
 
-        switch (result.status) {
-          case AuthorizationStatus.authorized:
-            try {
-              print('${result.credential.user} signed in with Apple');
-              final AppleIdCredential appleIdCredential = result.credential;
-
-              OAuthProvider oAuthProvider =
-                  new OAuthProvider(providerId: 'apple.com');
-              final AuthCredential credential = oAuthProvider.getCredential(
-                idToken: String.fromCharCodes(appleIdCredential.identityToken),
-                accessToken:
-                    String.fromCharCodes(appleIdCredential.authorizationCode),
-              );
-
-              // Sign into Firebase using Apple credentials
-
-              final FirebaseAuth _auth = FirebaseAuth.instance;
-
-
-              final AuthResult authResult = await _auth.signInWithCredential(credential);
-              final FirebaseUser firebaseUser = authResult.user;
-              print(
-                  '${firebaseUser.uid} successfully signed in user with Apple Provider');
-
-              // Get the current user, which should now be signed in with Apple
-              // Update the UserInfo with Apple profile information
-              FirebaseAuth.instance.currentUser().then((val) async {
-                UserUpdateInfo updateUser = UserUpdateInfo();
-                updateUser.displayName =
-                    '${appleIdCredential.fullName.givenName} ${appleIdCredential.fullName.familyName}';
-                await val
-                    .updateProfile(updateUser)
-                    .catchError((error) => print(error));
-
-                // Need to make this call to get the updated display name; or else display name will be null
-                FirebaseUser updatedUser =
-                    await FirebaseAuth.instance.currentUser();
-
-                // refresh data
-                updatedUser.reload();
-
-                print(
-                    'Updated user profile information: Name: ${updateUser.displayName}');
-
-                // If it is a new user, created a user in the Database
-                if (firebaseUser.metadata.creationTime ==
-                    firebaseUser.metadata.lastSignInTime) {
-                  firebaseRepository.createUserInDatabaseWithAppleProvider(
-                      updatedUser);
-                }
-
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => Home(
-                              firebaseUser: updatedUser,
-                            )),
-                    (Route<dynamic> route) => false);
-              });
-            } catch (e) {
-              print('error');
-            }
-            break;
-          case AuthorizationStatus.error:
-            print("Sign in failed: ${result.error.localizedDescription}");
-            break;
-
-          case AuthorizationStatus.cancelled:
-            print('User cancelled');
-            break;
-        }
-      } catch (error) {
-        print('error with apple sign in');
-      }
-    } else {
-      print('Apple SignIn is not available for your device');
-    }
-  }
-
-  void checkLoggedInState() async {
-    final userId = await FlutterSecureStorage().read(key: "userId");
+  void checkAppleLoggedInState() async {
+    final userId = await FlutterSecureStorage().read(key: "appleCredentialUid");
     if (userId == null) {
       print("No stored user ID");
       return;
@@ -417,18 +352,28 @@ class _WelcomesState extends State<Welcomes> {
       case CredentialStatus.error:
         print(
             "getCredentialState returned an error: ${credentialState.error.localizedDescription}");
+        _buildErrorDialog(context, '${credentialState.error.localizedDescription}. Please try again later or sign in using another method');
+
         break;
 
       case CredentialStatus.revoked:
         print("getCredentialState returned revoked");
+        _buildErrorDialog(context, 'Apple credentials revoked. Please try another sign in method');
+
         break;
 
       case CredentialStatus.notFound:
         print("getCredentialState returned not found");
+        _buildErrorDialog(context, 'Apple credentials not found. Please try another sign in method');
+
         break;
 
       case CredentialStatus.transferred:
         print("getCredentialState returned not transferred");
+        _buildErrorDialog(context, 'Apple credentials not found. Please try another sign in method');
+        break;
+      default:
+        print('Unknown credential status authorization error occurred');
         break;
     }
   }
@@ -440,5 +385,37 @@ class _WelcomesState extends State<Welcomes> {
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  Future _buildErrorDialog(BuildContext context, _message) {
+
+
+    return showDialog(
+      builder: (context) {
+        switch(_message) {
+          case 'The operation couldn’t be completed. (com.apple.AuthenticationServices.AuthorizationError error 1000.) Please try again later or sign in using another method':
+            break;
+          case 'Apple credentials revoked. Please try another sign in method':
+            break;
+          case 'Apple credentials not found. Please try another sign in method)':
+            break;
+          default:
+            break;
+        }
+        return AlertDialog(
+          title: Text('Error Message', style: Theme.of(context).textTheme.headline6),
+          content: Text(_message, style: Theme.of(context).textTheme.bodyText1),
+          actions: [
+            FlatButton(
+                child: Text('OK'),
+                onPressed: () {
+                 Navigator.of(context).pop();
+                })
+
+          ],
+        );
+      },
+      context: context,
+    );
   }
 }

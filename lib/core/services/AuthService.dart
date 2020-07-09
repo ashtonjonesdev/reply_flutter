@@ -4,28 +4,25 @@ import 'package:apple_sign_in/scope.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:reply_flutter/core/data/repository/firebase_repository.dart';
 
 class AuthService with ChangeNotifier {
-
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-
 
   Future<FirebaseUser> getUser() async {
     try {
       final user = await _auth.currentUser();
       if (user != null) {
         print('User signed in: ${user.email}');
-      }
-      else {
+      } else {
         print('No user signed in');
       }
       notifyListeners();
       return user;
-    }
-    catch (e) {
+    } catch (e) {
       print(e);
       return null;
     }
@@ -38,10 +35,11 @@ class AuthService with ChangeNotifier {
     return result;
   }
 
-  Future<FirebaseUser> registerUserWithEmailAndPassword({String firstName,
-    String lastName,
-    String email,
-    String password}) async {
+  Future<FirebaseUser> registerUserWithEmailAndPassword(
+      {String firstName,
+      String lastName,
+      String email,
+      String password}) async {
     var authResult = await FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password);
 
@@ -70,7 +68,6 @@ class AuthService with ChangeNotifier {
     return updatedUser;
   }
 
-
   Future<FirebaseUser> signInUserWithEmailAndPassword(
       {String email, String password}) async {
     try {
@@ -87,7 +84,7 @@ class AuthService with ChangeNotifier {
   Future<FirebaseUser> signInWithGoogle() async {
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
     final GoogleSignInAuthentication googleAuth =
-    await googleUser.authentication;
+        await googleUser.authentication;
 
     final AuthCredential credential = GoogleAuthProvider.getCredential(
       accessToken: googleAuth.accessToken,
@@ -104,5 +101,86 @@ class AuthService with ChangeNotifier {
     return user;
   }
 
-}
+  Future<FirebaseUser> signInWithApple() async {
+    // Sign In with Apple is only supported on iOS 13+
+    if (await AppleSignIn.isAvailable()) {
+      try {
+        final AuthorizationResult result = await AppleSignIn.performRequests([
+          AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+        ]);
 
+        switch (result.status) {
+          case AuthorizationStatus.authorized:
+            try {
+              print('Apple credentials authorized');
+              final AppleIdCredential appleIdCredential = result.credential;
+
+              // Store Apple Credetial uID
+              // Store user ID
+              await FlutterSecureStorage()
+                  .write(key: "appleCredentialUid", value: result.credential.user);
+
+              // Create Apple AuthCredential to sign into Firebase using Apple credentials
+              OAuthProvider oAuthProvider =
+                  new OAuthProvider(providerId: 'apple.com');
+              final AuthCredential credential = oAuthProvider.getCredential(
+                idToken: String.fromCharCodes(appleIdCredential.identityToken),
+                accessToken:
+                    String.fromCharCodes(appleIdCredential.authorizationCode),
+              );
+
+              // Sign into Firebase using Apple credentials
+
+              final FirebaseAuth _auth = FirebaseAuth.instance;
+              final AuthResult authResult =
+                  await _auth.signInWithCredential(credential);
+              final FirebaseUser firebaseUser = authResult.user;
+              print(
+                  '${firebaseUser.uid} successfully signed in user with Apple Provider');
+
+              // Update the UserInfo with Apple profile information
+              UserUpdateInfo updateUserInfo = UserUpdateInfo();
+              updateUserInfo.displayName =
+                  '${appleIdCredential.fullName.givenName} ${appleIdCredential.fullName.familyName}';
+              await firebaseUser
+                  .updateProfile(updateUserInfo)
+                  .catchError((error) => print(error));
+
+              // Refresh data
+              await firebaseUser.reload();
+
+              // Need to make this call to get the updated display name; or else display name will be null
+              FirebaseUser updatedUser = await FirebaseAuth.instance.currentUser();
+
+              print('Updated UserProfile info | Name: ${updatedUser.displayName}');
+
+              notifyListeners();
+
+              // Return the updated user
+              return updatedUser;
+
+
+            } catch (e) {
+              print('error');
+            }
+            break;
+          case AuthorizationStatus.error:
+            print("Sign in failed: ${result.error.localizedDescription}");
+            break;
+
+          case AuthorizationStatus.cancelled:
+            print('User cancelled');
+            break;
+        }
+      } catch (error) {
+        print('error with apple sign in');
+      }
+    } else {
+      print('Apple SignIn is not available for your device');
+
+    }
+
+    // If there is an error, return null for FirebaseUser
+    return null;
+  }
+}
