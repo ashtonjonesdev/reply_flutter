@@ -244,10 +244,11 @@ class _ReplyLaterState extends State<ReplyLater> {
 
 
   Future<void> scheduleNotification() async {
+
     int hoursToSend = _sliderValue.toInt();
 
     var scheduledNotificationDateTime =
-    DateTime.now().add(Duration(seconds: 5));
+    DateTime.now().add(Duration(seconds: 60 * 60 * hoursToSend));
     var androidPlatformChannelSpecifics =
     AndroidNotificationDetails(
         'primary_notification_channel',
