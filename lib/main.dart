@@ -59,6 +59,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Reply',
         theme: AppTheme.appThemeData,
         home: FutureBuilder(

@@ -315,11 +315,6 @@ class _WelcomeState extends State<Welcome> {
                         'Created by',
                         style: Theme.of(context).textTheme.bodyText1,
                       ),
-                      Image.asset(
-                        'images/associate_android_developer_badge_small.png',
-                        width: 96,
-                        height: 96,
-                      ),
                       GestureDetector(
                         onTap: _openPersonalWebsite,
                         child: Text('Ashton Jones',

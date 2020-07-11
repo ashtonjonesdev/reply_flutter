@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -86,6 +88,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   ];
 
   MessageCard selectedMessage;
+
+  final bool isAndroid = Platform.isAndroid;
+
 
   @override
   void initState() {
@@ -442,7 +447,16 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             PopupMenuButton<String>(
               onSelected: handleClick,
               itemBuilder: (BuildContext context) {
-                return {'Introduction', 'Tips', 'About Developer', 'Sign Out'}
+                return isAndroid ? {'Introduction', 'Tips', 'About Developer', 'Sign Out'}
+                    .map((String choice) {
+                  return PopupMenuItem<String>(
+                    value: choice,
+                    child: Text(
+                      choice,
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  );
+                }).toList() : {'Introduction', 'About Developer', 'Sign Out'}
                     .map((String choice) {
                   return PopupMenuItem<String>(
                     value: choice,
