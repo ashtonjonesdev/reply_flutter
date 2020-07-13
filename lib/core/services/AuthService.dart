@@ -12,6 +12,8 @@ class AuthService with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
+  final FirebaseRepository firebaseRepository = FirebaseRepository();
+
   Future<FirebaseUser> getUser() async {
     try {
       final user = await _auth.currentUser();
@@ -141,23 +143,43 @@ class AuthService with ChangeNotifier {
               print(
                   '${firebaseUser.uid} successfully signed in user with Apple Provider');
 
-              // Update the UserInfo with Apple profile information
-              UserUpdateInfo updateUserInfo = UserUpdateInfo();
-              updateUserInfo.displayName =
-                  '${appleIdCredential.fullName.givenName} ${appleIdCredential.fullName.familyName}';
-              await firebaseUser
-                  .updateProfile(updateUserInfo)
-                  .catchError((error) => print(error));
+              print('FBUser creation time: ${firebaseUser.metadata.creationTime} FBUser lastSignInTime: ${firebaseUser.metadata.lastSignInTime}');
 
-              // Refresh data
-              await firebaseUser.reload();
 
-              print('Updated UserProfile info | Name: ${firebaseUser.displayName}');
+              // Check if it is a new user
+
+              print(firebaseUser.metadata.creationTime.difference(firebaseUser.metadata.lastSignInTime).inSeconds.abs());
+              print(Duration(seconds: 1).inSeconds);
+              if(firebaseUser.metadata.creationTime.difference(firebaseUser.metadata.lastSignInTime).inSeconds.abs() < Duration(seconds: 1).inSeconds) {
+
+                // Update the UserInfo with Apple profile information on the first sign in
+                UserUpdateInfo updateUserInfo = UserUpdateInfo();
+                updateUserInfo.displayName =
+                '${appleIdCredential.fullName.givenName} ${appleIdCredential.fullName.familyName}';
+                await firebaseUser
+                    .updateProfile(updateUserInfo)
+                    .catchError((error) => print(error));
+
+                // Refresh data
+                await firebaseUser.reload();
+
+                FirebaseUser updatedUser = await FirebaseAuth.instance.currentUser();
+
+                print('Updated UserProfile info | Name: ${updatedUser.displayName}');
+
+                print('Creating new user in Database');
+
+                firebaseRepository.createUserInDatabaseWithAppleProvider(updatedUser);
+
+              }
+
+              FirebaseUser updatedUser = await FirebaseAuth.instance.currentUser();
+
 
               notifyListeners();
 
               // Return the updated user
-              return firebaseUser;
+              return updatedUser;
 
 
             } catch (e) {

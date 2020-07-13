@@ -134,6 +134,7 @@ class _WelcomeState extends State<Welcome> {
                                     print('FBUser creation time: ${firebaseUser.metadata.creationTime} FBUser lastSignInTime: ${firebaseUser.metadata.lastSignInTime}');
                                     // If it is a new user (signing in for the first time), create a user in the database
                                     if (firebaseUser.metadata.creationTime.difference(firebaseUser.metadata.lastSignInTime) < Duration(seconds: 1)) {
+                                      print('Creating new user in Database');
                                       firebaseRepository
                                           .createUserInDatabaseWithGoogleProvider(
                                           firebaseUser);
@@ -288,9 +289,10 @@ class _WelcomeState extends State<Welcome> {
                             if(firebaseUser != null)  {
                               print('FBUser creation time: ${firebaseUser.metadata.creationTime} FBUser lastSignInTime: ${firebaseUser.metadata.lastSignInTime}');
                               // If it is a new user, create a new user in the database
-                              if (firebaseUser.metadata.creationTime.difference(firebaseUser.metadata.lastSignInTime) < Duration(days: 1)) {
-                                firebaseRepository.createUserInDatabaseWithAppleProvider(firebaseUser);
-                              }
+//                              if (firebaseUser.metadata.creationTime.difference(firebaseUser.metadata.lastSignInTime) < Duration(seconds: 1)) {
+//                                print('Creating new user in Database');
+//                                firebaseRepository.createUserInDatabaseWithAppleProvider(firebaseUser);
+//                              }
                               Navigator.of(context).pushAndRemoveUntil(
                                   MaterialPageRoute(
                                       builder: (BuildContext context) => Home(
