@@ -133,8 +133,7 @@ class _WelcomeState extends State<Welcome> {
                                   if(firebaseUser != null) {
                                     print('FBUser creation time: ${firebaseUser.metadata.creationTime} FBUser lastSignInTime: ${firebaseUser.metadata.lastSignInTime}');
                                     // If it is a new user (signing in for the first time), create a user in the database
-                                    if (firebaseUser.metadata.creationTime ==
-                                        firebaseUser.metadata.lastSignInTime) {
+                                    if (firebaseUser.metadata.creationTime.difference(firebaseUser.metadata.lastSignInTime) < Duration(seconds: 1)) {
                                       firebaseRepository
                                           .createUserInDatabaseWithGoogleProvider(
                                           firebaseUser);
@@ -289,16 +288,21 @@ class _WelcomeState extends State<Welcome> {
                             if(firebaseUser != null)  {
                               print('FBUser creation time: ${firebaseUser.metadata.creationTime} FBUser lastSignInTime: ${firebaseUser.metadata.lastSignInTime}');
                               // If it is a new user, create a new user in the database
-                              if(firebaseUser.metadata.creationTime == firebaseUser.metadata.lastSignInTime) {
+                              if (firebaseUser.metadata.creationTime.difference(firebaseUser.metadata.lastSignInTime) < Duration(days: 1)) {
                                 firebaseRepository.createUserInDatabaseWithAppleProvider(firebaseUser);
                               }
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) => Home(
+                                        firebaseUser: firebaseUser,
+                                      )),
+                                      (Route<dynamic> route) => false);
                             }
-                            Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) => Home(
-                                      firebaseUser: firebaseUser,
-                                    )),
-                                    (Route<dynamic> route) => false);
+
+                            else {
+                              _buildErrorDialog(context, 'Sign in with Apple Failed');
+                            }
+
                           });
 
                         },
@@ -391,6 +395,8 @@ class _WelcomeState extends State<Welcome> {
     return showDialog(
       builder: (context) {
         switch(_message) {
+          case 'Sign in with Apple Failed':
+            break;
           case 'The operation couldn’t be completed. (com.apple.AuthenticationServices.AuthorizationError error 1000.) Please try again later or sign in using another method':
             break;
           case 'Apple credentials revoked. Please try another sign in method':

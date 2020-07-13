@@ -152,15 +152,12 @@ class AuthService with ChangeNotifier {
               // Refresh data
               await firebaseUser.reload();
 
-              // Need to make this call to get the updated display name; or else display name will be null
-              FirebaseUser updatedUser = await FirebaseAuth.instance.currentUser();
-
-              print('Updated UserProfile info | Name: ${updatedUser.displayName}');
+              print('Updated UserProfile info | Name: ${firebaseUser.displayName}');
 
               notifyListeners();
 
               // Return the updated user
-              return updatedUser;
+              return firebaseUser;
 
 
             } catch (e) {
