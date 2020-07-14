@@ -53,14 +53,11 @@ Copyright 2020 Ashton Jones
 
 
 ## 📸 Screenshots
-<img src="./screenshots/Screenshot_20200413-130527_Reply.jpg" width="30%" height="30%">&ensp;<img src="./screenshots/Screenshot_20200413-130425_Reply.jpg" width="30%" height="30%">&ensp;<img src="./screenshots/Screenshot_20200413-130454_Reply.jpg" width="30%" height="30%">&ensp;
+<img src="./screenshots/Screenshot_20200714-134549.jpg" width="30%" height="30%">&ensp;<img src="./screenshots/Screenshot_20200714-134838.jpg" width="30%" height="30%">&ensp;<img src="./screenshots/Screenshot_20200714-134845.jpg" width="30%" height="30%">&ensp;
 ------
-<img src="./screenshots/Screenshot_20200413-130009_Reply.jpg" width="30%" height="30%">&ensp;<img src="./screenshots/Screenshot_20200413-130020_Reply.jpg" width="30%" height="30%">&ensp;<img src="./screenshots/Screenshot_20200413-130028_Reply.jpg" width="30%" height="30%">&ensp;
+<img src="./screenshots/Screenshot_20200714-134857_Android System.jpg" width="30%" height="30%">&ensp;<img src="./screenshots/Screenshot_20200714-134915_Messages.jpg" width="30%" height="30%">&ensp;<img src="./screenshots/_reply_apple_screenshot_1.png" width="30%" height="30%">&ensp;
 ------
-<img src="./screenshots/Screenshot_20200413-130044_Android System.jpg" width="30%" height="30%">&ensp;<img src="./screenshots/Screenshot_20200413-130246_Messages.jpg" width="30%" height="30%">&ensp;
-------
-<img src="./screenshots/Screenshot_20200413-130352_Reply.jpg" width="30%" height="30%">&ensp;<img src="./screenshots/Screenshot_20200413-130414_Reply.jpg" width="30%" height="30%">&ensp;
-------
-<img src="./screenshots/Screenshot_20200413-130259_Reply.jpg" width="30%" height="30%">&ensp;<img src="./screenshots/Screenshot_20200413-130305_Reply.jpg" width="30%" height="30%">&ensp;<img src="./screenshots/Screenshot_20200413-130310_Reply.jpg" width="30%" height="30%">&ensp;
+<img src="./screenshots/_reply_apple_screenshot_2.png" width="30%" height="30%">&ensp;<img src="./screenshots/_reply_apple_screenshot_3.png" width="30%" height="30%">&ensp;
+<img src="./screenshots/_reply_apple_screenshot_4.png" width="30%" height="30%">&ensp;
 
 
