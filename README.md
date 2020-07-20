@@ -1,4 +1,4 @@
-# 📨 Reply (Rebuilt with Flutter!) 🐦
+# 📨 _Reply ("Reply" rebuilt with Flutter!) 🐦
 -------
 Easily send your own custom, pre-defined messages through any platform
 * ✅ Create and store your own message templates 
@@ -24,14 +24,19 @@ I wanted to translate a native Android app I built to Flutter to practice buildi
 - [Material Design](https://material.io/)
 
 ## 📚 Libraries used
+
+* [cloud_firestore](https://pub.dev/packages/cloud_firestore)
+* [firebase_auth](https://pub.dev/packages/firebase_auth)
+* [firebase_core](https://pub.dev/packages/firebase_core)
+* [google_sign_in](https://pub.dev/packages/google_sign_in)
 * [flutter_speed_dial](https://pub.dev/packages/flutter_speed_dial)
 * [share](https://pub.dev/packages/share)
 * [material_about](https://pub.dev/packages/material_about)  
-  [url_launcher](https://pub.dev/packages/url_launcher)
-
-
-## 👉🏼 Credits
-* 
+* [url_launcher](https://pub.dev/packages/url_launcher)
+* [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications)
+* [rxdart](https://pub.dev/packages/rxdart)
+* (apple_sign_in)[https://pub.dev/packages/apple_sign_in]
+* [flutter_secure_storage](https://pub.dev/packages/flutter_secure_storage)
 
 
 ## 👨🏻‍💻 Developed By
@@ -48,14 +53,11 @@ Copyright 2020 Ashton Jones
 
 
 ## 📸 Screenshots
-<img src="./screenshots/Screenshot_20200413-130527_Reply.jpg" width="30%" height="30%">&ensp;<img src="./screenshots/Screenshot_20200413-130425_Reply.jpg" width="30%" height="30%">&ensp;<img src="./screenshots/Screenshot_20200413-130454_Reply.jpg" width="30%" height="30%">&ensp;
+<img src="./screenshots/Screenshot_20200714-134549.jpg" width="30%" height="30%">&ensp;<img src="./screenshots/Screenshot_20200714-134838.jpg" width="30%" height="30%">&ensp;<img src="./screenshots/Screenshot_20200714-134845.jpg" width="30%" height="30%">&ensp;
 ------
-<img src="./screenshots/Screenshot_20200413-130009_Reply.jpg" width="30%" height="30%">&ensp;<img src="./screenshots/Screenshot_20200413-130020_Reply.jpg" width="30%" height="30%">&ensp;<img src="./screenshots/Screenshot_20200413-130028_Reply.jpg" width="30%" height="30%">&ensp;
+<img src="./screenshots/Screenshot_20200714-134857_Android System.jpg" width="30%" height="30%">&ensp;<img src="./screenshots/Screenshot_20200714-134915_Messages.jpg" width="30%" height="30%">&ensp;<img src="./screenshots/_reply_apple_screenshot_1.png" width="30%" height="30%">&ensp;
 ------
-<img src="./screenshots/Screenshot_20200413-130044_Android System.jpg" width="30%" height="30%">&ensp;<img src="./screenshots/Screenshot_20200413-130246_Messages.jpg" width="30%" height="30%">&ensp;
-------
-<img src="./screenshots/Screenshot_20200413-130352_Reply.jpg" width="30%" height="30%">&ensp;<img src="./screenshots/Screenshot_20200413-130414_Reply.jpg" width="30%" height="30%">&ensp;
-------
-<img src="./screenshots/Screenshot_20200413-130259_Reply.jpg" width="30%" height="30%">&ensp;<img src="./screenshots/Screenshot_20200413-130305_Reply.jpg" width="30%" height="30%">&ensp;<img src="./screenshots/Screenshot_20200413-130310_Reply.jpg" width="30%" height="30%">&ensp;
+<img src="./screenshots/_reply_apple_screenshot_2.png" width="30%" height="30%">&ensp;<img src="./screenshots/_reply_apple_screenshot_3.png" width="30%" height="30%">&ensp;
+<img src="./screenshots/_reply_apple_screenshot_4.png" width="30%" height="30%">&ensp;
 
 
