@@ -59,11 +59,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   int selectedItemIndex = -1;
 
-  bool isItemSelected = false;
-
-  bool selectedNewItem = true;
-
-  String appBarTitle = 'Personal Messages';
+  String initialAppBarTitle = 'Personal Messages';
 
   TabController _tabController;
 
@@ -441,11 +437,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       key: _scaffoldKeyHome,
       backgroundColor: kBackgroundColor,
       appBar: AppBar(
-          title: Text(appBarTitle),
+          title: Text(initialAppBarTitle),
           centerTitle: true,
           actions: <Widget>[
             PopupMenuButton<String>(
-              onSelected: handleClick,
+              onSelected: handleMenuItemClick,
               itemBuilder: (BuildContext context) {
                 return isAndroid ? {'Introduction', 'Tips', 'About Developer', 'Sign Out'}
                     .map((String choice) {
@@ -540,7 +536,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             backgroundColor: kPrimaryColorLight,
             onTap: () {
               print('Tapped Add');
-              Navigator.pushNamed(context, AddNewMessage.routeName);
+              Navigator.pushNamed(context, AddNewMessage.routeName).whenComplete(() {
+                reloadData();
+                clearSelection();
+              });
             },
             child: Icon(Icons.add),
           ),
@@ -595,6 +594,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                           messageCategory: selectedMessageCategory))
                   .whenComplete(() {
                 reloadData();
+                clearSelection();
               });
             },
             child: Icon(Icons.edit),
@@ -689,7 +689,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     );
   }
 
-  void handleClick(String value) {
+  void handleMenuItemClick(String value) {
     switch (value) {
       case 'Introduction':
         print('Tapped Introduction');
@@ -719,7 +719,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       setState(() {
         print('Changing to Tab: ${_tabController.index}');
         _currentTabIndex = _tabController.index;
-        appBarTitle = appBarTitles[_tabController.index];
+        initialAppBarTitle = appBarTitles[_tabController.index];
       });
   }
 
@@ -796,12 +796,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     Provider.of<PersonalMessagesViewModel>(context, listen: false)
         .loadPersonalMessagesList(widget.firebaseUser);
 
-    setState(() {
-      // Set selectedItemIndex back to -1 to signify a card isn't selected (change the color back to unselected)
-      selectedItemIndex = -1;
-      // Set selectedMessage back to null after message has been deleted
-      selectedMessage = null;
-    });
+    clearSelection();
+
   }
 
   void deleteSocialMessage(
@@ -813,12 +809,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     Provider.of<SocialMessagesViewModel>(context, listen: false)
         .loadSocialMessagesList(widget.firebaseUser);
 
-    setState(() {
-      // Set selectedItemIndex back to -1 to signify a card isn't selected (change the color back to unselected)
-      selectedItemIndex = -1;
-      // Set selectedMessage back to null after message has been deleted
-      selectedMessage = null;
-    });
+    clearSelection();
   }
 
   void deleteBusinessMessage(
@@ -830,12 +821,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     Provider.of<BusinessMessagesViewModel>(context, listen: false)
         .loadBusinessMessagesList(widget.firebaseUser);
 
-    setState(() {
-      // Set selectedItemIndex back to -1 to signify a card isn't selected (change the color back to unselected)
-      selectedItemIndex = -1;
-      // Set selectedMessage back to null after message has been deleted
-      selectedMessage = null;
-    });
+    clearSelection();
+
   }
 
   void deleteFirstAdditionalMessage(
@@ -847,12 +834,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     Provider.of<FirstAdditionalMessagesViewModel>(context, listen: false)
         .loadFirstAdditionalMessagesList(widget.firebaseUser);
 
-    setState(() {
-      // Set selectedItemIndex back to -1 to signify a card isn't selected (change the color back to unselected)
-      selectedItemIndex = -1;
-      // Set selectedMessage back to null after message has been deleted
-      selectedMessage = null;
-    });
+    clearSelection();
+
   }
 
   void deleteSecondAdditionalMessage(
@@ -864,24 +847,40 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     Provider.of<SecondAdditionalMessagesViewModel>(context, listen: false)
         .loadSecondAdditionalMessagesList(widget.firebaseUser);
 
-    setState(() {
-      // Set selectedItemIndex back to -1 to signify a card isn't selected (change the color back to unselected)
-      selectedItemIndex = -1;
-      // Set selectedMessage back to null after message has been deleted
-      selectedMessage = null;
-    });
+   clearSelection();
+
   }
 
   void reloadData() {
     // Had to add it here to have edited message show up in UI immediately upon editing
     Provider.of<PersonalMessagesViewModel>(context, listen: false)
         .loadPersonalMessagesList(widget.firebaseUser);
+
+    Provider.of<SocialMessagesViewModel>(context, listen: false)
+        .loadSocialMessagesList(widget.firebaseUser);
+
+    Provider.of<BusinessMessagesViewModel>(context, listen: false)
+        .loadBusinessMessagesList(widget.firebaseUser);
+
+    Provider.of<FirstAdditionalMessagesViewModel>(context, listen: false)
+        .loadFirstAdditionalMessagesList(widget.firebaseUser);
+
+    Provider.of<SecondAdditionalMessagesViewModel>(context, listen: false)
+        .loadSecondAdditionalMessagesList(widget.firebaseUser);
+
+
+  }
+
+  void clearSelection() {
+
     setState(() {
       // Set selectedItemIndex back to -1 to signify a card isn't selected (change the color back to unselected)
       selectedItemIndex = -1;
       // Set selectedMessage back to null after dialog is done showing
       selectedMessage = null;
     });
+
+
   }
 
   void _signOut() async {

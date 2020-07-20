@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Reply',
+        title: '_Reply',
         theme: AppTheme.appThemeData,
         home: FutureBuilder(
             future: Provider.of<AuthService>(context, listen: false).getUser(),
