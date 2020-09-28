@@ -52,5 +52,16 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSAppTransportSecurity</key>
+    <dict>
+      <key>NSAllowsArbitraryLoads</key>
+      <true/>
+    </dict>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Required to share photos</string>
+    <key>NSCameraUsageDescription</key>
+    <string>Required to take photos</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Required to record audio</string>
 </dict>
 </plist>

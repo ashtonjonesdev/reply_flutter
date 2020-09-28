@@ -5,8 +5,6 @@ class MessageCard  {
 
   MessageCard({this.title, this.message});
 
-
-
   MessageCard.fromJson(Map<String, dynamic> json)
       : title = json['title'],
         message = json['message'];

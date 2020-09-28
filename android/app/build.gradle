@@ -72,7 +72,6 @@ flutter {
 }
 
 dependencies {
-    implementation 'com.google.firebase:firebase-analytics:17.4.3'
     // Had to add this to avoid weird bug
     implementation 'com.android.support:multidex:1.0.3'
 

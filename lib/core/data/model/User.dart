@@ -1,13 +1,15 @@
 class User {
 
   String name;
-  int uID;
+  String uID;
   List<String> personalMessages;
   List<String> socialMessages;
   List<String> businessMessages;
   List<String> firstAdditionalMessages;
   List<String> secondAdditionalMessages;
 
+
+  User.simple(this.name, this.uID);
 
   User({this.name, this.uID, this.personalMessages, this.socialMessages,
     this.businessMessages, this.firstAdditionalMessages, this.secondAdditionalMessages});
@@ -35,4 +37,6 @@ class User {
         'firstAdditionalMessages': firstAdditionalMessages,
         'secondAdditionalMessages': secondAdditionalMessages
       };
+
+
 }

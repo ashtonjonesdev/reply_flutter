@@ -19,10 +19,7 @@ class Welcome extends StatefulWidget {
 }
 
 class _WelcomeState extends State<Welcome> {
-
   static final String routeName = 'welcome';
-
-
 
   final bool isAndroid = Platform.isAndroid;
 
@@ -35,14 +32,11 @@ class _WelcomeState extends State<Welcome> {
     super.initState();
 
     if (Platform.isIOS) {
-
       AppleSignIn.onCredentialRevoked.listen((_) {
         print("Apple Credentials revoked");
 
         checkAppleLoggedInState();
       });
-
-
     }
   }
 
@@ -130,28 +124,30 @@ class _WelcomeState extends State<Welcome> {
                                     listen: false)
                                 .signInWithGoogle()
                                 .then((FirebaseUser firebaseUser) async {
-                                  if(firebaseUser != null) {
-                                    print('FBUser creation time: ${firebaseUser.metadata.creationTime} FBUser lastSignInTime: ${firebaseUser.metadata.lastSignInTime}');
-                                    // If it is a new user (signing in for the first time), create a user in the database
-                                    if (firebaseUser.metadata.creationTime.difference(firebaseUser.metadata.lastSignInTime).abs() < Duration(seconds: 1)) {
-                                      print('Creating new user in Database');
-                                      firebaseRepository
-                                          .createUserInDatabaseWithGoogleProvider(
+                              if (firebaseUser != null) {
+                                print(
+                                    'FBUser creation time: ${firebaseUser.metadata.creationTime} FBUser lastSignInTime: ${firebaseUser.metadata.lastSignInTime}');
+                                // If it is a new user (signing in for the first time), create a user in the database
+                                if (firebaseUser.metadata.creationTime
+                                        .difference(firebaseUser
+                                            .metadata.lastSignInTime)
+                                        .abs() <
+                                    Duration(seconds: 1)) {
+                                  print('Creating new user in Database');
+                                  firebaseRepository
+                                      .createUserInDatabaseWithGoogleProvider(
                                           firebaseUser);
-                                    }
-                                    Navigator.of(context).pushAndRemoveUntil(
-                                        MaterialPageRoute(
-                                            builder: (BuildContext context) => Home(
+                                }
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) => Home(
                                               firebaseUser: firebaseUser,
                                             )),
-                                            (Route<dynamic> route) => false);
-                                  }
-
-                                  else {
-                                    _buildErrorDialog(context, 'Sign in with Google failed');
-                                  }
-
-
+                                    (Route<dynamic> route) => false);
+                              } else {
+                                _buildErrorDialog(
+                                    context, 'Sign in with Google failed');
+                              }
                             }).catchError((e) => print(e));
                           },
                           shape: RoundedRectangleBorder(
@@ -289,10 +285,12 @@ class _WelcomeState extends State<Welcome> {
                         style: ButtonStyle.black,
                         type: ButtonType.continueButton,
                         onPressed: () async {
-                          await Provider.of<AuthService>(context, listen: false).signInWithApple().then((FirebaseUser firebaseUser) async
-                          {
-                            if(firebaseUser != null)  {
-                              print('FBUser creation time: ${firebaseUser.metadata.creationTime} FBUser lastSignInTime: ${firebaseUser.metadata.lastSignInTime}');
+                          await Provider.of<AuthService>(context, listen: false)
+                              .signInWithApple()
+                              .then((FirebaseUser firebaseUser) async {
+                            if (firebaseUser != null) {
+                              print(
+                                  'FBUser creation time: ${firebaseUser.metadata.creationTime} FBUser lastSignInTime: ${firebaseUser.metadata.lastSignInTime}');
                               // If it is a new user, create a new user in the database
 //                              if (firebaseUser.metadata.creationTime.difference(firebaseUser.metadata.lastSignInTime) < Duration(seconds: 1)) {
 //                                print('Creating new user in Database');
@@ -301,17 +299,14 @@ class _WelcomeState extends State<Welcome> {
                               Navigator.of(context).pushAndRemoveUntil(
                                   MaterialPageRoute(
                                       builder: (BuildContext context) => Home(
-                                        firebaseUser: firebaseUser,
-                                      )),
-                                      (Route<dynamic> route) => false);
+                                            firebaseUser: firebaseUser,
+                                          )),
+                                  (Route<dynamic> route) => false);
+                            } else {
+                              _buildErrorDialog(
+                                  context, 'Sign in with Apple Failed');
                             }
-
-                            else {
-                              _buildErrorDialog(context, 'Sign in with Apple Failed');
-                            }
-
                           });
-
                         },
                       ),
                     ),
@@ -344,7 +339,6 @@ class _WelcomeState extends State<Welcome> {
           );
   }
 
-
   void checkAppleLoggedInState() async {
     final userId = await FlutterSecureStorage().read(key: "appleCredentialUid");
     if (userId == null) {
@@ -361,25 +355,29 @@ class _WelcomeState extends State<Welcome> {
       case CredentialStatus.error:
         print(
             "getCredentialState returned an error: ${credentialState.error.localizedDescription}");
-        _buildErrorDialog(context, '${credentialState.error.localizedDescription}. Please try again later or sign in using another method');
+        _buildErrorDialog(context,
+            '${credentialState.error.localizedDescription}. Please try again later or sign in using another method');
 
         break;
 
       case CredentialStatus.revoked:
         print("getCredentialState returned revoked");
-        _buildErrorDialog(context, 'Apple credentials revoked. Please try another sign in method');
+        _buildErrorDialog(context,
+            'Apple credentials revoked. Please try another sign in method');
 
         break;
 
       case CredentialStatus.notFound:
         print("getCredentialState returned not found");
-        _buildErrorDialog(context, 'Apple credentials not found. Please try another sign in method');
+        _buildErrorDialog(context,
+            'Apple credentials not found. Please try another sign in method');
 
         break;
 
       case CredentialStatus.transferred:
         print("getCredentialState returned not transferred");
-        _buildErrorDialog(context, 'Apple credentials not found. Please try another sign in method');
+        _buildErrorDialog(context,
+            'Apple credentials not found. Please try another sign in method');
         break;
       default:
         print('Unknown credential status authorization error occurred');
@@ -397,11 +395,9 @@ class _WelcomeState extends State<Welcome> {
   }
 
   Future _buildErrorDialog(BuildContext context, _message) {
-
-
     return showDialog(
       builder: (context) {
-        switch(_message) {
+        switch (_message) {
           case 'Sign in with Apple Failed':
             break;
           case 'Sign in with Google failed':
@@ -416,15 +412,15 @@ class _WelcomeState extends State<Welcome> {
             break;
         }
         return AlertDialog(
-          title: Text('Error Message', style: Theme.of(context).textTheme.headline6),
+          title: Text('Error Message',
+              style: Theme.of(context).textTheme.headline6),
           content: Text(_message, style: Theme.of(context).textTheme.bodyText1),
           actions: [
             FlatButton(
                 child: Text('OK'),
                 onPressed: () {
-                 Navigator.of(context).pop();
+                  Navigator.of(context).pop();
                 })
-
           ],
         );
       },

@@ -1,17 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:reply_flutter/core/data/model/MessageCard.dart';
 import 'package:reply_flutter/core/data/repository/RepositoryInterface.dart';
-import 'package:reply_flutter/core/services/AuthService.dart';
 
 class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
 
   FirebaseRepository();
 
 
-  final firestoreInstance = Firestore.instance;
+  final firestoreInstance = FirebaseFirestore.instance;
 
   static const String USERS_COLLECTION = 'users';
 
@@ -33,9 +31,9 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
 
 
 
-  void createUserInDatabaseWithEmail(FirebaseUser firebaseUser) async {
+  void createUserInDatabaseWithEmail(auth.User firebaseUser) async {
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).setData({
+    await firestoreInstance.collection(USERS_COLLECTION).doc(firebaseUser.uid).set({
       NAME_FIELD : firebaseUser.displayName,
       EMAIL_FIELD: firebaseUser.email,
       PERSONAL_MESSAGES_FIELD : [MessageCard(title: 'Hi ${firebaseUser.displayName}! 👋🏼', message: 'Add your own message!').toJson(),MessageCard(title: 'Hello ${firebaseUser.displayName}! 👋🏼', message: 'Add your own message!').toJson()],
@@ -47,10 +45,9 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
 
   }
 
-  void createUserInDatabaseWithGoogleProvider(FirebaseUser firebaseUser) async {
+  void createUserInDatabaseWithGoogleProvider(auth.User firebaseUser) async {
 
-
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).setData({
+    await firestoreInstance.collection(USERS_COLLECTION).doc(firebaseUser.uid).set({
       NAME_FIELD : firebaseUser.displayName,
       EMAIL_FIELD: firebaseUser.email,
       PERSONAL_MESSAGES_FIELD : [MessageCard(title: 'Hi ${firebaseUser.displayName}! 👋🏼', message: 'Add your own message!').toJson(),MessageCard(title: 'Hello ${firebaseUser.displayName}! 👋🏼', message: 'Add your own message!').toJson()],
@@ -63,9 +60,9 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
 
   }
 
-  void createUserInDatabaseWithAppleProvider(FirebaseUser firebaseUser) async {
+  void createUserInDatabaseWithAppleProvider(auth.User firebaseUser) async {
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).setData({
+    await firestoreInstance.collection(USERS_COLLECTION).doc(firebaseUser.uid).set({
       NAME_FIELD : firebaseUser.displayName,
       PERSONAL_MESSAGES_FIELD : [MessageCard(title: 'Hi ${firebaseUser.displayName}! 👋🏼', message: 'Add your own message!').toJson(),MessageCard(title: 'Hello ${firebaseUser.displayName}! 👋🏼', message: 'Add your own message!').toJson()],
       SOCIAL_MESSAGES_FIELD : [MessageCard(title: 'Hi ${firebaseUser.displayName}! 👋🏼', message: 'Add your own message!').toJson(),MessageCard(title: 'Hello ${firebaseUser.displayName}! 👋🏼', message: 'Add your own message!').toJson()],
@@ -77,16 +74,16 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
 
   }
 
-  Future<List<MessageCard>> getPersonalMessages(FirebaseUser firebaseUser) async {
+  Future<List<MessageCard>> getPersonalMessages(auth.User firebaseUser) async {
 
     List<MessageCard> personalMessages = List();
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).get().then((document) {
+    await firestoreInstance.collection(USERS_COLLECTION).doc(firebaseUser.uid).get().then((document) {
 
       if(document.exists) {
 
         // Get the List of Maps
-        List values = document.data[PERSONAL_MESSAGES_FIELD];
+        List values = document.get(PERSONAL_MESSAGES_FIELD);
         print('List received: $values');
 
 
@@ -112,16 +109,16 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
   }
 
   @override
-  Future<List<MessageCard>> getBusinessMessages(FirebaseUser firebaseUser) async {
+  Future<List<MessageCard>> getBusinessMessages(auth.User firebaseUser) async {
 
     List<MessageCard> businessMessages = List();
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).get().then((document) {
+    await firestoreInstance.collection(USERS_COLLECTION).doc(firebaseUser.uid).get().then((document) {
 
       if(document.exists) {
 
         // Get the List of Maps
-        List values = document.data[BUSINESS_MESSAGES_FIELD];
+        List values = document.get(BUSINESS_MESSAGES_FIELD);
         print('List received: $values');
 
 
@@ -146,16 +143,16 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
   }
 
   @override
-  Future<List<MessageCard>> getFirstAdditionalMessages(FirebaseUser firebaseUser) async {
+  Future<List<MessageCard>> getFirstAdditionalMessages(auth.User firebaseUser) async {
 
     List<MessageCard> firstAdditionalMessages = List();
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).get().then((document) {
+    await firestoreInstance.collection(USERS_COLLECTION).doc(firebaseUser.uid).get().then((document) {
 
       if(document.exists) {
 
         // Get the List of Maps
-        List values = document.data[FIRST_ADDITIONAL_MESSAGES_FIELD];
+        List values = document.get(FIRST_ADDITIONAL_MESSAGES_FIELD);
         print('List received: $values');
 
 
@@ -180,16 +177,16 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
   }
 
   @override
-  Future<List<MessageCard>> getSecondAdditionalMessages(FirebaseUser firebaseUser) async {
+  Future<List<MessageCard>> getSecondAdditionalMessages(auth.User firebaseUser) async {
 
     List<MessageCard> secondAdditionalMessages = List();
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).get().then((document) {
+    await firestoreInstance.collection(USERS_COLLECTION).doc(firebaseUser.uid).get().then((document) {
 
       if(document.exists) {
 
         // Get the List of Maps
-        List values = document.data[SECOND_ADDITIONAL_MESSAGES_FIELD];
+        List values = document.get(SECOND_ADDITIONAL_MESSAGES_FIELD);
         print('List received: $values');
 
 
@@ -214,16 +211,16 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
   }
 
   @override
-  Future<List<MessageCard>> getSocialMessages(FirebaseUser firebaseUser) async {
+  Future<List<MessageCard>> getSocialMessages(auth.User firebaseUser) async {
 
     List<MessageCard> socialMessages = List();
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).get().then((document) {
+    await firestoreInstance.collection(USERS_COLLECTION).doc(firebaseUser.uid).get().then((document) {
 
       if(document.exists) {
 
         // Get the List of Maps
-        List values = document.data[SOCIAL_MESSAGES_FIELD];
+        List values = document.get(SOCIAL_MESSAGES_FIELD);
         print('List received: $values');
 
 
@@ -248,16 +245,16 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
   }
 
   @override
-  Future<MessageCard> getReplyLaterMessage(FirebaseUser firebaseUser) async {
+  Future<MessageCard> getReplyLaterMessage(auth.User firebaseUser) async {
 
     List<MessageCard> replyLaterMessageList = List();
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).get().then((document) {
+    await firestoreInstance.collection(USERS_COLLECTION).doc(firebaseUser.uid).get().then((document) {
 
       if(document.exists) {
 
         // Get the List of Maps
-        List values = document.data[REPLY_LATER_MESSAGE_FIELD];
+        List values = document.get(REPLY_LATER_MESSAGE_FIELD);
         print('List received: $values');
 
 
@@ -281,13 +278,13 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
     return replyLaterMessageList[0];
   }
 
-  void addPersonalMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) async {
+  void addPersonalMessage(auth.User firebaseUser, MessageCard messageCardToAdd) async {
 
     Map messageCardData = messageCardToAdd.toJson();
 
     List messageCardList = [messageCardData];
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+    await firestoreInstance.collection(USERS_COLLECTION).doc(firebaseUser.uid).update({
 
       PERSONAL_MESSAGES_FIELD : FieldValue.arrayUnion(messageCardList)
 
@@ -295,13 +292,13 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
   }
 
   @override
-  void addBusinessMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) async {
+  void addBusinessMessage(auth.User firebaseUser, MessageCard messageCardToAdd) async {
 
     Map messageCardData = messageCardToAdd.toJson();
 
     List messageCardList = [messageCardData];
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+    await firestoreInstance.collection(USERS_COLLECTION).doc(firebaseUser.uid).update({
 
       BUSINESS_MESSAGES_FIELD : FieldValue.arrayUnion(messageCardList)
 
@@ -309,13 +306,13 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
   }
 
   @override
-  void addFirstAdditionalMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) async {
+  void addFirstAdditionalMessage(auth.User firebaseUser, MessageCard messageCardToAdd) async {
 
     Map messageCardData = messageCardToAdd.toJson();
 
     List messageCardList = [messageCardData];
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+    await firestoreInstance.collection(USERS_COLLECTION).doc(firebaseUser.uid).update({
 
       FIRST_ADDITIONAL_MESSAGES_FIELD : FieldValue.arrayUnion(messageCardList)
 
@@ -323,13 +320,13 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
   }
 
   @override
-  void addSecondAdditionalMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) async {
+  void addSecondAdditionalMessage(auth.User firebaseUser, MessageCard messageCardToAdd) async {
 
     Map messageCardData = messageCardToAdd.toJson();
 
     List messageCardList = [messageCardData];
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+    await firestoreInstance.collection(USERS_COLLECTION).doc(firebaseUser.uid).update({
 
       SECOND_ADDITIONAL_MESSAGES_FIELD : FieldValue.arrayUnion(messageCardList)
 
@@ -337,13 +334,13 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
   }
 
   @override
-  void addSocialMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) async {
+  void addSocialMessage(auth.User firebaseUser, MessageCard messageCardToAdd) async {
 
     Map messageCardData = messageCardToAdd.toJson();
 
     List messageCardList = [messageCardData];
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+    await firestoreInstance.collection(USERS_COLLECTION).doc(firebaseUser.uid).update({
 
       SOCIAL_MESSAGES_FIELD : FieldValue.arrayUnion(messageCardList)
 
@@ -351,13 +348,13 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
   }
 
   @override
-  void addReplyLaterMessage(FirebaseUser firebaseUser, MessageCard replyLaterMessageCard) async {
+  void addReplyLaterMessage(auth.User firebaseUser, MessageCard replyLaterMessageCard) async {
 
     Map messageCardData = replyLaterMessageCard.toJson();
 
     List messageCardList = [messageCardData];
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+    await firestoreInstance.collection(USERS_COLLECTION).doc(firebaseUser.uid).update({
 
       REPLY_LATER_MESSAGE_FIELD : messageCardList
 
@@ -366,13 +363,13 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
   }
 
   @override
-  void deleteBusinessMessage(FirebaseUser firebaseUser, MessageCard messageCardToDelete) async {
+  void deleteBusinessMessage(auth.User firebaseUser, MessageCard messageCardToDelete) async {
 
     Map messageCardData = messageCardToDelete.toJson();
 
     List messageCardList = [messageCardData];
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+    await firestoreInstance.collection(USERS_COLLECTION).doc(firebaseUser.uid).update({
 
       BUSINESS_MESSAGES_FIELD : FieldValue.arrayRemove(messageCardList)
 
@@ -380,13 +377,13 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
   }
 
   @override
-  void deleteFirstAdditionalMessage(FirebaseUser firebaseUser, MessageCard messageCardToDelete) async {
+  void deleteFirstAdditionalMessage(auth.User firebaseUser, MessageCard messageCardToDelete) async {
 
     Map messageCardData = messageCardToDelete.toJson();
 
     List messageCardList = [messageCardData];
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+    await firestoreInstance.collection(USERS_COLLECTION).doc(firebaseUser.uid).update({
 
       FIRST_ADDITIONAL_MESSAGES_FIELD : FieldValue.arrayRemove(messageCardList)
 
@@ -394,13 +391,13 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
   }
 
   @override
-  void deletePersonalMessage(FirebaseUser firebaseUser, MessageCard messageCardToDelete) async {
+  void deletePersonalMessage(auth.User firebaseUser, MessageCard messageCardToDelete) async {
 
     Map messageCardData = messageCardToDelete.toJson();
 
     List messageCardList = [messageCardData];
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+    await firestoreInstance.collection(USERS_COLLECTION).doc(firebaseUser.uid).update({
 
       PERSONAL_MESSAGES_FIELD : FieldValue.arrayRemove(messageCardList)
 
@@ -408,13 +405,13 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
   }
 
   @override
-  void deleteSecondAdditionalMessage(FirebaseUser firebaseUser, MessageCard messageCardToDelete) async {
+  void deleteSecondAdditionalMessage(auth.User firebaseUser, MessageCard messageCardToDelete) async {
 
     Map messageCardData = messageCardToDelete.toJson();
 
     List messageCardList = [messageCardData];
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+    await firestoreInstance.collection(USERS_COLLECTION).doc(firebaseUser.uid).update({
 
       SECOND_ADDITIONAL_MESSAGES_FIELD : FieldValue.arrayRemove(messageCardList)
 
@@ -422,13 +419,13 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
   }
 
   @override
-  void deleteSocialMessage(FirebaseUser firebaseUser, MessageCard messageCardToDelete) async {
+  void deleteSocialMessage(auth.User firebaseUser, MessageCard messageCardToDelete) async {
 
     Map messageCardData = messageCardToDelete.toJson();
 
     List messageCardList = [messageCardData];
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+    await firestoreInstance.collection(USERS_COLLECTION).doc(firebaseUser.uid).update({
 
       SOCIAL_MESSAGES_FIELD : FieldValue.arrayRemove(messageCardList)
 
@@ -436,14 +433,14 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
   }
 
   @override
-  void editBusinessMessage(FirebaseUser firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) async {
+  void editBusinessMessage(auth.User firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) async {
 
     /// Delete the oldMessageCard first
     Map oldMessageCardData = oldMessageCard.toJson();
 
     List oldMessageCardList = [oldMessageCardData];
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+    await firestoreInstance.collection(USERS_COLLECTION).doc(firebaseUser.uid).update({
 
       BUSINESS_MESSAGES_FIELD : FieldValue.arrayRemove(oldMessageCardList)
 
@@ -454,7 +451,7 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
 
     List newMessageCardList = [newMessageCardData];
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+    await firestoreInstance.collection(USERS_COLLECTION).doc(firebaseUser.uid).update({
 
       BUSINESS_MESSAGES_FIELD : FieldValue.arrayUnion(newMessageCardList)
 
@@ -462,14 +459,14 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
   }
 
   @override
-  void editFirstAdditionalMessage(FirebaseUser firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) async {
+  void editFirstAdditionalMessage(auth.User firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) async {
 
     /// Delete the oldMessageCard first
     Map oldMessageCardData = oldMessageCard.toJson();
 
     List oldMessageCardList = [oldMessageCardData];
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+    await firestoreInstance.collection(USERS_COLLECTION).doc(firebaseUser.uid).update({
 
       FIRST_ADDITIONAL_MESSAGES_FIELD : FieldValue.arrayRemove(oldMessageCardList)
 
@@ -480,7 +477,7 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
 
     List newMessageCardList = [newMessageCardData];
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+    await firestoreInstance.collection(USERS_COLLECTION).doc(firebaseUser.uid).update({
 
       FIRST_ADDITIONAL_MESSAGES_FIELD : FieldValue.arrayUnion(newMessageCardList)
 
@@ -488,14 +485,14 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
   }
 
   @override
-  void editPersonalMessage(FirebaseUser firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) async {
+  void editPersonalMessage(auth.User firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) async {
 
     /// Delete the oldMessageCard first
     Map oldMessageCardData = oldMessageCard.toJson();
 
     List oldMessageCardList = [oldMessageCardData];
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+    await firestoreInstance.collection(USERS_COLLECTION).doc(firebaseUser.uid).update({
 
       PERSONAL_MESSAGES_FIELD : FieldValue.arrayRemove(oldMessageCardList)
 
@@ -506,7 +503,7 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
 
     List newMessageCardList = [newMessageCardData];
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+    await firestoreInstance.collection(USERS_COLLECTION).doc(firebaseUser.uid).update({
 
       PERSONAL_MESSAGES_FIELD : FieldValue.arrayUnion(newMessageCardList)
 
@@ -515,14 +512,14 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
   }
 
   @override
-  void editSecondAdditionalMessage(FirebaseUser firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) async {
+  void editSecondAdditionalMessage(auth.User firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) async {
 
     /// Delete the oldMessageCard first
     Map oldMessageCardData = oldMessageCard.toJson();
 
     List oldMessageCardList = [oldMessageCardData];
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+    await firestoreInstance.collection(USERS_COLLECTION).doc(firebaseUser.uid).update({
 
       SECOND_ADDITIONAL_MESSAGES_FIELD : FieldValue.arrayRemove(oldMessageCardList)
 
@@ -533,7 +530,7 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
 
     List newMessageCardList = [newMessageCardData];
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+    await firestoreInstance.collection(USERS_COLLECTION).doc(firebaseUser.uid).update({
 
       SECOND_ADDITIONAL_MESSAGES_FIELD : FieldValue.arrayUnion(newMessageCardList)
 
@@ -541,13 +538,13 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
   }
 
   @override
-  void editSocialMessage(FirebaseUser firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) async {
+  void editSocialMessage(auth.User firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) async {
     /// Delete the oldMessageCard first
     Map oldMessageCardData = oldMessageCard.toJson();
 
     List oldMessageCardList = [oldMessageCardData];
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+    await firestoreInstance.collection(USERS_COLLECTION).doc(firebaseUser.uid).update({
 
       SOCIAL_MESSAGES_FIELD : FieldValue.arrayRemove(oldMessageCardList)
 
@@ -558,7 +555,7 @@ class FirebaseRepository with ChangeNotifier implements RepositoryInterface {
 
     List newMessageCardList = [newMessageCardData];
 
-    await firestoreInstance.collection(USERS_COLLECTION).document(firebaseUser.uid).updateData({
+    await firestoreInstance.collection(USERS_COLLECTION).doc(firebaseUser.uid).update({
 
       SOCIAL_MESSAGES_FIELD : FieldValue.arrayUnion(newMessageCardList)
 
