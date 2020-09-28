@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
@@ -26,7 +26,7 @@ class Home extends StatefulWidget {
   
   static final String routeName = 'home';
 
-  final FirebaseUser firebaseUser;
+  final auth.User firebaseUser;
 
   Home({this.firebaseUser});
 
@@ -788,7 +788,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   void deletePersonalMessage(
-      FirebaseUser firebaseUser, MessageCard messageCardToDelete) async {
+      auth.User firebaseUser, MessageCard messageCardToDelete) async {
     Provider.of<PersonalMessagesViewModel>(context, listen: false)
         .deletePersonalMessage(firebaseUser, messageCardToDelete);
 
@@ -801,7 +801,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   void deleteSocialMessage(
-      FirebaseUser firebaseUser, MessageCard messageCardToDelete) async {
+      auth.User firebaseUser, MessageCard messageCardToDelete) async {
     Provider.of<SocialMessagesViewModel>(context, listen: false)
         .deleteSocialMessage(firebaseUser, messageCardToDelete);
 
@@ -813,7 +813,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   void deleteBusinessMessage(
-      FirebaseUser firebaseUser, MessageCard messageCardToDelete) async {
+      auth.User firebaseUser, MessageCard messageCardToDelete) async {
     Provider.of<BusinessMessagesViewModel>(context, listen: false)
         .deleteBusinessMessage(firebaseUser, messageCardToDelete);
 
@@ -826,7 +826,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   void deleteFirstAdditionalMessage(
-      FirebaseUser firebaseUser, MessageCard messageCardToDelete) async {
+      auth.User firebaseUser, MessageCard messageCardToDelete) async {
     Provider.of<FirstAdditionalMessagesViewModel>(context, listen: false)
         .deleteFirstAdditionalMessage(firebaseUser, messageCardToDelete);
 
@@ -839,7 +839,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   void deleteSecondAdditionalMessage(
-      FirebaseUser firebaseUser, MessageCard messageCardToDelete) async {
+      auth.User firebaseUser, MessageCard messageCardToDelete) async {
     Provider.of<SecondAdditionalMessagesViewModel>(context, listen: false)
         .deleteSecondAdditionalMessage(firebaseUser, messageCardToDelete);
 

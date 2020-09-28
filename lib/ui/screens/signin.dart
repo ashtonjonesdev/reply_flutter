@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reply_flutter/core/services/AuthService.dart';
@@ -108,7 +108,7 @@ class _SignInState extends State<SignIn> {
 
   void _signInUserWithEmailAndPassword() async {
     try {
-      FirebaseUser signedInUser = await Provider.of<AuthService>(context,
+      auth.User signedInUser = await Provider.of<AuthService>(context,
           listen: false)
           .signInUserWithEmailAndPassword(email: _email, password: _password);
       if (signedInUser != null) {
@@ -121,7 +121,7 @@ class _SignInState extends State<SignIn> {
       } else {
         print('Signed in user is null!');
       }
-    } on AuthException catch (error) {
+    } on auth.FirebaseAuthException catch (error) {
       print('AuthException: ' + error.message.toString());
       return _buildErrorDialog(context, error.message.toString());
     } on Exception catch (error) {

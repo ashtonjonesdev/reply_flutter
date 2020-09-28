@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/cupertino.dart';
 import 'package:reply_flutter/core/data/model/MessageCard.dart';
 import 'package:reply_flutter/core/data/repository/firebase_repository.dart';
@@ -14,7 +14,7 @@ class FirstAdditionalMessagesViewModel with ChangeNotifier {
 
 
 
-  void loadFirstAdditionalMessagesList(FirebaseUser firebaseUser) async {
+  void loadFirstAdditionalMessagesList(auth.User firebaseUser) async {
 
     _firstAdditionalMessagesList = await _firebaseRepository.getFirstAdditionalMessages(firebaseUser);
 
@@ -22,7 +22,7 @@ class FirstAdditionalMessagesViewModel with ChangeNotifier {
 
   }
 
-  void addFirstAdditionalMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) async {
+  void addFirstAdditionalMessage(auth.User firebaseUser, MessageCard messageCardToAdd) async {
 
     _firebaseRepository.addFirstAdditionalMessage(firebaseUser, messageCardToAdd);
 
@@ -35,7 +35,7 @@ class FirstAdditionalMessagesViewModel with ChangeNotifier {
 
   }
 
-  void deleteFirstAdditionalMessage(FirebaseUser firebaseUser, MessageCard messageCardToDelete) async {
+  void deleteFirstAdditionalMessage(auth.User firebaseUser, MessageCard messageCardToDelete) async {
 
     _firebaseRepository.deleteFirstAdditionalMessage(firebaseUser, messageCardToDelete);
 
@@ -43,7 +43,7 @@ class FirstAdditionalMessagesViewModel with ChangeNotifier {
 
   }
 
-  void editFirstAdditionalMessage(FirebaseUser firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) async {
+  void editFirstAdditionalMessage(auth.User firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) async {
 
     _firebaseRepository.editFirstAdditionalMessage(firebaseUser, oldMessageCard, newMessageCard);
 

@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/cupertino.dart';
 import 'package:reply_flutter/core/data/model/MessageCard.dart';
 import 'package:reply_flutter/core/data/repository/firebase_repository.dart';
@@ -14,7 +14,7 @@ class SocialMessagesViewModel with ChangeNotifier {
 
 
 
-  void loadSocialMessagesList(FirebaseUser firebaseUser) async {
+  void loadSocialMessagesList(auth.User firebaseUser) async {
 
     _socialMessagesList = await _firebaseRepository.getSocialMessages(firebaseUser);
 
@@ -22,7 +22,7 @@ class SocialMessagesViewModel with ChangeNotifier {
 
   }
 
-  void addSocialMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) async {
+  void addSocialMessage(auth.User firebaseUser, MessageCard messageCardToAdd) async {
 
     _firebaseRepository.addSocialMessage(firebaseUser, messageCardToAdd);
 
@@ -35,7 +35,7 @@ class SocialMessagesViewModel with ChangeNotifier {
 
   }
 
-  void deleteSocialMessage(FirebaseUser firebaseUser, MessageCard messageCardToDelete) async {
+  void deleteSocialMessage(auth.User firebaseUser, MessageCard messageCardToDelete) async {
 
     _firebaseRepository.deleteSocialMessage(firebaseUser, messageCardToDelete);
 
@@ -43,7 +43,7 @@ class SocialMessagesViewModel with ChangeNotifier {
 
   }
 
-  void editSocialMessage(FirebaseUser firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) async {
+  void editSocialMessage(auth.User firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) async {
 
     _firebaseRepository.editSocialMessage(firebaseUser, oldMessageCard, newMessageCard);
 

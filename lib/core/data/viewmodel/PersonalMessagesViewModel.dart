@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/cupertino.dart';
 import 'package:reply_flutter/core/data/model/MessageCard.dart';
 import 'package:reply_flutter/core/data/repository/firebase_repository.dart';
@@ -14,7 +14,7 @@ class PersonalMessagesViewModel with ChangeNotifier {
 
 
 
-  void loadPersonalMessagesList(FirebaseUser firebaseUser) async {
+  void loadPersonalMessagesList(auth.User firebaseUser) async {
 
     _personalMessagesList = await _firebaseRepository.getPersonalMessages(firebaseUser);
 
@@ -22,7 +22,7 @@ class PersonalMessagesViewModel with ChangeNotifier {
 
   }
 
-  void addPersonalMessage(FirebaseUser firebaseUser, MessageCard messageCardToAdd) async {
+  void addPersonalMessage(auth.User firebaseUser, MessageCard messageCardToAdd) async {
 
     _firebaseRepository.addPersonalMessage(firebaseUser, messageCardToAdd);
 
@@ -35,7 +35,7 @@ class PersonalMessagesViewModel with ChangeNotifier {
 
   }
 
-  void deletePersonalMessage(FirebaseUser firebaseUser, MessageCard messageCardToDelete) async {
+  void deletePersonalMessage(auth.User firebaseUser, MessageCard messageCardToDelete) async {
 
     _firebaseRepository.deletePersonalMessage(firebaseUser, messageCardToDelete);
 
@@ -43,7 +43,7 @@ class PersonalMessagesViewModel with ChangeNotifier {
 
   }
 
-  void editPersonalMessage(FirebaseUser firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) async {
+  void editPersonalMessage(auth.User firebaseUser, MessageCard oldMessageCard, MessageCard newMessageCard) async {
 
     _firebaseRepository.editPersonalMessage(firebaseUser, oldMessageCard, newMessageCard);
 
@@ -51,13 +51,13 @@ class PersonalMessagesViewModel with ChangeNotifier {
 
   }
 
-  void addReplyLaterMessage(FirebaseUser firebaseUser, MessageCard replyLaterMessageCard) async {
+  void addReplyLaterMessage(auth.User firebaseUser, MessageCard replyLaterMessageCard) async {
 
     _firebaseRepository.addReplyLaterMessage(firebaseUser, replyLaterMessageCard);
 
   }
 
-  Future<MessageCard> getReplyLaterMessage(FirebaseUser firebaseUser) async {
+  Future<MessageCard> getReplyLaterMessage(auth.User firebaseUser) async {
 
     MessageCard replyLaterMessage = await _firebaseRepository.getReplyLaterMessage(firebaseUser);
 

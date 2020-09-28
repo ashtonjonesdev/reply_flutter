@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reply_flutter/core/data/model/MessageCard.dart';
@@ -135,7 +135,7 @@ class _RegisterState extends State<Register> {
 
   void registerUserWithEmailAndPassword() async {
     try {
-      FirebaseUser newUser =
+      auth.User newUser =
           await Provider.of<AuthService>(context, listen: false)
               .registerUserWithEmailAndPassword(
                   firstName: _firstName,
@@ -147,7 +147,7 @@ class _RegisterState extends State<Register> {
         // Create a new user in the database
         firebaseRepository.createUserInDatabaseWithEmail(newUser);
         /// Make sure user was also signed in after registration
-        FirebaseUser currentUser = await Provider.of<AuthService>(context, listen: false).getUser();
+        auth.User currentUser = await Provider.of<AuthService>(context, listen: false).getUser();
         if(currentUser != null) {
           print('Registered user was signed in: ${currentUser.uid}');
           List<MessageCard> personalMessages = await firebaseRepository.getPersonalMessages(currentUser);
@@ -162,11 +162,8 @@ class _RegisterState extends State<Register> {
             MaterialPageRoute(builder: (BuildContext context) => Home(firebaseUser: newUser,)),
                 (Route<dynamic> route) => false);
       }
-    } on AuthException catch (error) {
+    } on auth.FirebaseAuthException catch (error) {
       print('AuthException: ' + error.message.toString());
-      return _buildErrorDialog(context, error.toString());
-    } on Exception catch (error) {
-      print('Exception: ' + error.toString());
       return _buildErrorDialog(context, error.toString());
     }
   }

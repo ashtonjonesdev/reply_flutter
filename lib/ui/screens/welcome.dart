@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:apple_sign_in/apple_sign_in.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
@@ -123,7 +123,7 @@ class _WelcomeState extends State<Welcome> {
                             await Provider.of<AuthService>(context,
                                     listen: false)
                                 .signInWithGoogle()
-                                .then((FirebaseUser firebaseUser) async {
+                                .then((auth.User firebaseUser) async {
                               if (firebaseUser != null) {
                                 print(
                                     'FBUser creation time: ${firebaseUser.metadata.creationTime} FBUser lastSignInTime: ${firebaseUser.metadata.lastSignInTime}');
@@ -287,7 +287,7 @@ class _WelcomeState extends State<Welcome> {
                         onPressed: () async {
                           await Provider.of<AuthService>(context, listen: false)
                               .signInWithApple()
-                              .then((FirebaseUser firebaseUser) async {
+                              .then((auth.User firebaseUser) async {
                             if (firebaseUser != null) {
                               print(
                                   'FBUser creation time: ${firebaseUser.metadata.creationTime} FBUser lastSignInTime: ${firebaseUser.metadata.lastSignInTime}');

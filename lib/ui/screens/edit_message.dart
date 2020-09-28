@@ -1,6 +1,6 @@
 
 
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reply_flutter/core/data/model/MessageCard.dart';
@@ -137,7 +137,7 @@ class _EditMessageState extends State<EditMessage> {
 
     else {
 
-      FirebaseUser firebaseUser = await Provider.of<AuthService>(context, listen: false).getUser();
+      auth.User firebaseUser = await Provider.of<AuthService>(context, listen: false).getUser();
 
       _newMessageCard = MessageCard(title: _newMessageCardTitle, message: _newMessageCardMessage);
 

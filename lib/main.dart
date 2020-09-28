@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,7 +19,6 @@ import 'package:reply_flutter/ui/screens/introduction.dart';
 import 'package:reply_flutter/ui/screens/register.dart';
 import 'package:reply_flutter/ui/screens/reply_later.dart';
 import 'package:reply_flutter/ui/screens/signin.dart';
-import 'package:reply_flutter/ui/screens/welcome.dart';
 import 'package:reply_flutter/ui/screens/welcome.dart';
 
 
@@ -73,7 +72,7 @@ class MyApp extends StatelessWidget {
         theme: AppTheme.appThemeData,
         home: FutureBuilder(
             future: Provider.of<AuthService>(context, listen: false).getUser(),
-            builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
+            builder: (context, AsyncSnapshot<auth.User> snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.error != null) {
                   print("error");

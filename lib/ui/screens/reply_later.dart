@@ -1,12 +1,11 @@
 import 'dart:async';
 
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:reply_flutter/core/data/model/MessageCard.dart';
-import 'package:reply_flutter/core/data/repository/firebase_repository.dart';
 import 'package:reply_flutter/core/data/viewmodel/PersonalMessagesViewModel.dart';
 import 'package:reply_flutter/core/services/AuthService.dart';
 import 'package:reply_flutter/core/utils/MessageCardArguments.dart';
@@ -37,7 +36,6 @@ class ReceivedNotification {
   });
 }
 
-FirebaseRepository _firebaseRepository = FirebaseRepository();
 
 class ReplyLater extends StatefulWidget {
   static final String routeName = 'replylater';
@@ -228,7 +226,7 @@ class _ReplyLaterState extends State<ReplyLater> {
   }
 
   void addReplyLaterMessage() async {
-    FirebaseUser firebaseUser =
+    auth.User firebaseUser =
     await Provider.of<AuthService>(context, listen: false).getUser();
 
     Provider.of<PersonalMessagesViewModel>(context, listen: false)
@@ -264,7 +262,7 @@ class _ReplyLaterState extends State<ReplyLater> {
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
 
     // Get the ReplyLater message
-    FirebaseUser firebaseUser =
+    auth.User firebaseUser =
     await Provider.of<AuthService>(context, listen: false).getUser();
     MessageCard replyLaterMessageCard =
     await Provider.of<PersonalMessagesViewModel>(context, listen: false)
