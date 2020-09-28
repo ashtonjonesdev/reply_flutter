@@ -1,4 +1,6 @@
 # 📨 _Reply ("Reply" rebuilt with Flutter!) 🐦
+
+<p align="center"><img src="./gif/_replyDemo.gif"></p>
 -------
 Easily send your own custom, pre-defined messages through any platform
 * ✅ Create and store your own message templates 
