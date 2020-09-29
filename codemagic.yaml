@@ -35,7 +35,7 @@ workflows:
         # set up local properties
         echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/android/local.properties"
       - cd . && flutter packages pub get
-      - cd . && flutter build appbundle --target-platform android-arm,android-arm64,android-x64flutter pub cache repair
+      - cd . && flutter build appbundle --target-platform android-arm,android-arm64,android-x64
       - find . -name "Podfile" -execdir pod install \;
       - cd . && flutter build ios --release --no-codesign
     artifacts:
