@@ -44,6 +44,6 @@ app.*.map.json
 
 # Configuration files
 key*.properties
-Sigining:Configuration
+signing_and_configuration
 android/app/reply_flutter.jks
 
