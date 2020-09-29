@@ -95,5 +95,6 @@ flutter {
 dependencies {
     // Had to add this to avoid weird bug
     implementation 'androidx.multidex:multidex:2.0.1'
+    //
 
 }
