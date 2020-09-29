@@ -44,6 +44,11 @@ app.*.map.json
 
 # Configuration files
 key*.properties
+signing_and_configuration/apple_distribution_certificate_reply_flutter.p12
+signing_and_configuration/api-8786079395794167171-95595-c8628ff63d1e.json
+signing_and_configuration/ios_distribution.cer
+signing_and_configuration/Reply_Flutter.mobileprovision
+signing_and_configuration/AuthKey_9T5ZP95W6F.p8
 signing_and_configuration
 android/app/reply_flutter.jks
 
