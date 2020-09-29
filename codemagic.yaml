@@ -36,6 +36,7 @@ workflows:
         echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/android/local.properties"
       - cd . && flutter packages pub get
         # Run debug first ok hi
+      - cd . && flutter build apk --debug
       - cd . && flutter build apk --profile
       - cd . && flutter build apk --release
       - find . -name "Podfile" -execdir pod install \;
