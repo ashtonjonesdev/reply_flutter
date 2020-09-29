@@ -41,3 +41,9 @@ app.*.map.json
 
 # Exceptions to above rules.
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+
+# Configuration files
+key*.properties
+Sigining:Configuration
+android/app/reply_flutter.jks
+
